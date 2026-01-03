@@ -34,6 +34,7 @@ export class Page {
       contentMode: Page.contentModeEnum.TEXT,
       requireExactMatchCount: false,
       partialScan: false,
+      useHiddenTabScan: false,
       newHtmlHash: null,
     };
   }
@@ -128,6 +129,8 @@ export class Page {
    *   match.
    * @property {boolean} partialScan - True if selectors should be used for
    *   selecting parts of the page to scan.
+   * @property {boolean} useHiddenTabScan - Nutzt einen versteckten Tab als
+   *   Scan-Quelle statt fetch.
    * @property {?string} newHtmlHash - Hash der zuletzt gespeicherten NEW-HTML.
    */
   constructor(
@@ -152,6 +155,7 @@ export class Page {
       contentMode = Page.DEFAULTS.contentMode,
       requireExactMatchCount = Page.DEFAULTS.requireExactMatchCount,
       partialScan = Page.DEFAULTS.partialScan,
+      useHiddenTabScan = Page.DEFAULTS.useHiddenTabScan,
       newHtmlHash = Page.DEFAULTS.newHtmlHash,
     },
   ) {
@@ -175,6 +179,7 @@ export class Page {
     this.contentMode = contentMode;
     this.requireExactMatchCount = requireExactMatchCount;
     this.partialScan = partialScan;
+    this.useHiddenTabScan = useHiddenTabScan;
     this.newHtmlHash = newHtmlHash;
   }
 
@@ -204,6 +209,7 @@ export class Page {
       contentMode: this.contentMode,
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
+      useHiddenTabScan: this.useHiddenTabScan,
       newHtmlHash: this.newHtmlHash,
     };
   }
@@ -230,6 +236,7 @@ export class Page {
       contentMode: this.contentMode,
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
+      useHiddenTabScan: this.useHiddenTabScan,
       newHtmlHash: this.newHtmlHash,
       // state: this.state,
       // lastAutoscanTime: this.lastAutoscanTime,

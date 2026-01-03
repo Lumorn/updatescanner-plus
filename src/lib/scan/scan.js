@@ -27,6 +27,7 @@ export const __ = {
 
 // Wait between scanning pages
 const SCAN_IDLE_MS = 2000;
+const TAB_LOAD_TIMEOUT_MS = 20000;
 
 /**
  * Start scanning the pages one at a time. HTML is checked for updates and
@@ -67,12 +68,9 @@ export async function scanPage(page) {
   }
   __.log(`Scanning "${page.title}"...`);
   try {
-    const response = await fetch(page.url);
-    if (!response.ok) {
-      throw Error(`[${response.status}] ${response.statusText}`);
-    }
-
-    const html = await getHtmlFromResponse(response, page);
+    const html = page.useHiddenTabScan
+      ? await getHtmlFromHiddenTab(page)
+      : await getHtmlFromFetch(page);
     return processHtml(page, html);
   } catch (error) {
     __.log(`Could not scan "${page.title}": ${error}`);
@@ -84,6 +82,100 @@ export async function scanPage(page) {
     }
   }
   return false;
+}
+
+/**
+ * Lädt HTML per fetch (Standardpfad).
+ *
+ * @param {Page} page - Page object associated with the scan.
+ * @returns {string} HTML page content.
+ */
+async function getHtmlFromFetch(page) {
+  const response = await fetch(page.url);
+  if (!response.ok) {
+    throw Error(`[${response.status}] ${response.statusText}`);
+  }
+
+  return await getHtmlFromResponse(response, page);
+}
+
+/**
+ * Lädt HTML über einen versteckten Tab und einen DOM-Snapshot.
+ *
+ * @param {Page} page - Page object associated with the scan.
+ * @returns {string} HTML page content.
+ */
+async function getHtmlFromHiddenTab(page) {
+  const tab = await browser.tabs.create({
+    url: page.url,
+    active: false,
+  });
+
+  try {
+    await waitForTabReady(tab.id);
+    return await getHtmlFromTab(tab.id);
+  } finally {
+    await browser.tabs.remove(tab.id).catch(() => {
+      __.log(`Konnte Tab nicht schließen: ${page.url}`);
+    });
+  }
+}
+
+/**
+ * Wartet, bis der Tab fertig geladen ist.
+ *
+ * @param {number} tabId - Tab-ID.
+ */
+async function waitForTabReady(tabId) {
+  const tab = await browser.tabs.get(tabId);
+  if (tab.status === 'complete') {
+    return;
+  }
+
+  await new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      cleanup();
+      reject(new Error('Timeout beim Laden des versteckten Tabs.'));
+    }, TAB_LOAD_TIMEOUT_MS);
+
+    const handleUpdated = (updatedTabId, changeInfo) => {
+      if (updatedTabId !== tabId) {
+        return;
+      }
+      if (changeInfo.status === 'complete') {
+        cleanup();
+        resolve();
+      }
+    };
+
+    const cleanup = () => {
+      clearTimeout(timeoutId);
+      browser.tabs.onUpdated.removeListener(handleUpdated);
+    };
+
+    browser.tabs.onUpdated.addListener(handleUpdated);
+  });
+}
+
+/**
+ * Liefert den DOM-Snapshot aus dem Tab über executeScript.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @returns {string} HTML page content.
+ */
+async function getHtmlFromTab(tabId) {
+  if (browser.scripting && browser.scripting.executeScript) {
+    const [{result}] = await browser.scripting.executeScript({
+      target: {tabId},
+      func: () => document.documentElement.outerHTML,
+    });
+    return result ?? '';
+  }
+
+  const [result] = await browser.tabs.executeScript(tabId, {
+    code: 'document.documentElement.outerHTML',
+  });
+  return result ?? '';
 }
 
 /**

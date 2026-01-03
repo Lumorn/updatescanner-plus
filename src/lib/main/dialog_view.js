@@ -60,6 +60,7 @@ export function openPageDialog(page) {
   updateThresholdDescription(thresholdSliderValue);
 
   form.elements['ignore-numbers'].checked = page.ignoreNumbers;
+  form.elements['hidden-tab-scan'].checked = page.useHiddenTabScan;
 
   hideElement(qs('#folder-heading'));
 
@@ -82,6 +83,7 @@ export function openPageDialog(page) {
           contentMode: modeData.contentMode,
           requireExactMatchCount: modeData.requireExactMatchCount,
           partialScan: modeData.partialScan,
+          useHiddenTabScan: form.elements['hidden-tab-scan'].checked,
         });
       } else {
         resolve(null);
@@ -110,6 +112,7 @@ export function openPageFolderDialog(pageFolder) {
   hideElement(qs('#thresholdFieldset'));
   hideElement(qs('#selectorsFieldset'));
   hideElement(qs('#scanModeFieldset'));
+  hideElement(qs('#scanSourceFieldset'));
 
   dialog.showModal();
 

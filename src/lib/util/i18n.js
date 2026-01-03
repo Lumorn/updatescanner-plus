@@ -55,6 +55,9 @@ const translations = {
     'main.dialog.scanMode.anywhere': 'Anywhere in the page',
     'main.dialog.scanMode.insideElements': 'Inside the selected HTML elements',
     'main.dialog.scanMode.countOnly': 'Only count HTML elements',
+    'main.dialog.hiddenTabScan': 'Use hidden tab for scan',
+    'main.dialog.hiddenTabScan.description':
+      'Open a background tab and capture the DOM snapshot instead of fetch.',
     'main.dialog.selectors': 'CSS selectors:',
     'main.dialog.selectors.description': 'CSS selectors for more information see',
     'main.dialog.cancel': 'Cancel',
@@ -213,6 +216,9 @@ const translations = {
     'main.dialog.scanMode.anywhere': 'Überall auf der Seite',
     'main.dialog.scanMode.insideElements': 'Innerhalb der ausgewählten HTML-Elemente',
     'main.dialog.scanMode.countOnly': 'Nur HTML-Elemente zählen',
+    'main.dialog.hiddenTabScan': 'Versteckten Tab zum Scannen verwenden',
+    'main.dialog.hiddenTabScan.description':
+      'Einen Hintergrund-Tab öffnen und den DOM-Snapshot statt fetch verwenden.',
     'main.dialog.selectors': 'CSS-Selektoren:',
     'main.dialog.selectors.description':
       'CSS-Selektoren, weitere Infos unter',
