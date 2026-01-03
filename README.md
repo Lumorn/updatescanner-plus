@@ -71,6 +71,8 @@ Das Manifest liegt in `src/`, die Build-Artefakte landen in `dist/`.
 
 Hinweis für MV3: eine feste Extension-ID ist wichtig für Updates und Signing
 (`browser_specific_settings.gecko.id` im Manifest).
+Für dieses Fork ist die feste ID `updatescanner-plus@lumorn` gesetzt, damit die
+Erweiterung parallel zum Original installierbar ist.
 
 ## Lizenz
 

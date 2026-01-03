@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Update Scanner",
+  "name": "Update Scanner Plus",
   "short_name": "Updatescan",
-  "version": "4.6.0beta2",
+  "version": "4.6.0.2",
   "description": "Monitors webpages for updates.",
   "homepage_url": "https://sneakypete81.github.io/updatescanner/",
   "browser_specific_settings": {
     "gecko": {
-      "id": "{c07d1a49-9894-49ff-a594-38960ede8fb9}",
+      "id": "updatescanner-plus@lumorn",
       "strict_min_version": "60.0"
     }
   },
@@ -29,7 +29,6 @@
     "scripts": [
       "app/background/eventpage.js"
     ],
-    "persistent": false,
     "type": "module"
   },
   "action": {
