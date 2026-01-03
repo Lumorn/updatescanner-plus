@@ -26,6 +26,8 @@ Sidebar.
 * Wiederherstellungsseite öffnet MV3-kompatibel über `runtime.getURL`.
 * Mehrsprachige Oberfläche im gesamten Add-on inkl. modular erweiterbarer
   Sprachverwaltung (Englisch/Deutsch).
+* Zentrales Theme-Token-Set für Farben, Abstände und Typografie mit konsistenten
+  Font- und Line-Height-Skalen.
 
 ## Roadmap
 
