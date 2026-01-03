@@ -143,11 +143,11 @@ unterteilt.
   - Keine Inline-Skripte in HTML-Dateien.
   - Notizen: `docs/modernization/08-csp-inline-scripts.md`.
   - Hinweis: Keine `options_ui` vorhanden, nur Popup/Sidebar und Tab-Seiten.
-- [ ] 9. Optional: Migration von tabs.executeScript → scripting.executeScript  
+- [x] 9. Optional: Migration von tabs.executeScript → scripting.executeScript  
   Optionaler API-Wechsel für MV3-Standardpfad, ohne Funktionsverlust.  
   Done:
-  - `scripting.executeScript` ersetzt alte Aufrufe.
-  - Injects funktionieren in allen Zielseiten.
+  - Keine Script- oder CSS-Injektion im Code gefunden (Schritt nicht zutreffend).
+  - Notizen: `docs/modernization/09-scripting-api.md`.
 - [ ] 10. Optional: web_accessible_resources (MV3-Syntax)  
   `web_accessible_resources` in MV3-Format bringen und Zugriffe prüfen.  
   Done:

@@ -33,6 +33,7 @@
 * Modernisierungsdoku für Schritt 8 ergänzt (CSP/Inline-Skripte)
 * README-Checklist für Schritt 8 aktualisiert
 * CSP-Doku präzisiert (keine Optionsseite vorhanden)
+* Modernisierungsdoku für Schritt 9 ergänzt (scripting API, nicht zutreffend)
 
 ## 4.6.0beta2
 
