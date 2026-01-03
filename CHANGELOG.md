@@ -6,6 +6,7 @@
 * Aktion im Popup ergänzt, um den versteckten Tab-Scan für alle vorhandenen Seiten zu aktivieren/deaktivieren
 * Option zum Mitsenden von Cookies/Credentials pro Seite beim fetch-Scan ergänzt
 * Optionaler Scan-Modus ergänzt, der die Seite in einem versteckten Tab lädt und einen DOM-Snapshot erfasst
+* Hidden-Tab-Scan wartet optional auf Selektoren, nutzt ein DOM-Stabilitätsfenster und einen Standard-Delay
 * Scan-Queue verarbeitet mehrere Scans parallel, mit Host-basiertem Rate-Limit und adaptiven Delays
 * Versionsanzeige im Popup unter der Buttonreihe ergänzt und Versionierungsregel dokumentiert
 * Scan-Queue auf Deque/Index-Logik umgestellt und Duplikate per Seiten-ID verhindert

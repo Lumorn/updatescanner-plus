@@ -28,6 +28,18 @@ export const __ = {
 // Wait between scanning pages
 const SCAN_IDLE_MS = 2000;
 const TAB_LOAD_TIMEOUT_MS = 20000;
+const HIDDEN_TAB_DEFAULT_WAIT_MS = 3000;
+const HIDDEN_TAB_WAIT_FOR_SELECTOR_TIMEOUT_MS = 10000;
+const HIDDEN_TAB_DOM_STABILITY_WINDOW_MS = 1000;
+const HIDDEN_TAB_DOM_STABILITY_TIMEOUT_MS = 8000;
+const HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS = 250;
+
+class ScanTimeoutError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ScanTimeoutError';
+  }
+}
 
 /**
  * Start scanning the pages one at a time. HTML is checked for updates and
@@ -73,7 +85,11 @@ export async function scanPage(page) {
       : await getHtmlFromFetch(page);
     return processHtml(page, html);
   } catch (error) {
-    __.log(`Could not scan "${page.title}": ${error}`);
+    if (error?.name === 'ScanTimeoutError') {
+      __.log(`Scan-Timeout bei "${page.title}": ${error.message}`);
+    } else {
+      __.log(`Could not scan "${page.title}": ${error}`);
+    }
     // Only save if the page still exists
     if (await page.existsInStorage()) {
       const updatedPage = await Page.load(page.id);
@@ -113,7 +129,11 @@ async function getHtmlFromHiddenTab(page) {
   });
 
   try {
-    await waitForTabReady(tab.id);
+    await waitForTabReady(tab.id, page);
+    if (HIDDEN_TAB_DEFAULT_WAIT_MS > 0) {
+      await __.waitForMs(HIDDEN_TAB_DEFAULT_WAIT_MS);
+    }
+    await waitForDomStability(tab.id, page);
     return await getHtmlFromTab(tab.id);
   } finally {
     await browser.tabs.remove(tab.id).catch(() => {
@@ -127,16 +147,17 @@ async function getHtmlFromHiddenTab(page) {
  *
  * @param {number} tabId - Tab-ID.
  */
-async function waitForTabReady(tabId) {
+async function waitForTabReady(tabId, page) {
   const tab = await browser.tabs.get(tabId);
   if (tab.status === 'complete') {
+    await waitForOptionalSelector(tabId, page);
     return;
   }
 
   await new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
       cleanup();
-      reject(new Error('Timeout beim Laden des versteckten Tabs.'));
+      reject(new ScanTimeoutError('Timeout beim Laden des versteckten Tabs.'));
     }, TAB_LOAD_TIMEOUT_MS);
 
     const handleUpdated = (updatedTabId, changeInfo) => {
@@ -156,6 +177,8 @@ async function waitForTabReady(tabId) {
 
     browser.tabs.onUpdated.addListener(handleUpdated);
   });
+
+  await waitForOptionalSelector(tabId, page);
 }
 
 /**
@@ -165,18 +188,114 @@ async function waitForTabReady(tabId) {
  * @returns {string} HTML page content.
  */
 async function getHtmlFromTab(tabId) {
+  const result = await executeInTab(tabId, () => document.documentElement.outerHTML);
+  return result ?? '';
+}
+
+/**
+ * Führt eine Funktion im Tab aus und liefert das Ergebnis zurück.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @param {Function} func - Funktion, die im Tab ausgeführt wird.
+ * @param {Array} args - Argumente für die Funktion.
+ * @returns {any} Ergebnis der Funktion.
+ */
+async function executeInTab(tabId, func, args = []) {
   if (browser.scripting && browser.scripting.executeScript) {
     const [{result}] = await browser.scripting.executeScript({
       target: {tabId},
-      func: () => document.documentElement.outerHTML,
+      func,
+      args,
     });
-    return result ?? '';
+    return result;
   }
 
-  const [result] = await browser.tabs.executeScript(tabId, {
-    code: 'document.documentElement.outerHTML',
+  const serializedArgs = args.map((arg) => JSON.stringify(arg)).join(',');
+  const code = `(${func})(${serializedArgs})`;
+  const [result] = await browser.tabs.executeScript(tabId, {code});
+  return result;
+}
+
+/**
+ * Wartet optional auf einen Selektor im Tab.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @param {Page} page - Page object associated with the scan.
+ */
+async function waitForOptionalSelector(tabId, page) {
+  const selector = page?.waitForSelector;
+  if (!selector) {
+    return;
+  }
+
+  const timeoutMs = page?.waitForSelectorTimeoutMs ?? HIDDEN_TAB_WAIT_FOR_SELECTOR_TIMEOUT_MS;
+  const startTime = Date.now();
+
+  while (Date.now() - startTime < timeoutMs) {
+    const found = await executeInTab(
+      tabId,
+      (selectorToFind) => Boolean(document.querySelector(selectorToFind)),
+      [selector],
+    );
+    if (found) {
+      return;
+    }
+    await __.waitForMs(HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS);
+  }
+
+  throw new ScanTimeoutError(`Timeout beim Warten auf Selektor: ${selector}`);
+}
+
+/**
+ * Wartet, bis sich das DOM über ein Zeitfenster nicht mehr ändert.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @param {Page} page - Page object associated with the scan.
+ */
+async function waitForDomStability(tabId, page) {
+  const stabilityWindowMs = page?.hiddenTabDomStabilityWindowMs ?? HIDDEN_TAB_DOM_STABILITY_WINDOW_MS;
+  if (stabilityWindowMs <= 0) {
+    return;
+  }
+
+  const timeoutMs = page?.hiddenTabDomStabilityTimeoutMs ?? HIDDEN_TAB_DOM_STABILITY_TIMEOUT_MS;
+  const startTime = Date.now();
+  let lastChangeTime = startTime;
+  let lastSnapshot = await getDomSnapshotInfo(tabId);
+
+  while (Date.now() - startTime < timeoutMs) {
+    await __.waitForMs(HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS);
+    const nextSnapshot = await getDomSnapshotInfo(tabId);
+    if (nextSnapshot.hash !== lastSnapshot.hash || nextSnapshot.length !== lastSnapshot.length) {
+      lastSnapshot = nextSnapshot;
+      lastChangeTime = Date.now();
+    }
+    if (Date.now() - lastChangeTime >= stabilityWindowMs) {
+      return;
+    }
+  }
+
+  throw new ScanTimeoutError('Timeout beim Warten auf DOM-Stabilität.');
+}
+
+/**
+ * Liefert Hash und Länge des DOMs aus dem Tab.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @returns {{length: number, hash: string}} Snapshot-Info.
+ */
+async function getDomSnapshotInfo(tabId) {
+  const snapshot = await executeInTab(tabId, () => {
+    const html = document.documentElement?.outerHTML ?? '';
+    let hash = 2166136261;
+    for (let i = 0; i < html.length; i++) {
+      hash ^= html.charCodeAt(i);
+      hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+    }
+    return {length: html.length, hash: (hash >>> 0).toString(16)};
   });
-  return result ?? '';
+
+  return snapshot ?? {length: 0, hash: '0'};
 }
 
 /**
