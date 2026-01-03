@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Dark-Mode-Overrides in ein gemeinsames Theme-Token-Set ausgelagert
 * Popup-Footer-Knöpfe für Neu/Sidebar/Menü auf gleiche Breite gebracht
 * Popup-Menü reagiert wieder zuverlässig auf den Menüknopf und Außenklicks
 * Popup-Menü wird wieder direkt über dem Menüknopf eingeblendet und nicht verdeckt
