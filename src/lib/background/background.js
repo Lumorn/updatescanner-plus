@@ -115,7 +115,8 @@ export class Background {
    * @private
    */
   _refreshIcon(iconPath) {
-    browser.browserAction.setIcon({path: iconPath});
+    const actionApi = browser.action || browser.browserAction;
+    actionApi.setIcon({path: iconPath});
   }
 
   /**
@@ -126,7 +127,8 @@ export class Background {
    * @private
    */
   _refreshBadge(text) {
-    browser.browserAction.setBadgeText({text: text});
+    const actionApi = browser.action || browser.browserAction;
+    actionApi.setBadgeText({text: text});
   }
 
   /**

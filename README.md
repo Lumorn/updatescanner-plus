@@ -107,6 +107,8 @@ unterteilt.
   Done:
   - `browser_action` ist entfernt.
   - Toolbar-Popup öffnet wie bisher.
+  - Hintergrund nutzt temporäres Action-Fallback für Icon/Badge.
+  - Notizen: `docs/modernization/03-action-toolbar.md`.
 - [ ] 4. Hintergrundseite entfernen, Service Worker einführen  
   Hintergrundseite ablösen und Service Worker als zentralen Einstieg setzen.  
   Done:
