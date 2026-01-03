@@ -32,6 +32,7 @@ Sidebar.
 * Dark-Mode-Varianten für zentrale UI-Farbtokens in Popup, Hauptansicht und Sidebar.
 * Modernisierte Button- und Menü-Styles mit klaren Fokus-/Hover-Zuständen und
   konsistenten Klickflächen.
+* Gleich große Footer-Knöpfe im Popup für Neu/Sidebar/Menü.
 * Popup-Menü reagiert zuverlässig auf den Menüknopf und schließt sauber bei
   Außenklicks.
 * Popup-Menü klappt direkt über dem Menüknopf aus und wird nicht verdeckt.
