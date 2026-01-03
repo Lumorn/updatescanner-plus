@@ -21,6 +21,22 @@
   --color-backdrop-dark: rgba(200, 200, 200, 0.8);
   --shadow-1: 0 4px 16px rgba(12, 12, 13, 0.1);
   --radius-m: 0.375rem;
+  --button-radius: var(--radius-m);
+  --button-shadow: 0 1px 4px rgba(12, 12, 13, 0.12);
+  --button-shadow-hover: 0 2px 8px rgba(12, 12, 13, 0.16);
+  --button-shadow-active: 0 1px 3px rgba(12, 12, 13, 0.14);
+  --button-hover-bg: var(--color-hover);
+  --button-active-bg: var(--color-surface-alt);
+  --button-press-translate: 1px;
+  --button-transition: background-color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.1s ease;
+  --focus-ring: 2px solid var(--color-accent);
+  --focus-ring-offset: 2px;
+  --menu-bg: var(--color-surface-muted);
+  --menu-shadow: var(--shadow-1);
+  --menu-radius: var(--radius-m);
+  --menu-item-hover-bg: var(--color-hover);
+  --menu-item-active-bg: var(--color-surface-alt);
   --space-0-5: 0.125rem;
   --space-0-75: 0.1875rem;
   --space-1: 0.25rem;

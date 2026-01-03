@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Gemeinsame Button- und Menü-Variablen eingeführt, damit Popup und Hauptansicht identische Hover-/Active-/Focus-Zustände nutzen
 * Dark-Mode-Overrides in ein gemeinsames Theme-Token-Set ausgelagert
 * Popup-Footer-Knöpfe für Neu/Sidebar/Menü auf gleiche Breite gebracht
 * Popup-Menü reagiert wieder zuverlässig auf den Menüknopf und Außenklicks
