@@ -101,14 +101,18 @@ async function getHtmlFromResponse(response, page) {
   }
 
   const buffer = await response.arrayBuffer();
+  let encodingToUse = page.encoding;
 
   if (page.encoding == null || page.encoding === 'auto') {
     const rawHtml = __.applyEncoding(buffer, 'utf-8');
     const updatedPage = await Page.load(page.id);
-    updatedPage.encoding = __.detectEncoding(response.headers, rawHtml);
+    const detectedEncoding = __.detectEncoding(response.headers, rawHtml);
+    const normalizedEncoding = detectedEncoding ?? 'utf-8';
+    updatedPage.encoding = normalizedEncoding;
     updatedPage.save();
+    encodingToUse = normalizedEncoding;
   }
-  return __.applyEncoding(buffer, page.encoding);
+  return __.applyEncoding(buffer, encodingToUse);
 }
 
 /**
