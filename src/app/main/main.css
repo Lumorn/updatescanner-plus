@@ -64,25 +64,63 @@ a:hover {
   border: none;
 }
 
-/* Menu content, hidden by default */
+button.browser-style {
+  border-radius: var(--radius-m);
+  box-shadow: 0 1px 4px rgba(12, 12, 13, 0.12);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+button.browser-style:hover {
+  background-color: var(--color-hover);
+  box-shadow: 0 2px 8px rgba(12, 12, 13, 0.16);
+}
+
+button.browser-style:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(12, 12, 13, 0.14);
+}
+
+button.browser-style:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Menüinhalt, standardmäßig ausgeblendet */
 .menu-content {
   position: absolute;
-  padding: inherit;
+  padding: var(--space-1);
+  margin: 0;
+  list-style: none;
   width: var(--size-menu-width);
   margin-left: calc(var(--size-menu-offset) * -1);
   margin-top: var(--space-0-5);
   background-color: var(--color-surface);
   box-shadow: var(--shadow-1);
+  border-radius: var(--radius-m);
   z-index: 1;
 }
 
 .menu-content li {
-  padding: var(--space-1) var(--space-4);
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: var(--space-1-5) var(--space-4);
+  line-height: var(--line-height-normal);
+  border-radius: var(--radius-m);
 }
 
 .menu-content li:hover {
   background-color: var(--color-hover);
+}
+
+.menu-content li:active {
+  background-color: var(--color-surface-alt);
+}
+
+.menu-content li:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 #view-dropdown {
