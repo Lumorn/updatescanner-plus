@@ -54,6 +54,7 @@
 * Modernisierungsdoku für Schritt 12 ergänzt (Permission-Audit)
 * MV3-kompatible URL-Ermittlung für die Hauptansicht (runtime.getURL) korrigiert
 * UI-Nachrichten im Background tolerieren fehlende Empfänger, um MV3-Fehler zu vermeiden
+* Restore-Dialog nutzt runtime.getURL, damit das Öffnen in MV3-Umgebungen funktioniert
 
 ## 4.6.0beta2
 
