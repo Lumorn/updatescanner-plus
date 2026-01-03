@@ -49,7 +49,11 @@ export class Popup {
     view.bindHelpClick(this._handleHelpClick.bind(this));
     view.bindPageClick(this._handlePageClick.bind(this));
     view.bindLanguageChange(this._handleLanguageChange.bind(this));
+    view.bindHiddenTabScanDefaultChange(
+      this._handleHiddenTabScanDefaultChange.bind(this),
+    );
     view.setLanguage(this.config.get('language'));
+    view.setHiddenTabScanDefault(this.config.get('useHiddenTabScanByDefault'));
     view.setVersion(this.version);
 
     browser.runtime.onMessage.addListener(this._handleMessage.bind(this));
@@ -208,5 +212,16 @@ export class Popup {
     await this.config.save();
     view.setLanguage(language);
     view.setVersion(this.version);
+  }
+
+  /**
+   * Speichert den Default für versteckte Tabs bei neuen Scans.
+   *
+   * @param {boolean} enabled - Neuer Standardwert.
+   */
+  async _handleHiddenTabScanDefaultChange(enabled) {
+    this.config.set('useHiddenTabScanByDefault', enabled);
+    await this.config.save();
+    view.setHiddenTabScanDefault(enabled);
   }
 }
