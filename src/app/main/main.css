@@ -11,27 +11,28 @@ html, body, #content {
 #header {
   display: grid;
   grid-template-columns: auto minmax(30em, 1fr) auto;
-  padding: 1em;
-  border-bottom: #d7d7db solid 1px;
-  background-color: #f9f9fa;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface-muted);
 }
 
 #icon {
-  height: 48px;
-  width: 48px;
-  margin-top: 3px;
-  margin-right: 15px;
+  height: var(--size-icon-l);
+  width: var(--size-icon-l);
+  margin-top: var(--space-0-75);
+  margin-right: var(--space-4);
   background-image: url('/images/updatescanner_48.png');
   background-position: center center;
   background-repeat: no-repeat;
 }
 
 h1 {
-  font-size: x-large;
-  font-weight: normal;
-  color: #4040b0;
+  font-size: var(--font-size-400);
+  font-weight: 400;
+  line-height: var(--line-height-tight);
+  color: var(--color-accent);
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-2-5);
 }
 
 a {
@@ -44,7 +45,7 @@ a:hover {
 }
 
 #subtitle {
-  color: #595959;
+  color: var(--color-text-muted);
 }
 
 #menu-container {
@@ -54,9 +55,9 @@ a:hover {
 }
 
 #menuButton {
-  height: 24px;
-  width: 24px;
-  margin: 0px;
+  height: var(--size-icon-s);
+  width: var(--size-icon-s);
+  margin: 0;
   background-image: url('/images/preferences-16-macos.svg');
   background-position: center center;
   background-repeat: no-repeat;
@@ -67,25 +68,25 @@ a:hover {
 .menu-content {
   position: absolute;
   padding: inherit;
-  width: 164px;
-  margin-left: -140px;
-  margin-top: 2px;
-  background-color: #ffffff;
-  box-shadow: 0px 4px 16px rgba(12, 12, 13, 0.1);
+  width: var(--size-menu-width);
+  margin-left: calc(var(--size-menu-offset) * -1);
+  margin-top: var(--space-0-5);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-1);
   z-index: 1;
 }
 
 .menu-content li {
-  padding: 5px 15px;
+  padding: var(--space-1) var(--space-4);
   display: block;
 }
 
 .menu-content li:hover {
-  background-color: rgba(12, 12, 13, 0.1);
+  background-color: var(--color-hover);
 }
 
 #view-dropdown {
-  margin-top: 5px;
+  margin-top: var(--space-1);
 }
 
 
@@ -96,11 +97,11 @@ a:hover {
 }
 
 dialog {
-  padding: 1em;
-  width: 32em;
-  border: 1px solid #d7d7db;
-  border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(12, 12, 13, 0.1);
+  padding: var(--space-4);
+  width: var(--size-dialog-width);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-1);
 }
 
 dialog::backdrop { /* native */
@@ -109,7 +110,7 @@ dialog::backdrop { /* native */
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--color-backdrop-light);
 }
 
 dialog + .backdrop { /* polyfill */
@@ -118,53 +119,53 @@ dialog + .backdrop { /* polyfill */
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--color-backdrop-light);
 }
 
 form h1 {
-  margin-bottom: 1em;
-  margin-left: 0.2em;
+  margin-bottom: var(--space-4);
+  margin-left: var(--space-1);
 }
 
 fieldset {
   border: none;
-  margin-left: 0.5em;
-  margin-bottom: 0.5em;
+  margin-left: var(--space-2);
+  margin-bottom: var(--space-2);
 }
 
 fieldset div {
-  margin-top: 0.5em;
-  margin-left: 1em;
+  margin-top: var(--space-2);
+  margin-left: var(--space-4);
 }
 
 .slider {
-  padding-left: 0.5em;
+  padding-left: var(--space-2);
   display: flex;
 }
 
 .selectors-description {
-  margin-top: 8px;
+  margin-top: var(--space-2);
 }
 
 #selectors::placeholder {
-  font-size: smaller;
+  font-size: var(--font-size-100);
 }
 
 legend {
-  font-size: larger;
+  font-size: var(--font-size-300);
 }
 
 label {
   display: flex;
-  margin-bottom: 12px;
-  font-size: larger;
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-300);
 }
 
 label span {
   display: inline-block;
   min-width: 2.5em;
   text-align: right;
-  margin-right: 6px;
+  margin-right: var(--space-1-5);
 }
 
 .checkbox-label {
@@ -183,26 +184,26 @@ select {
 
 .range-label-min {
   display: inline-block;
-  margin-top: 3px;
+  margin-top: var(--space-0-75);
   text-align: right;
-  font-size: smaller;
+  font-size: var(--font-size-100);
 }
 
 .range-label-max {
-  margin-top: 3px;
-  font-size: smaller;
+  margin-top: var(--space-0-75);
+  font-size: var(--font-size-100);
 }
 
 output {
   display: block;
   text-align: center;
-  font-size: smaller;
+  font-size: var(--font-size-100);
   min-height: 1.5em;
 }
 
 #dialog-buttons {
   float: right;
-  margin-right: 0.5em;
+  margin-right: var(--space-2);
 }
 
 form button.browser-style {

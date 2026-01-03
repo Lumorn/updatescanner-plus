@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Zentrales Theme-Token-Set für Farben, Abstände und Typografie eingeführt und UI-CSS auf Variablen umgestellt
 * Mehrsprachigkeit auf das gesamte Add-on ausgeweitet und Übersetzungen modular erweiterbar gemacht
 * Popup-Menü um Einstellungen für die Sprachwahl erweitert (Englisch/Deutsch)
 * Zeichencodierung-Handling beim Scannen gehärtet (UTF-8-Fallback bei fehlender Kodierung)
