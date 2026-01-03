@@ -7,8 +7,10 @@ export const __ = {
   waitForMs: (...args) => waitForMs(...args),
 };
 
-// Wait between scanning pages
-const SCAN_IDLE_MS = 2000;
+// Maximale Anzahl paralleler Scans in der Queue
+const MAX_PARALLEL_SCANS = 4;
+// Mindestabstand zwischen Requests pro Host
+const HOST_IDLE_MS = 2000;
 const COMPACT_QUEUE_MIN_HEAD = 50;
 
 /**
@@ -54,6 +56,8 @@ export class ScanQueue {
     this._isScanning = false;
     this._scanCompleteCount = 0;
     this._isManualScan = false;
+    this._activeScans = 0;
+    this._lastRequestTime = new Map();
   }
 
   /**
@@ -97,9 +101,9 @@ export class ScanQueue {
       return;
     }
 
-    this._changeScanState(true, 0);
+    this._changeScanState(true, 0, 0);
     const {majorChanges, scanCount} = await this._processScanQueue();
-    this._changeScanState(false, 0);
+    this._changeScanState(false, 0, 0);
 
     if (this._scanCompleteHandler !== null) {
       this._scanCompleteHandler({
@@ -116,11 +120,13 @@ export class ScanQueue {
    *
    * @param {boolean} isScanning - True if scanning is active.
    * @param {number} scannedCount - Number of already scanned items.
+   * @param {number} activeScans - Anzahl aktuell laufender Scans.
    * @private
    */
-  _changeScanState(isScanning, scannedCount) {
+  _changeScanState(isScanning, scannedCount, activeScans) {
     this._isScanning = isScanning;
     this._scanCompleteCount = scannedCount;
+    this._activeScans = activeScans;
     if (this._queueStateChangeHandler != null) {
       this._queueStateChangeHandler(this.getScanState());
     }
@@ -133,11 +139,12 @@ export class ScanQueue {
    *   queue state enum.
    */
   getScanState() {
+    const remaining = Math.max(0, this.queue.length - this._headIndex);
     return {
       state: this._isScanning ?
         scanQueueStateEnum.ACTIVE :
         scanQueueStateEnum.INACTIVE,
-      queueLength: Math.max(0, this.queue.length - this._headIndex),
+      queueLength: remaining + this._activeScans,
       scanned: this._scanCompleteCount,
     };
   }
@@ -160,22 +167,36 @@ export class ScanQueue {
     let majorChanges = 0;
     let scanCount = 0;
 
-    while (this._headIndex < this.queue.length) {
-      const page = this.queue[this._headIndex];
-      this._headIndex += 1;
-      this._queuedIds.delete(page.id);
-      const majorChange = await __.scanPage(page);
-      if (majorChange) {
-        majorChanges++;
-      }
-      scanCount++;
-      this._changeScanState(true, scanCount);
+    const workerCount = Math.max(
+      1,
+      Math.min(MAX_PARALLEL_SCANS, this.queue.length - this._headIndex),
+    );
+    const workers = [];
+    for (let index = 0; index < workerCount; index++) {
+      workers.push((async () => {
+        while (true) {
+          const page = this._getNextPage();
+          if (!page) {
+            return;
+          }
 
-      if (this._headIndex < this.queue.length) {
-        await __.waitForMs(SCAN_IDLE_MS);
-      }
-      this._maybeCompactQueue();
+          this._activeScans += 1;
+          this._changeScanState(true, scanCount, this._activeScans);
+
+          await this._waitForHost(page);
+          const majorChange = await __.scanPage(page);
+          if (majorChange) {
+            majorChanges++;
+          }
+          scanCount++;
+          this._activeScans -= 1;
+          this._changeScanState(true, scanCount, this._activeScans);
+          this._maybeCompactQueue();
+        }
+      })());
     }
+
+    await Promise.all(workers);
 
     if (this._headIndex >= this.queue.length) {
       this.queue = [];
@@ -201,5 +222,60 @@ export class ScanQueue {
 
     this.queue = this.queue.slice(this._headIndex);
     this._headIndex = 0;
+  }
+
+  /**
+   * Holt die nächste Seite aus der Queue oder null, wenn nichts übrig ist.
+   *
+   * @returns {Page|null} Nächste Seite oder null.
+   * @private
+   */
+  _getNextPage() {
+    if (this._headIndex >= this.queue.length) {
+      return null;
+    }
+
+    const page = this.queue[this._headIndex];
+    this._headIndex += 1;
+    this._queuedIds.delete(page.id);
+    return page;
+  }
+
+  /**
+   * Wartet bei Bedarf, um Burst-Requests auf denselben Host zu vermeiden.
+   *
+   * @param {Page} page - Seite, deren Host limitiert werden soll.
+   * @private
+   */
+  async _waitForHost(page) {
+    const hostKey = this._getHostKey(page);
+    if (!hostKey) {
+      return;
+    }
+
+    const lastRequestTime = this._lastRequestTime.get(hostKey);
+    if (lastRequestTime != null) {
+      const elapsed = Date.now() - lastRequestTime;
+      const remaining = HOST_IDLE_MS - elapsed;
+      if (remaining > 0) {
+        await __.waitForMs(remaining);
+      }
+    }
+    this._lastRequestTime.set(hostKey, Date.now());
+  }
+
+  /**
+   * Ermittelt den Host-Key für das Rate-Limiting.
+   *
+   * @param {Page} page - Seite, deren Host bestimmt wird.
+   * @returns {string|null} Host-Key oder null bei ungültiger URL.
+   * @private
+   */
+  _getHostKey(page) {
+    try {
+      return new URL(page.url).host;
+    } catch (error) {
+      return null;
+    }
   }
 }
