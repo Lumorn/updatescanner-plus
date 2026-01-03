@@ -1,7 +1,7 @@
 /**
- * Opens the Restore page.
+ * Öffnet die Wiederherstellungsseite.
  */
 export function openRestoreUrl() {
-  const url = browser.extension.getURL('/app/restore/restore.html');
+  const url = browser.runtime.getURL('/app/restore/restore.html');
   browser.tabs.create({url: url});
 }
