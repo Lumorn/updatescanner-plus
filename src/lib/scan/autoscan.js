@@ -24,20 +24,20 @@ export class Autoscan {
   constructor(scanQueue, pageStore) {
     this._scanQueue = scanQueue;
     this._pageStore = pageStore;
+    this._debug = false;
   }
 
   /**
-   * Starts the Autoscanner.
+   * Bereitet den Autoscanner vor und stellt sicher, dass der Alarm existiert.
    */
-  async start() {
+  async init() {
     const debug = await Config.loadSingleSetting('debug');
+    this._debug = debug;
     if (debug) {
       __.log('Debug enabled - using fast scan times.');
     }
 
-    await stopAlarm();
-    startAlarm(debug);
-    browser.alarms.onAlarm.addListener((alarm) => this.onAlarm(alarm));
+    await ensureAutoscanAlarmScheduled(debug);
   }
 
   /**
@@ -75,10 +75,17 @@ function startAlarm(debug) {
 }
 
 /**
- * Stop the Autoscanner alarm.
+ * Stellt sicher, dass der Autoscanner-Alarm existiert, ohne ihn zu ersetzen.
+ *
+ * @param {boolean} debug - Ob Debug-Timings verwendet werden sollen.
  */
-async function stopAlarm() {
-  await browser.alarms.clear(ALARM_ID);
+async function ensureAutoscanAlarmScheduled(debug) {
+  const existing = await browser.alarms.get(ALARM_ID);
+  if (existing) {
+    return;
+  }
+
+  startAlarm(debug);
 }
 
 /**
