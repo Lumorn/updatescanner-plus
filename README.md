@@ -32,6 +32,8 @@ Sidebar.
 * Dark-Mode-Varianten für zentrale UI-Farbtokens in Popup, Hauptansicht und Sidebar.
 * Modernisierte Button- und Menü-Styles mit klaren Fokus-/Hover-Zuständen und
   konsistenten Klickflächen.
+* Popup-Menü reagiert zuverlässig auf den Menüknopf und schließt sauber bei
+  Außenklicks.
 
 ## Roadmap
 
