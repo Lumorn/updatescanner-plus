@@ -27,7 +27,7 @@ export function openDebugInfo(pageId) {
  */
 function getDebugInfoUrl(pageId) {
   const url = new URL(
-    browser.extension.getURL('/app/debug_info/debug_info.html'));
+    browser.runtime.getURL('/app/debug_info/debug_info.html'));
   url.searchParams.set(paramEnum.ID, pageId);
   return url.href;
 }

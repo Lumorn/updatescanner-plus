@@ -24,6 +24,7 @@ Sidebar.
 * Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.
 * Stabile Öffnung der Hauptansicht über MV3-kompatible URL-Ermittlung.
 * Wiederherstellungsseite öffnet MV3-kompatibel über `runtime.getURL`.
+* Debug-Info- und Update-Seiten öffnen MV3-kompatibel über `runtime.getURL`.
 * Mehrsprachige Oberfläche im gesamten Add-on inkl. modular erweiterbarer
   Sprachverwaltung (Englisch/Deutsch).
 * Zentrales Theme-Token-Set für Farben, Abstände und Typografie mit konsistenten
