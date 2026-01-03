@@ -8,10 +8,9 @@ Option nicht mehr unterstützt. Ein vorhandenes Command
 `_execute_browser_action` wird auf `_execute_action` migriert (falls im
 Manifest vorhanden).
 
-Für den Übergang wurde im Background ein minimales Fallback ergänzt,
-damit Aufrufe wie `setIcon` und `setBadgeText` weiterhin funktionieren
-(`browser.action || browser.browserAction`). Der vollständige API-Refactor
-folgt in Schritt 6.
+Für den Übergang wurde im Background ein minimales Fallback ergänzt.
+Dieser Schritt wird in der API-Refactor-Phase (Schritt 6) vollständig
+entfernt, sodass nur noch `browser.action` genutzt wird.
 
 Smoke Test: Add-on laden, Toolbar-Icon sichtbar, Popup öffnet,
 Badge/Icon aktualisieren ohne Fehler im Background.

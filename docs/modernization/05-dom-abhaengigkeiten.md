@@ -7,7 +7,7 @@ Damit Initialisierung robust bleibt, reduzieren wir direkte Abhängigkeiten auf
 ## Kategorien der Anpassungen
 
 * Hintergrund-Timer und globale Referenzen laufen über `globalThis`/Utility.
-* Action-API wird über Utility-Funktion geholt (action/browserAction).
+* Action-API wird im Background direkt über `browser.action` genutzt.
 * DOMParser-Zugriff ist in eine Utility gekapselt und kann fehlende DOM-Umgebung
   erkennen.
 

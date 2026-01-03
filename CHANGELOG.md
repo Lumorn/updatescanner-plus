@@ -14,7 +14,7 @@
 * Minimale CI für web-ext lint ergänzt
 * PR-Template mit Smoke-Test-Checkliste hinzugefügt
 * Manifest auf MV3-Basis umgestellt (manifest_version 3, action statt browser_action, browser_style entfernt, background.page beibehalten)
-* Hintergrund-Toolbar nutzt temporäres Action-Fallback für Icon/Badge
+* Hintergrund-Toolbar nutzt Action-API ohne Fallback für Icon/Badge
 * Hintergrund-Event-Page aktiviert (background.scripts statt background.page)
 * Modernisierungsdoku für Schritt 4 ergänzt (Event Page)
 * Lint-Workflow nutzt temporäres MV2-Manifest wegen web-ext-4.x-Limitierung
@@ -22,6 +22,9 @@
 * DOMParser-Zugriff gekapselt, damit Event Page robust bleibt
 * Modernisierungsdoku für Schritt 5 ergänzt (DOM-Abhängigkeiten)
 * Background-Instanz über env-Utility global verfügbar gemacht
+* Action-API vollständig auf `browser.action` umgestellt
+* Modernisierungsdoku für Schritt 6 ergänzt (Action-API-Refactor)
+* Schritt-6-Doku präzisiert (keine Action-Aufrufe in UI-Skripten gefunden)
 
 ## 4.6.0beta2
 
