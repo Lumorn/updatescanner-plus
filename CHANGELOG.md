@@ -9,6 +9,7 @@
 * Web-Ext-Skripte für Dev/Lint/Build standardisiert
 * Minimale CI für web-ext lint ergänzt
 * PR-Template mit Smoke-Test-Checkliste hinzugefügt
+* Manifest auf MV3-Basis umgestellt (manifest_version 3, action statt browser_action, browser_style entfernt, background.page beibehalten)
 
 ## 4.6.0beta2
 
