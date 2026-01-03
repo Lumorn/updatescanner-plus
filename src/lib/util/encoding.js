@@ -29,7 +29,10 @@ export function detectEncoding(headers, html) {
  */
 export function applyEncoding(buffer, encoding) {
   try {
-    const decoder = new TextDecoder(encoding.toLowerCase());
+    const normalizedEncoding = (typeof encoding === 'string' && encoding.trim())
+      ? encoding
+      : 'utf-8';
+    const decoder = new TextDecoder(normalizedEncoding.toLowerCase());
     return decoder.decode(buffer);
   } catch (error) {
     console.log(error);

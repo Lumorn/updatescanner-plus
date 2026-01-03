@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Zeichencodierung-Handling beim Scannen gehärtet (UTF-8-Fallback bei fehlender Kodierung)
 * Fehlende Sidebar-Abhängigkeiten unter `src/dependencies` ergänzt, damit jQuery, JSTree, Dialog-Polyfill und idb-file-storage beim Laden verfügbar sind
 * Dev- und Build-Skripte kopieren vor dem Start die Abhängigkeiten, damit Sidebar und Storage-Module geladen werden
 * Manifest-Version auf numerisches Format korrigiert, eigene Gecko-ID gesetzt und `background.persistent` entfernt

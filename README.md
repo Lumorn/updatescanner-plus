@@ -21,6 +21,7 @@ Sidebar.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
+* Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.
 
 ## Roadmap
 
