@@ -54,7 +54,7 @@ Für einen reproduzierbaren Start im Dev-Modus empfiehlt sich `web-ext`.
 Das Manifest liegt in `src/`, daher muss der Source-Ordner gesetzt werden.
 
 * Starten: `npm run dev` (lädt das Add-on aus `src/`)
-* Linten: `npm run lint` (führt zusätzlich `web-ext lint` aus)
+* Linten: `npm run lint` (führt zusätzlich `web-ext lint` aus; MV3 nutzt dafür ein temporäres MV2-Manifest wegen der web-ext-4.x-Limitierung)
 * Build: `npm run build` (erstellt das XPI-Paket in `dist/`)
 * Details und Smoke Tests: `docs/modernization/00-arbeitsbasis.md`
 
@@ -109,11 +109,12 @@ unterteilt.
   - Toolbar-Popup öffnet wie bisher.
   - Hintergrund nutzt temporäres Action-Fallback für Icon/Badge.
   - Notizen: `docs/modernization/03-action-toolbar.md`.
-- [ ] 4. Hintergrundseite entfernen, Service Worker einführen  
-  Hintergrundseite ablösen und Service Worker als zentralen Einstieg setzen.  
+- [x] 4. Hintergrundseite entfernen, Event Page aktivieren  
+  Hintergrundseite ablösen und Event-Page-Skripte als zentralen Einstieg setzen.  
   Done:
-  - Service Worker läuft und registriert Kern-Listener.
+  - Event Page läuft über `background.scripts`.
   - Keine `background.page` mehr im Manifest.
+  - Notizen: `docs/modernization/04-background-event-page.md`.
 - [ ] 5. Worker-Kompatibilität: window/document eliminieren  
   Zugriff auf `window`/`document` in Worker-Kontexten entfernen oder ersetzen.  
   Done:

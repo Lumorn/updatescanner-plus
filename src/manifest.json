@@ -28,7 +28,11 @@
     "*://www.facebook.com/*"
   ],
   "background": {
-    "page": "app/background/background.html"
+    "scripts": [
+      "app/background/eventpage.js"
+    ],
+    "persistent": false,
+    "type": "module"
   },
   "action": {
     "default_title": "Update Scanner",
