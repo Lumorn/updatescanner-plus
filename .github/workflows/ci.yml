@@ -22,4 +22,6 @@ jobs:
             npm install
           fi
       - name: Run web-ext lint
-        run: npm run lint
+        run: npm run lint:addon
+      - name: Build web-ext package
+        run: npm run build:zip
