@@ -52,6 +52,13 @@ export class PageStore {
    * fully populated pageMap.
    */
   static async load() {
+    try {
+      await StorageDB.ensureInitialized();
+    } catch (error) {
+      // IndexedDB-Init-Fehler dürfen den Start nicht blockieren.
+      console.error('IndexedDB konnte nicht initialisiert werden.', error);
+    }
+
     const storageInfo = await StorageInfo.load();
 
     try {
@@ -63,6 +70,10 @@ export class PageStore {
       }
 
       await storageInfo.save();
+      log(
+        `Init: ${storageInfo.pageIds.length} URLs, ` +
+        `${storageInfo.pageFolderIds.length} Ordner geladen.`,
+      );
       return new PageStore(pageMap, storageInfo);
 
     } catch (error) {

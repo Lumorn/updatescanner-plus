@@ -153,11 +153,12 @@ unterteilt.
   Done:
   - Nicht erforderlich, da keine Web-Context-Ladungen erfolgen.
   - Notizen: `docs/modernization/10-web-accessible-resources.md`.
-- [ ] 11. Storage/IndexedDB im Worker verifizieren  
+- [x] 11. Storage/IndexedDB im Worker verifizieren  
   Speichern und Laden aus dem Worker prüfen, inklusive Migrationen.  
   Done:
   - Storage-Operationen funktionieren im Worker.
   - Keine Datenverluste beim Neustart.
+  - Notizen: `docs/modernization/11-storage-indexeddb.md`.
 - [ ] 12. Permission-Audit und Minimalprinzip (ohne Funktionsverlust)  
   Permissions auf das nötige Minimum reduzieren und dokumentieren.  
   Done:
