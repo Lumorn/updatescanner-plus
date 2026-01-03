@@ -8,6 +8,7 @@ import {createBackupJson} from '/lib/backup/backup.js';
 import {openRestoreUrl} from '/lib/backup/restore_url.js';
 import {waitForMs} from '/lib/util/promise.js';
 import {uiActionsEnum} from '/lib/background/actions.js';
+import {Config} from '/lib/util/config.js';
 
 /**
  * Class representing the Update Scanner toolbar popup.
@@ -19,6 +20,7 @@ export class Popup {
    */
   constructor() {
     this.pageStore = null;
+    this.config = null;
   }
 
   /**
@@ -31,6 +33,8 @@ export class Popup {
     this.pageStore = await PageStore.load();
     this.pageStore.bindPageUpdate(this._handlePageUpdate.bind(this));
 
+    this.config = await (new Config()).load();
+
     view.init();
     view.bindShowAllClick(this._handleShowAllClick.bind(this));
     view.bindNewClick(this._handleNewClick.bind(this));
@@ -38,8 +42,11 @@ export class Popup {
     view.bindScanAllClick(this._handleScanAllClick.bind(this));
     view.bindBackupClick(this._handleBackupClick.bind(this));
     view.bindRestoreClick(this._handleRestoreClick.bind(this));
+    view.bindSettingsClick(this._handleSettingsClick.bind(this));
     view.bindHelpClick(this._handleHelpClick.bind(this));
     view.bindPageClick(this._handlePageClick.bind(this));
+    view.bindLanguageChange(this._handleLanguageChange.bind(this));
+    view.setLanguage(this.config.get('language'));
 
     browser.runtime.onMessage.addListener(this._handleMessage.bind(this));
     browser.runtime.sendMessage({action: uiActionsEnum.QUEUE_STATE_REQUEST})
@@ -178,5 +185,23 @@ export class Popup {
    */
   _handleQueueChange(queueData) {
     view.setScanState(queueData);
+  }
+
+  /**
+   * Öffnet die Einstellungen im Popup.
+   */
+  _handleSettingsClick() {
+    view.showSettingsPanel();
+  }
+
+  /**
+   * Speichert die neue Sprache und aktualisiert die UI.
+   *
+   * @param {string} language - Sprachcode.
+   */
+  async _handleLanguageChange(language) {
+    this.config.set('language', language);
+    await this.config.save();
+    view.setLanguage(language);
   }
 }

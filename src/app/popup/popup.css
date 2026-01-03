@@ -65,6 +65,31 @@ p {
   width: 32px;
 }
 
+.warning-text {
+  display: inline-block;
+  padding-left: 8px;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 10px;
+}
+
+.settings-label {
+  font-weight: 600;
+}
+
+.settings-description {
+  margin-top: 4px;
+  color: #5a5a5a;
+}
+
+#language-select {
+  width: 100%;
+}
+
 .panel-section-footer {
   height: auto;
   min-height: 41px;
@@ -135,4 +160,3 @@ p {
 .menu-content li:hover {
   background-color: rgba(12, 12, 13, 0.1);
 }
-
