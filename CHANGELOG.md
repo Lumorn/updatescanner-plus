@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Globale Einstellung ergänzt, um neue Seiten standardmäßig im versteckten Tab zu scannen
+* Aktion im Popup ergänzt, um den versteckten Tab-Scan für alle vorhandenen Seiten zu aktivieren/deaktivieren
 * Option zum Mitsenden von Cookies/Credentials pro Seite beim fetch-Scan ergänzt
 * Optionaler Scan-Modus ergänzt, der die Seite in einem versteckten Tab lädt und einen DOM-Snapshot erfasst
 * Scan-Queue verarbeitet mehrere Scans parallel, mit Host-basiertem Rate-Limit und adaptiven Delays

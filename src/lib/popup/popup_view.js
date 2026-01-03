@@ -91,6 +91,15 @@ export function bindHiddenTabScanDefaultChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn alle Seiten umgestellt werden.
+ */
+export function bindHiddenTabScanAllChange(handler) {
+  $on(qs('#hidden-tab-scan-all'), 'change', (event) => {
+    handler(event.target.checked);
+  });
+}
+
+/**
  * Setzt die aktuelle Sprache und aktualisiert die UI-Texte.
  *
  * @param {string} language - Sprachcode.
@@ -107,6 +116,17 @@ export function setLanguage(language) {
  */
 export function setHiddenTabScanDefault(enabled) {
   qs('#hidden-tab-scan-default').checked = enabled;
+}
+
+/**
+ * Setzt den Status für den versteckten Tab-Scan bei allen Seiten.
+ *
+ * @param {{checked: boolean, indeterminate: boolean}} state - Statuswerte.
+ */
+export function setHiddenTabScanAllState({checked, indeterminate}) {
+  const checkbox = qs('#hidden-tab-scan-all');
+  checkbox.checked = checked;
+  checkbox.indeterminate = indeterminate;
 }
 
 /**
