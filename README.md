@@ -40,6 +40,7 @@ Sidebar.
 * Popup-Menü reagiert zuverlässig auf den Menüknopf und schließt sauber bei
   Außenklicks.
 * Popup-Menü klappt direkt über dem Menüknopf aus und wird nicht verdeckt.
+* Scan-Queue nutzt ein Deque/Index-Modell und verhindert Duplikate per Seiten-ID.
 
 ## Roadmap
 

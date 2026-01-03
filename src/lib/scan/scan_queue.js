@@ -9,6 +9,7 @@ export const __ = {
 
 // Wait between scanning pages
 const SCAN_IDLE_MS = 2000;
+const COMPACT_QUEUE_MIN_HEAD = 50;
 
 /**
  * Scan queue state name mappings.
@@ -46,6 +47,8 @@ export class ScanQueue {
    */
   constructor() {
     this.queue = [];
+    this._headIndex = 0;
+    this._queuedIds = new Set();
     this._scanCompleteHandler = null;
     this._queueStateChangeHandler = null;
     this._isScanning = false;
@@ -78,8 +81,9 @@ export class ScanQueue {
    */
   add(pageList) {
     for (const page of pageList) {
-      if (!this.queue.includes(page)) {
+      if (!this._queuedIds.has(page.id)) {
         this.queue.push(page);
+        this._queuedIds.add(page.id);
       }
     }
   }
@@ -133,7 +137,7 @@ export class ScanQueue {
       state: this._isScanning ?
         scanQueueStateEnum.ACTIVE :
         scanQueueStateEnum.INACTIVE,
-      queueLength: this.queue.length,
+      queueLength: Math.max(0, this.queue.length - this._headIndex),
       scanned: this._scanCompleteCount,
     };
   }
@@ -156,19 +160,46 @@ export class ScanQueue {
     let majorChanges = 0;
     let scanCount = 0;
 
-    while (this.queue.length > 0) {
-      const majorChange = await __.scanPage(this.queue.shift());
+    while (this._headIndex < this.queue.length) {
+      const page = this.queue[this._headIndex];
+      this._headIndex += 1;
+      this._queuedIds.delete(page.id);
+      const majorChange = await __.scanPage(page);
       if (majorChange) {
         majorChanges++;
       }
       scanCount++;
       this._changeScanState(true, scanCount);
 
-      if (this.queue.length > 0) {
+      if (this._headIndex < this.queue.length) {
         await __.waitForMs(SCAN_IDLE_MS);
       }
+      this._maybeCompactQueue();
+    }
+
+    if (this._headIndex >= this.queue.length) {
+      this.queue = [];
+      this._headIndex = 0;
     }
 
     return {majorChanges: majorChanges, scanCount: scanCount};
+  }
+
+  /**
+   * Kompaktiert die Queue, wenn der Kopfindex groß genug ist.
+   *
+   * @private
+   */
+  _maybeCompactQueue() {
+    if (this._headIndex < COMPACT_QUEUE_MIN_HEAD) {
+      return;
+    }
+
+    if (this._headIndex <= this.queue.length / 2) {
+      return;
+    }
+
+    this.queue = this.queue.slice(this._headIndex);
+    this._headIndex = 0;
   }
 }
