@@ -35,6 +35,7 @@ export class Page {
       requireExactMatchCount: false,
       partialScan: false,
       useHiddenTabScan: false,
+      sendCredentials: false,
       newHtmlHash: null,
     };
   }
@@ -131,6 +132,7 @@ export class Page {
    *   selecting parts of the page to scan.
    * @property {boolean} useHiddenTabScan - Nutzt einen versteckten Tab als
    *   Scan-Quelle statt fetch.
+   * @property {boolean} sendCredentials - Sendet Cookies/Credentials beim fetch.
    * @property {?string} newHtmlHash - Hash der zuletzt gespeicherten NEW-HTML.
    */
   constructor(
@@ -156,6 +158,7 @@ export class Page {
       requireExactMatchCount = Page.DEFAULTS.requireExactMatchCount,
       partialScan = Page.DEFAULTS.partialScan,
       useHiddenTabScan = Page.DEFAULTS.useHiddenTabScan,
+      sendCredentials = Page.DEFAULTS.sendCredentials,
       newHtmlHash = Page.DEFAULTS.newHtmlHash,
     },
   ) {
@@ -180,6 +183,7 @@ export class Page {
     this.requireExactMatchCount = requireExactMatchCount;
     this.partialScan = partialScan;
     this.useHiddenTabScan = useHiddenTabScan;
+    this.sendCredentials = sendCredentials;
     this.newHtmlHash = newHtmlHash;
   }
 
@@ -210,6 +214,7 @@ export class Page {
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
       useHiddenTabScan: this.useHiddenTabScan,
+      sendCredentials: this.sendCredentials,
       newHtmlHash: this.newHtmlHash,
     };
   }

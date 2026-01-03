@@ -53,6 +53,7 @@ ${translate('debugInfo.details.highlightColour')}:  ${page.highlightColour}
 ${translate('debugInfo.details.markChanges')}:      ${page.markChanges}
 ${translate('debugInfo.details.doPost')}:           ${page.doPost}
 ${translate('debugInfo.details.postParams')}:       ${page.postParams}
+${translate('debugInfo.details.sendCredentials')}:  ${page.sendCredentials}
 ${translate('debugInfo.details.state')}:            ${page.state}
 ${translate('debugInfo.details.lastAutoscanTime')}: ${lastAutoscanTime}
 ${translate('debugInfo.details.oldScanTime')}:      ${oldScanTime}
