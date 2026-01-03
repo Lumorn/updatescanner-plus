@@ -202,12 +202,27 @@ function toggleMenu(event) {
   const body = qs('body');
   if (isHidden(menu)) {
     showElement(menu);
-    body.addEventListener('click', toggleMenu);
+    body.addEventListener('click', handleMenuOutsideClick);
     event.stopPropagation();
   } else {
     hideElement(menu);
-    body.removeEventListener('click', toggleMenu);
+    body.removeEventListener('click', handleMenuOutsideClick);
   }
+}
+
+/**
+ * Blendet das Menü aus, wenn außerhalb geklickt wird.
+ *
+ * @param {Event} event - Klick-Ereignis.
+ */
+function handleMenuOutsideClick(event) {
+  const menu = qs('#menu');
+  const menuButton = qs('#menu-button');
+  if (menu.contains(event.target) || menuButton.contains(event.target)) {
+    return;
+  }
+  hideElement(menu);
+  qs('body').removeEventListener('click', handleMenuOutsideClick);
 }
 
 /**
@@ -235,6 +250,6 @@ function showPanel(selector) {
   hideElement(qs('#restore-panel'));
   hideElement(qs('#settings-panel'));
   hideElement(qs('#menu'));
-  qs('body').removeEventListener('click', toggleMenu);
+  qs('body').removeEventListener('click', handleMenuOutsideClick);
   showElement(qs(selector));
 }
