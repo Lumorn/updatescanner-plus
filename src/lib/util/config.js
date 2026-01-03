@@ -14,6 +14,7 @@ export class Config {
       'debug': false, // Enable debug mode
       'isFirstRun': true, // Is this the first time the extension has run
       'updateVersion': 0, // Used to determine if update tasks are required
+      'language': 'en', // Sprache der Benutzeroberfläche
     };
   }
 
