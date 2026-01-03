@@ -27,8 +27,8 @@ html, body, #content {
 }
 
 h1 {
-  font-size: var(--font-size-400);
-  font-weight: 400;
+  font-size: var(--font-size-500);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   color: var(--color-accent);
   margin-top: 0;
@@ -46,6 +46,9 @@ a:hover {
 
 #subtitle {
   color: var(--color-text-muted);
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
 }
 
 #menu-container {
@@ -161,6 +164,8 @@ dialog + .backdrop { /* polyfill */
 }
 
 form h1 {
+  font-size: var(--font-size-400);
+  font-weight: var(--font-weight-semibold);
   margin-bottom: var(--space-4);
   margin-left: var(--space-1);
 }
@@ -190,13 +195,15 @@ fieldset div {
 }
 
 legend {
-  font-size: var(--font-size-300);
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-medium);
 }
 
 label {
   display: flex;
   margin-bottom: var(--space-3);
-  font-size: var(--font-size-300);
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-medium);
 }
 
 label span {
@@ -225,11 +232,13 @@ select {
   margin-top: var(--space-0-75);
   text-align: right;
   font-size: var(--font-size-100);
+  color: var(--color-text-muted);
 }
 
 .range-label-max {
   margin-top: var(--space-0-75);
   font-size: var(--font-size-100);
+  color: var(--color-text-muted);
 }
 
 output {
@@ -237,6 +246,7 @@ output {
   text-align: center;
   font-size: var(--font-size-100);
   min-height: 1.5em;
+  color: var(--color-text-muted);
 }
 
 #dialog-buttons {
