@@ -107,7 +107,7 @@ unterteilt.
   Done:
   - `browser_action` ist entfernt.
   - Toolbar-Popup öffnet wie bisher.
-  - Hintergrund nutzt temporäres Action-Fallback für Icon/Badge.
+  - Hintergrund nutzt die Action-API für Icon/Badge.
   - Notizen: `docs/modernization/03-action-toolbar.md`.
 - [x] 4. Hintergrundseite entfernen, Event Page aktivieren  
   Hintergrundseite ablösen und Event-Page-Skripte als zentralen Einstieg setzen.  
@@ -122,11 +122,13 @@ unterteilt.
   - Funktionen laufen im Worker fehlerfrei.
   - Utility: `lib/util/env.js` bündelt globalThis/Timer-Zugriffe.
   - Notizen: `docs/modernization/05-dom-abhaengigkeiten.md`.
-- [ ] 6. API-Refactor: browser.browserAction → browser.action  
+- [x] 6. API-Refactor: browser.browserAction → browser.action  
   API-Aufrufe umstellen, damit Toolbar-Logik MV3-konform ist.  
   Done:
   - Keine Nutzung von `browser.browserAction` mehr.
   - Toolbar-APIs funktionieren unverändert.
+  - Keine Action-Aufrufe in Popup/Sidebar/Options gefunden.
+  - Notizen: `docs/modernization/06-action-api-refactor.md`.
 - [ ] 7. Event-Registrierung robust machen (MV3-Lebenszyklus)  
   Listener so registrieren, dass Wake-up/Shutdown korrekt abgedeckt sind.  
   Done:

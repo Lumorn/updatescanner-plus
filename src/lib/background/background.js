@@ -8,7 +8,7 @@ import {isUpToDate, latestVersion} from '/lib/update/update.js';
 import {openUpdate} from '/lib/update/update_url.js';
 import {log} from '/lib/util/log.js';
 import {Config} from '/lib/util/config.js';
-import {g, getActionApi} from '/lib/util/env.js';
+import {g} from '/lib/util/env.js';
 
 const defaultIcon = {
   18: '/images/updatescanner_18.png',
@@ -96,7 +96,7 @@ export class Background {
   }
 
   /**
-   * Refresh the browserAction icon and badge text.
+   * Aktualisiert Icon und Badge der Toolbar-Aktion.
    */
   _refreshToolbar() {
     const updateCount = this.pageStore.getPageList()
@@ -116,8 +116,7 @@ export class Background {
    * @private
    */
   _refreshIcon(iconPath) {
-    const actionApi = getActionApi(browser);
-    actionApi.setIcon({path: iconPath});
+    browser.action.setIcon({path: iconPath});
   }
 
   /**
@@ -128,8 +127,7 @@ export class Background {
    * @private
    */
   _refreshBadge(text) {
-    const actionApi = getActionApi(browser);
-    actionApi.setBadgeText({text: text});
+    browser.action.setBadgeText({text: text});
   }
 
   /**

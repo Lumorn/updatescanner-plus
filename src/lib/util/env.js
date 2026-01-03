@@ -23,13 +23,3 @@ export function hasDOM() {
 export function delay(ms) {
   return new Promise((resolve) => g.setTimeout(resolve, ms));
 }
-
-/**
- * Liefert die passende Action-API für MV2/MV3.
- *
- * @param {object} browserInstance - Browser-API.
- * @returns {object} Action-API-Objekt.
- */
-export function getActionApi(browserInstance) {
-  return browserInstance.action || browserInstance.browserAction;
-}
