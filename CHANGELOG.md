@@ -8,7 +8,6 @@
 * Popup-Footer-Knöpfe für Neu/Sidebar/Menü auf gleiche Breite gebracht
 * Popup-Menü reagiert wieder zuverlässig auf den Menüknopf und Außenklicks
 * Popup-Menü wird wieder direkt über dem Menüknopf eingeblendet und nicht verdeckt
-* Popup-Header, -Liste und -Footer als Cards mit konsistenten Abständen, Rahmen und Schatten gestaltet
 * Buttons und Menüs in Popup und Hauptansicht modernisiert (Radius, Schatten, Fokuszustände, konsistente Abstände, Mindestklickfläche)
 * Dark-Mode-Tokens für Popup, Hauptansicht und Sidebar ergänzt (Farben, Rahmen, Schatten)
 * Zentrales Theme-Token-Set für Farben, Abstände und Typografie eingeführt und UI-CSS auf Variablen umgestellt
