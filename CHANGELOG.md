@@ -29,6 +29,10 @@
 * Autoscanner-Alarm wird nur angelegt, wenn er fehlt (kein Rescheduling bei jedem Wake)
 * Modernisierungsdoku für Schritt 7 ergänzt (MV3-Lifecycle)
 * Queue-State-Antwort im Background nutzt nun den Message-Return-Pfad
+* FileReader-Eventhandler nutzt jetzt `addEventListener` (CSP-konforme Patterns)
+* Modernisierungsdoku für Schritt 8 ergänzt (CSP/Inline-Skripte)
+* README-Checklist für Schritt 8 aktualisiert
+* CSP-Doku präzisiert (keine Optionsseite vorhanden)
 
 ## 4.6.0beta2
 
