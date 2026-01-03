@@ -8,11 +8,13 @@
 * Host-Permissions aus `permissions` nach `host_permissions` verschoben (MV3)
 * Modernisierungsdoku für Schritt 2 ergänzt (host_permissions)
 * Hinweise zu optionalen Host-Rechten und Lint-Status in Schritt-2-Doku ergänzt
+* Modernisierungsdoku für Schritt 3 ergänzt (action-Toolbar)
 * Development-Abschnitt im README ergänzt
 * Web-Ext-Skripte für Dev/Lint/Build standardisiert
 * Minimale CI für web-ext lint ergänzt
 * PR-Template mit Smoke-Test-Checkliste hinzugefügt
 * Manifest auf MV3-Basis umgestellt (manifest_version 3, action statt browser_action, browser_style entfernt, background.page beibehalten)
+* Hintergrund-Toolbar nutzt temporäres Action-Fallback für Icon/Badge
 
 ## 4.6.0beta2
 
