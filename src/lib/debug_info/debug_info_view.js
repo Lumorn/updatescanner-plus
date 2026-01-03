@@ -1,5 +1,6 @@
 import {$on, qs} from '/lib/util/view_helpers.js';
 import {waitForMs} from '/lib/util/promise.js';
+import {translate} from '/lib/util/i18n.js';
 
 /**
  * @param {object} handlers - Object containing the following keys
@@ -19,7 +20,9 @@ export function bind({downloadOldHandler, downloadNewHandler}) {
  * @param {string} newHtml - New HTML data to display.
  */
 export function update(page, oldHtml, newHtml) {
-  qs('#title').textContent = `${page.title} - Debug Info`;
+  qs('#title').textContent = translate('debugInfo.titleWithPage', {
+    title: page.title,
+  });
   qs('#details').textContent = formatDetails(page);
   qs('#html-old').textContent = oldHtml;
   qs('#html-new').textContent = newHtml;
@@ -40,20 +43,20 @@ function formatDetails(page) {
   const newScanTime = page.newScanTime ?
     new Date(page.newScanTime).toString() : null;
 
-  return `${page.url}
-scanRateMinutes:  ${page.scanRateMinutes}
-changeThreshold:  ${page.changeThreshold}
-ignoreNumbers:    ${page.ignoreNumbers}
-encoding:         ${page.encoding}
-highlightChanges: ${page.highlightChanges}
-highlightColour:  ${page.highlightColour}
-markChanges:      ${page.markChanges}
-doPost:           ${page.doPost}
-postParams:       ${page.postParams}
-state:            ${page.state}
-lastAutoscanTime: ${lastAutoscanTime}
-oldScanTime:      ${oldScanTime}
-newScanTime:      ${newScanTime}`;
+  return `${translate('debugInfo.details.url')}: ${page.url}
+${translate('debugInfo.details.scanRateMinutes')}:  ${page.scanRateMinutes}
+${translate('debugInfo.details.changeThreshold')}:  ${page.changeThreshold}
+${translate('debugInfo.details.ignoreNumbers')}:    ${page.ignoreNumbers}
+${translate('debugInfo.details.encoding')}:         ${page.encoding}
+${translate('debugInfo.details.highlightChanges')}: ${page.highlightChanges}
+${translate('debugInfo.details.highlightColour')}:  ${page.highlightColour}
+${translate('debugInfo.details.markChanges')}:      ${page.markChanges}
+${translate('debugInfo.details.doPost')}:           ${page.doPost}
+${translate('debugInfo.details.postParams')}:       ${page.postParams}
+${translate('debugInfo.details.state')}:            ${page.state}
+${translate('debugInfo.details.lastAutoscanTime')}: ${lastAutoscanTime}
+${translate('debugInfo.details.oldScanTime')}:      ${oldScanTime}
+${translate('debugInfo.details.newScanTime')}:      ${newScanTime}`;
 }
 
 /**

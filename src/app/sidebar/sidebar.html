@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <title>Update Scanner</title>
+  <title data-i18n="app.title">Update Scanner</title>
   <link rel="stylesheet" href="chrome://browser/content/extension.css">
   <link rel="stylesheet" href="sidebar.css">
   <link rel="stylesheet" href="jstree_theme/style.css">
@@ -16,8 +16,14 @@
     <form method="dialog">
       <p id="dialog-confirm-message"></p>
       <div class="dialog-buttons">
-        <button class="browser-style default" type="submit" value="delete">Delete</button>
-        <button class="browser-style" value="cancel">Cancel</button>
+        <button class="browser-style default" type="submit" value="delete"
+          data-i18n="sidebar.dialog.delete">
+          Delete
+        </button>
+        <button class="browser-style" value="cancel"
+          data-i18n="sidebar.dialog.cancel">
+          Cancel
+        </button>
       </div>
     </form>
   </dialog>

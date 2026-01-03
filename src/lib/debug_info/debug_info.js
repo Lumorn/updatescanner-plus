@@ -1,6 +1,7 @@
 import {paramEnum} from './debug_info_url.js';
 import * as view from './debug_info_view.js';
 import {PageStore} from '/lib/page/page_store.js';
+import {translate} from '/lib/util/i18n.js';
 
 /**
  * Class representing the Debug Info page.
@@ -62,14 +63,20 @@ export class DebugInfo {
    * Download the Old HTML for the page.
    */
   _handleDownloadOld() {
-    this._download(this.oldHtml, this.page.title + '-old.html');
+    this._download(
+      this.oldHtml,
+      `${this.page.title}${translate('debugInfo.filename.oldSuffix')}`,
+    );
   }
 
   /**
    * Download the New HTML for the page.
    */
   _handleDownloadNew() {
-    this._download(this.newHtml, this.page.title + '-new.html');
+    this._download(
+      this.newHtml,
+      `${this.page.title}${translate('debugInfo.filename.newSuffix')}`,
+    );
   }
 
   /**

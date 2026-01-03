@@ -1,3 +1,5 @@
+import {translate} from '/lib/util/i18n.js';
+
 /**
  * Returns a formatted string describing the time elapsed since the given date
  * in natural language.
@@ -12,7 +14,7 @@ export function timeSince(scanTime) {
   const timeDiffInHours = timeDiffInMs / 1000 / 60 / 60;
 
   if (timeDiffInHours < 0) {
-    return 'in the future';
+    return translate('time.future');
   }
 
   if (timeDiffInHours < 24) {
@@ -40,7 +42,7 @@ export function timeSince(scanTime) {
 function formatTimeToday(scanTime) {
   const hours = scanTime.getHours();
   const minutesString = zeroPad(scanTime.getMinutes());
-  return `today at ${hours}:${minutesString}`;
+  return translate('time.todayAt', {time: `${hours}:${minutesString}`});
 }
 
 /**
@@ -51,7 +53,7 @@ function formatTimeToday(scanTime) {
 function formatTimeYesterday(scanTime) {
   const hours = scanTime.getHours();
   const minutesString = zeroPad(scanTime.getMinutes());
-  return `yesterday at ${hours}:${minutesString}`;
+  return translate('time.yesterdayAt', {time: `${hours}:${minutesString}`});
 }
 
 /**
@@ -62,9 +64,9 @@ function formatTimeYesterday(scanTime) {
 function formatTimeInDays(timeDiffInDays) {
   const days = Math.floor(timeDiffInDays);
   if (days == 1) {
-    return 'one day ago';
+    return translate('time.oneDay');
   } else {
-    return `${days} days ago`;
+    return translate('time.days', {days});
   }
 }
 
@@ -76,9 +78,9 @@ function formatTimeInDays(timeDiffInDays) {
 function formatTimeInWeeks(timeDiffInWeeks) {
   const weeks = Math.floor(timeDiffInWeeks);
   if (weeks == 1) {
-    return 'one week ago';
+    return translate('time.oneWeek');
   } else {
-    return `${weeks} weeks ago`;
+    return translate('time.weeks', {weeks});
   }
 }
 

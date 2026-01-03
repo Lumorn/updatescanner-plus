@@ -1,4 +1,5 @@
 import {showAllChanges} from '/lib/main/main_url.js';
+import {loadLanguageFromConfig, translate} from '/lib/util/i18n.js';
 
 const NOTIFICATION_ID = 'updatescanner';
 
@@ -8,25 +9,26 @@ const NOTIFICATION_ID = 'updatescanner';
  * @param {number} updateCount - Number of updates.
  */
 export async function showNotification(updateCount) {
+  await loadLanguageFromConfig();
   let message;
   if (updateCount === 0) {
-    message = 'No updates were detected.';
+    message = translate('notification.none');
   } else if (updateCount === 1) {
-    message = 'A webpage has been updated.';
+    message = translate('notification.single');
   } else {
-    message = `${updateCount} webpages have been updated.`;
+    message = translate('notification.multi', {count: updateCount});
   }
 
   let clickMessage;
   if (updateCount == 0) {
     clickMessage = '';
   } else {
-    clickMessage = 'Click this panel to view the changes.';
+    clickMessage = translate('notification.click');
   }
 
   browser.notifications.create(NOTIFICATION_ID, {
     type: 'basic',
-    title: 'Update Scanner',
+    title: translate('app.title'),
     iconUrl: 'images/updatescanner_48.png',
     message: '\n' + message + '\n' + clickMessage,
   });

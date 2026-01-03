@@ -7,6 +7,8 @@ import {Page} from '/lib/page/page.js';
 import {PageFolder} from '/lib/page/page_folder.js';
 import {diff} from '/lib/diff/diff.js';
 import {log} from '/lib/util/log.js';
+import {applyTranslations, loadLanguageFromConfig, translate}
+  from '/lib/util/i18n.js';
 
 // Allow function mocking
 export const __ = {
@@ -36,6 +38,10 @@ export class Main {
    */
   async init() {
     this.pageStore = await PageStore.load();
+
+    await loadLanguageFromConfig();
+    applyTranslations();
+    document.title = translate('app.title');
 
     view.init();
     view.bindMenu({

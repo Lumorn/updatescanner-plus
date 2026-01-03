@@ -9,6 +9,7 @@ import {openRestoreUrl} from '/lib/backup/restore_url.js';
 import {waitForMs} from '/lib/util/promise.js';
 import {uiActionsEnum} from '/lib/background/actions.js';
 import {Config} from '/lib/util/config.js';
+import {translate} from '/lib/util/i18n.js';
 
 /**
  * Class representing the Update Scanner toolbar popup.
@@ -105,7 +106,7 @@ export class Popup {
     );
     const url = URL.createObjectURL(blob);
 
-    await view.downloadUrl(url, 'Update Scanner Backup.json');
+    await view.downloadUrl(url, translate('backup.filename'));
     URL.revokeObjectURL(url);
   }
 

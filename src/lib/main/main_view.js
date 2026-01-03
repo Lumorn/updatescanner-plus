@@ -1,6 +1,7 @@
 import {qs, $on, hideElement, toggleElement}
   from '/lib/util/view_helpers.js';
 import {timeSince} from '/lib/util/date_format.js';
+import {translate} from '/lib/util/i18n.js';
 
 export const ViewTypes = {
   OLD: 'old',
@@ -64,14 +65,12 @@ export function bindViewDropdownChange(handler) {
 export function viewDiff(page, html) {
   setTitle(page.title, page.url);
   if (page.isError()) {
-    setSubtitle('This page returned an error when scanned. ' +
-      'Click the title above to see what\'s wrong.');
+    setSubtitle(translate('main.subtitle.error'));
   } else if (page.newScanTime == null) {
-    setSubtitle('This page has not yet been scanned.');
+    setSubtitle(translate('main.subtitle.notScanned'));
   } else {
     const scanTime = timeSince(new Date(page.newScanTime));
-    setSubtitle(`This page was last scanned ${scanTime}. ` +
-      'The changes are highlighted.');
+    setSubtitle(translate('main.subtitle.lastScanned', {time: scanTime}));
   }
   setViewDropdown(ViewTypes.DIFF);
   loadSandboxedIframe(html);
@@ -86,10 +85,10 @@ export function viewDiff(page, html) {
 export function viewOld(page, html) {
   setTitle(page.title, page.url);
   if (page.oldScanTime == null) {
-    setSubtitle('There is no old version of this page available yet.');
+    setSubtitle(translate('main.subtitle.oldNotAvailable'));
   } else {
     const scanTime = timeSince(new Date(page.oldScanTime));
-    setSubtitle(`This is the old version of the page, scanned ${scanTime}.`);
+    setSubtitle(translate('main.subtitle.oldScanned', {time: scanTime}));
   }
   setViewDropdown(ViewTypes.OLD);
   loadSandboxedIframe(html);
@@ -104,10 +103,10 @@ export function viewOld(page, html) {
 export function viewNew(page, html) {
   setTitle(page.title, page.url);
   if (page.newScanTime == null) {
-    setSubtitle('This page has not yet been scanned.');
+    setSubtitle(translate('main.subtitle.newNotScanned'));
   } else {
     const scanTime = timeSince(new Date(page.newScanTime));
-    setSubtitle(`This is the new version of the page, scanned ${scanTime}.`);
+    setSubtitle(translate('main.subtitle.newScanned', {time: scanTime}));
   }
   setViewDropdown(ViewTypes.NEW);
   loadSandboxedIframe(html);
@@ -118,7 +117,7 @@ export function viewNew(page, html) {
  * @param {string} url - URL of the page.
  */
 function setTitle(title, url) {
-  document.title = `Update Scanner - ${title}`;
+  document.title = translate('main.titleWithPage', {title});
 
   const titleElement = qs('#title');
   titleElement.textContent = title;
