@@ -136,11 +136,13 @@ unterteilt.
   - Keine verlorenen Events nach Idle/Restart.
   - Notizen: `docs/modernization/07-mv3-lifecycle.md`.
   - Queue-State-Antwort erfolgt per Message-Return für Event-Pages.
-- [ ] 8. CSP und Inline-Skripte prüfen und bereinigen  
+- [x] 8. CSP und Inline-Skripte prüfen und bereinigen  
   CSP prüfen, Inline-Skripte entfernen oder ersetzen.  
   Done:
   - CSP-Fehler in der Konsole sind eliminiert.
   - Keine Inline-Skripte in HTML-Dateien.
+  - Notizen: `docs/modernization/08-csp-inline-scripts.md`.
+  - Hinweis: Keine `options_ui` vorhanden, nur Popup/Sidebar und Tab-Seiten.
 - [ ] 9. Optional: Migration von tabs.executeScript → scripting.executeScript  
   Optionaler API-Wechsel für MV3-Standardpfad, ohne Funktionsverlust.  
   Done:
