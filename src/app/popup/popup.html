@@ -15,8 +15,34 @@
       <div class="text-section-header" data-i18n="app.title">Update Scanner</div>
     </div>
 
+    <div class="panel-section panel-section-filters">
+      <div class="search-row">
+        <input id="search-input" type="search" class="search-input"
+          data-i18n-attr="placeholder:popup.search.placeholder;aria-label:popup.search.label">
+      </div>
+      <div class="filter-chips" role="group"
+        data-i18n-attr="aria-label:popup.filter.label">
+        <button class="filter-chip active" type="button" data-filter="all"
+          aria-pressed="true" data-i18n="popup.filter.all">Alle</button>
+        <button class="filter-chip" type="button" data-filter="new"
+          aria-pressed="false" data-i18n="popup.filter.new">Neu</button>
+        <button class="filter-chip" type="button" data-filter="error"
+          aria-pressed="false" data-i18n="popup.filter.error">Fehler</button>
+        <button class="filter-chip" type="button" data-filter="changed"
+          aria-pressed="false" data-i18n="popup.filter.changed">Geändert</button>
+      </div>
+    </div>
+
     <div class="panel-section panel-section-list">
       <div id="list" class="panel-list-content"></div>
+      <div id="list-empty" class="panel-empty-state hidden"
+        data-i18n="popup.empty.default">
+        Keine Updates verfügbar.
+      </div>
+      <div id="list-empty-filter" class="panel-empty-state hidden"
+        data-i18n="popup.empty.filtered">
+        Keine Treffer für diese Filter.
+      </div>
     </div>
 
     <div class="panel-section panel-section-queue-state hidden" id="scan-state">

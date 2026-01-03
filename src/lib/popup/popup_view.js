@@ -176,6 +176,9 @@ function createListItem(page) {
   const item = document.createElement('div');
   item.className = 'panel-list-item';
   item.dataset.id = page.id;
+  const statusInfo = getPageStatusInfo(page);
+  item.dataset.status = statusInfo.key;
+  item.dataset.title = page.title;
 
   const icon = document.createElement('div');
   icon.className = 'icon';
@@ -187,9 +190,30 @@ function createListItem(page) {
   text.className = 'text';
   text.textContent = page.title;
 
+  const statusBadge = document.createElement('span');
+  statusBadge.className = `status-badge status-${statusInfo.key}`;
+  statusBadge.textContent = statusInfo.label;
+
   item.appendChild(icon);
   item.appendChild(text);
+  item.appendChild(statusBadge);
   return item;
+}
+
+/**
+ * Ermittelt Statusschlüssel und Label für ein Listenelement.
+ *
+ * @param {Page} page - Page-Objekt.
+ * @returns {{key: string, label: string}} Statusdaten.
+ */
+function getPageStatusInfo(page) {
+  if (page.newScanTime == null) {
+    return {key: 'new', label: i18nTranslate('popup.status.new')};
+  }
+  if (page.isError()) {
+    return {key: 'error', label: i18nTranslate('popup.status.error')};
+  }
+  return {key: 'changed', label: i18nTranslate('popup.status.changed')};
 }
 
 /**
