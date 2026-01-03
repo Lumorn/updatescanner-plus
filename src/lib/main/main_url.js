@@ -52,7 +52,7 @@ export function openMain(params, newTab) {
  * @returns {string} URL of the Main page.
  */
 function getMainUrl(params) {
-  const url = new URL(browser.extension.getURL('/app/main/main.html'));
+  const url = new URL(browser.runtime.getURL('/app/main/main.html'));
   for (const [param, value] of Object.entries(params)) {
     url.searchParams.set(param, value);
   }
