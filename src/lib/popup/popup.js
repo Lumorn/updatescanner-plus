@@ -2,7 +2,7 @@ import * as view from './popup_view.js';
 import {openMain, showAllChanges, paramEnum, actionEnum}
   from '/lib/main/main_url.js';
 import {backgroundActionEnum} from '/lib/background/actions.js';
-import {PageStore, hasPageStateChanged, isItemChanged}
+import {PageStore, hasPageStateChanged}
   from '/lib/page/page_store.js';
 import {createBackupJson} from '/lib/backup/backup.js';
 import {openRestoreUrl} from '/lib/backup/restore_url.js';
@@ -62,8 +62,18 @@ export class Popup {
   _refreshPageList() {
     view.clearPageList();
     this.pageStore.getPageList()
-      .filter(isItemChanged)
+      .filter((page) => this._isPopupRelevant(page))
       .map(view.addPage);
+  }
+
+  /**
+   * Prüft, ob eine Seite im Popup gelistet werden soll.
+   *
+   * @param {Page} page - Page-Objekt.
+   * @returns {boolean} True, wenn die Seite angezeigt werden soll.
+   */
+  _isPopupRelevant(page) {
+    return page.isChanged() || page.isError() || page.newScanTime == null;
   }
 
   /**
@@ -161,9 +171,24 @@ export class Popup {
    * @param {storage.StorageChange} change - Object representing the change.
    */
   _handlePageUpdate(pageId, change) {
-    if (hasPageStateChanged(change)) {
+    if (hasPageStateChanged(change) || this._hasNewStatusChanged(change)) {
       this._refreshPageList();
     }
+  }
+
+  /**
+   * Prüft, ob sich der "Neu"-Status einer Seite geändert hat.
+   *
+   * @param {storage.StorageChange} change - Storage-Änderung.
+   * @returns {boolean} True, wenn der Neu-Status gewechselt hat.
+   */
+  _hasNewStatusChanged(change) {
+    if (!change?.oldValue || !change?.newValue) {
+      return false;
+    }
+    const wasNew = change.oldValue.newScanTime == null;
+    const isNew = change.newValue.newScanTime == null;
+    return wasNew !== isNew;
   }
 
   /**
