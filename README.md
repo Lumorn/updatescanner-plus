@@ -54,6 +54,7 @@ Das Manifest liegt in `src/`, die Build-Artefakte landen in `dist/`.
 
 **Dev Run**
 * `npm run dev:firefox` (kopiert Abhängigkeiten nach `src/dependencies` und startet Firefox mit temporär installiertem Add-on aus `src/`)
+* Hinweis: Die für Sidebar und Storage benötigten Abhängigkeiten liegen im Repository unter `src/dependencies`. Für Updates kann `node scripts/copy-dependencies.js` genutzt werden.
 
 **Build**
 * `npm run build:zip` (erzeugt das XPI im Ordner `dist/`)

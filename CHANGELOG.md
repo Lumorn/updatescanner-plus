@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Fehlende Sidebar-Abhängigkeiten unter `src/dependencies` ergänzt, damit jQuery, JSTree, Dialog-Polyfill und idb-file-storage beim Laden verfügbar sind
 * Dev- und Build-Skripte kopieren vor dem Start die Abhängigkeiten, damit Sidebar und Storage-Module geladen werden
 * Manifest-Version auf numerisches Format korrigiert, eigene Gecko-ID gesetzt und `background.persistent` entfernt
 * Add-on-Name im Manifest auf „Update Scanner Plus (Fork)“ angepasst
