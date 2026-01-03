@@ -18,6 +18,7 @@ export const __ = {
   isUpToDate: (...args) => isUpToDate(...args),
   isMajorChange: (...args) => isMajorChange(...args),
   matchHtmlWithSelector: (...args) => matchHtmlWithSelector(...args),
+  computeHtmlHash: (html) => computeHtmlHash(html),
 
   // Allow private functions to be tested
   updatePageState: updatePageState,
@@ -181,12 +182,18 @@ async function processHtmlWithConditions(page, scanHtml, prevHtml) {
  */
 async function updatePageState(page, prevHtmlData, scannedHtmlData) {
   const updatedPage = await Page.load(page.id);
+  const scannedHtmlHash = computeHtmlHash(scannedHtmlData.html);
 
   const changeType = getChanges(
     prevHtmlData,
     scannedHtmlData,
     updatedPage,
   );
+
+  const isSameHtml = prevHtmlData.html === scannedHtmlData.html;
+  const isSameHash = updatedPage.newHtmlHash != null &&
+    updatedPage.newHtmlHash === scannedHtmlHash;
+  const shouldSaveNewHtml = !(isSameHtml || isSameHash);
 
   if (changeType === changeEnum.MAJOR_CHANGE) {
     if (!updatedPage.isChanged()) {
@@ -195,21 +202,42 @@ async function updatePageState(page, prevHtmlData, scannedHtmlData) {
         .saveHtml(updatedPage.id, PageStore.htmlTypes.OLD, prevHtmlData.html);
       updatedPage.oldScanTime = updatedPage.newScanTime;
     }
-    await PageStore
-      .saveHtml(updatedPage.id, PageStore.htmlTypes.NEW, scannedHtmlData.html);
+    if (shouldSaveNewHtml) {
+      await PageStore
+        .saveHtml(updatedPage.id, PageStore.htmlTypes.NEW, scannedHtmlData.html);
+    }
     updatedPage.state = Page.stateEnum.CHANGED;
   } else {
-    await PageStore
-      .saveHtml(updatedPage.id, PageStore.htmlTypes.NEW, scannedHtmlData.html);
+    if (shouldSaveNewHtml) {
+      await PageStore
+        .saveHtml(updatedPage.id, PageStore.htmlTypes.NEW, scannedHtmlData.html);
+    }
     // Only update the state if not previously marked as changed.
     if (!updatedPage.isChanged()) {
       updatedPage.state = Page.stateEnum.NO_CHANGE;
     }
   }
 
+  updatedPage.newHtmlHash = scannedHtmlHash;
   updatedPage.newScanTime = Date.now();
 
   await updatedPage.save();
   __.log(`Scan-Ergebnis gespeichert für URL: ${updatedPage.url}`);
   return changeType === changeEnum.MAJOR_CHANGE;
+}
+
+/**
+ * Berechnet einen einfachen Hash über HTML für schnelle Vergleiche.
+ *
+ * @param {string} html - HTML-String.
+ * @returns {string} Hash als String.
+ */
+function computeHtmlHash(html) {
+  let hash = 2166136261;
+  const safeHtml = html || '';
+  for (let i = 0; i < safeHtml.length; i++) {
+    hash ^= safeHtml.charCodeAt(i);
+    hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+  }
+  return (hash >>> 0).toString(16);
 }

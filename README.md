@@ -41,6 +41,8 @@ Sidebar.
   Außenklicks.
 * Popup-Menü klappt direkt über dem Menüknopf aus und wird nicht verdeckt.
 * Scan-Queue nutzt ein Deque/Index-Modell und verhindert Duplikate per Seiten-ID.
+* Scans speichern NEW-HTML nur bei echten Änderungen und merken sich zusätzlich
+  einen Hash, um unnötige Schreibvorgänge zu vermeiden.
 
 ## Roadmap
 
