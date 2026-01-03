@@ -115,11 +115,13 @@ unterteilt.
   - Event Page läuft über `background.scripts`.
   - Keine `background.page` mehr im Manifest.
   - Notizen: `docs/modernization/04-background-event-page.md`.
-- [ ] 5. Worker-Kompatibilität: window/document eliminieren  
+- [x] 5. Worker-Kompatibilität: window/document eliminieren  
   Zugriff auf `window`/`document` in Worker-Kontexten entfernen oder ersetzen.  
   Done:
   - Keine direkten `window`/`document`-Zugriffe im Worker.
   - Funktionen laufen im Worker fehlerfrei.
+  - Utility: `lib/util/env.js` bündelt globalThis/Timer-Zugriffe.
+  - Notizen: `docs/modernization/05-dom-abhaengigkeiten.md`.
 - [ ] 6. API-Refactor: browser.browserAction → browser.action  
   API-Aufrufe umstellen, damit Toolbar-Logik MV3-konform ist.  
   Done:

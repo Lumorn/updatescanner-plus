@@ -18,6 +18,10 @@
 * Hintergrund-Event-Page aktiviert (background.scripts statt background.page)
 * Modernisierungsdoku für Schritt 4 ergänzt (Event Page)
 * Lint-Workflow nutzt temporäres MV2-Manifest wegen web-ext-4.x-Limitierung
+* DOM-Abhängigkeiten im Background reduziert (globalThis/Utility)
+* DOMParser-Zugriff gekapselt, damit Event Page robust bleibt
+* Modernisierungsdoku für Schritt 5 ergänzt (DOM-Abhängigkeiten)
+* Background-Instanz über env-Utility global verfügbar gemacht
 
 ## 4.6.0beta2
 
