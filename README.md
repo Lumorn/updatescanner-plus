@@ -32,6 +32,8 @@ Sidebar.
 * Dark-Mode-Varianten für zentrale UI-Farbtokens konsistent im gemeinsamen Theme hinterlegt.
 * Modernisierte Button- und Menü-Styles mit klaren Fokus-/Hover-Zuständen und
   konsistenten Klickflächen.
+* Gemeinsame Button- und Menü-Variablen sorgen für einheitliche Hover-/Active-
+  und Fokuszustände in Popup und Hauptansicht.
 * Gleich große Footer-Knöpfe im Popup für Neu/Sidebar/Menü.
 * Popup-Menü reagiert zuverlässig auf den Menüknopf und schließt sauber bei
   Außenklicks.
