@@ -121,6 +121,13 @@ p {
 
 .bottom-button-row {
   min-height: var(--size-footer-row);
+  display: flex;
+  align-items: stretch;
+}
+
+.bottom-button-row .panel-section-footer-button {
+  flex: 1;
+  min-width: 0;
 }
 
 .footer-button-icon {
@@ -155,8 +162,13 @@ p {
 
 .menu-wrapper {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  flex: 1;
+}
+
+.menu-wrapper .panel-section-footer-button {
+  width: 100%;
 }
 
 .menu-content {

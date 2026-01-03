@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Popup-Footer-Knöpfe für Neu/Sidebar/Menü auf gleiche Breite gebracht
 * Popup-Menü reagiert wieder zuverlässig auf den Menüknopf und Außenklicks
 * Popup-Menü wird wieder direkt über dem Menüknopf eingeblendet und nicht verdeckt
 * Buttons und Menüs in Popup und Hauptansicht modernisiert (Radius, Schatten, Fokuszustände, konsistente Abstände, Mindestklickfläche)
