@@ -35,29 +35,69 @@ export class Background {
   constructor() {
     this.pageStore = null;
     this.scanQueue = null;
+    this.autoscan = null;
+    this._initPromise = null;
+    this._listenersRegistered = false;
+    this._boundHandleMessage = this._handleMessage.bind(this);
+    this._boundHandleAlarm = this._handleAlarm.bind(this);
+    this._boundHandleInstalled = this._handleInstalled.bind(this);
+    this._boundHandleStartup = this._handleStartup.bind(this);
   }
 
   /**
    * Start the background processes and listeners.
    */
   async init() {
-    this.pageStore = await PageStore.load();
-    this.pageStore.bindPageUpdate(this._handlePageUpdate.bind(this));
-    browser.runtime.onMessage.addListener(this._handleMessage.bind(this));
+    await this.ensureInitialized();
+  }
 
-    this.scanQueue = new ScanQueue();
-    this.scanQueue.bindScanComplete(this._handleScanComplete.bind(this));
-    this.scanQueue.bindQueueStateChange(
-      this._handleScanQueueStateChange.bind(this),
-    );
+  /**
+   * Registriert alle Listener synchron beim Start der Event Page.
+   */
+  registerListeners() {
+    if (this._listenersRegistered) {
+      return;
+    }
+    this._listenersRegistered = true;
 
-    this._refreshToolbar();
-    this.pageStore.refreshFolderState();
-    await this._checkFirstRun();
-    await this._checkIfUpdateRequired();
+    browser.runtime.onMessage.addListener(this._boundHandleMessage);
+    browser.alarms.onAlarm.addListener(this._boundHandleAlarm);
+    browser.runtime.onInstalled.addListener(this._boundHandleInstalled);
+    browser.runtime.onStartup.addListener(this._boundHandleStartup);
+  }
 
-    const autoscan = new Autoscan(this.scanQueue, this.pageStore);
-    autoscan.start();
+  /**
+   * Stellt sicher, dass die Initialisierung nur einmal parallel läuft.
+   *
+   * @returns {Promise<void>} Promise der Initialisierung.
+   */
+  async ensureInitialized() {
+    if (!this._initPromise) {
+      this._initPromise = (async () => {
+        this.pageStore = await PageStore.load();
+        this.pageStore.bindPageUpdate(this._handlePageUpdate.bind(this));
+
+        this.scanQueue = new ScanQueue();
+        this.scanQueue.bindScanComplete(this._handleScanComplete.bind(this));
+        this.scanQueue.bindQueueStateChange(
+          this._handleScanQueueStateChange.bind(this),
+        );
+
+        this._refreshToolbar();
+        this.pageStore.refreshFolderState();
+        await this._checkFirstRun();
+        await this._checkIfUpdateRequired();
+
+        this.autoscan = new Autoscan(this.scanQueue, this.pageStore);
+        await this.autoscan.init();
+      })().catch((error) => {
+        // Fehler zurücksetzen, damit ein späterer Init-Versuch möglich ist.
+        this._initPromise = null;
+        throw error;
+      });
+    }
+
+    return this._initPromise;
   }
 
   /**
@@ -75,24 +115,26 @@ export class Background {
   }
 
   /**
-   * Called when a message is sent to the background process.
+   * Verarbeitet Nachrichten aus der UI oder anderen Scripten.
    *
-   * @param {object} message - Message content.
-   * @param {object} sender - Object giving details about the message sender.
-   * @param {Function} sendResponse - Function that can be used to send a
-   *   response back to the sender.
+   * @param {object} message - Nachrichtendaten.
+   * @returns {Promise<object|undefined>} Antwort für sendMessage, falls nötig.
    */
-  _handleMessage(message, sender, sendResponse) {
-    if (message.action === backgroundActionEnum.SCAN_ALL) {
-      this._scanAll();
-    } else if (message.action === backgroundActionEnum.SCAN_ITEM) {
-      this._scanItem(message.itemId);
-    } else if (message.action === uiActionsEnum.QUEUE_STATE_REQUEST) {
-      this._handleScanQueueStateChange(
-        this.scanQueue.getScanState(),
-        sendResponse,
-      );
-    }
+  _handleMessage(message) {
+    return this.ensureInitialized().then(() => {
+      if (message.action === backgroundActionEnum.SCAN_ALL) {
+        this._scanAll();
+      } else if (message.action === backgroundActionEnum.SCAN_ITEM) {
+        this._scanItem(message.itemId);
+      } else if (message.action === uiActionsEnum.QUEUE_STATE_REQUEST) {
+        return {
+          action: uiActionsEnum.QUEUE_STATE_CHANGED,
+          data: this.scanQueue.getScanState(),
+        };
+      }
+
+      return undefined;
+    });
   }
 
   /**
@@ -197,6 +239,37 @@ export class Background {
         showNotification(notifyChangeCount);
       }
     }, 1000);
+  }
+
+  /**
+   * Behandelt Alarm-Events der Event Page.
+   *
+   * @param {alarms.Alarm} alarm - Alarmdaten.
+   * @private
+   */
+  async _handleAlarm(alarm) {
+    await this.ensureInitialized();
+    if (this.autoscan) {
+      this.autoscan.onAlarm(alarm);
+    }
+  }
+
+  /**
+   * Reagiert auf Installations-Events und stellt die Initialisierung sicher.
+   *
+   * @private
+   */
+  async _handleInstalled() {
+    await this.ensureInitialized();
+  }
+
+  /**
+   * Reagiert auf Startup-Events und stellt die Initialisierung sicher.
+   *
+   * @private
+   */
+  async _handleStartup() {
+    await this.ensureInitialized();
   }
 
   /**

@@ -129,11 +129,13 @@ unterteilt.
   - Toolbar-APIs funktionieren unverändert.
   - Keine Action-Aufrufe in Popup/Sidebar/Options gefunden.
   - Notizen: `docs/modernization/06-action-api-refactor.md`.
-- [ ] 7. Event-Registrierung robust machen (MV3-Lebenszyklus)  
+- [x] 7. Event-Registrierung robust machen (MV3-Lebenszyklus)  
   Listener so registrieren, dass Wake-up/Shutdown korrekt abgedeckt sind.  
   Done:
   - Listener werden beim Start zuverlässig registriert.
   - Keine verlorenen Events nach Idle/Restart.
+  - Notizen: `docs/modernization/07-mv3-lifecycle.md`.
+  - Queue-State-Antwort erfolgt per Message-Return für Event-Pages.
 - [ ] 8. CSP und Inline-Skripte prüfen und bereinigen  
   CSP prüfen, Inline-Skripte entfernen oder ersetzen.  
   Done:

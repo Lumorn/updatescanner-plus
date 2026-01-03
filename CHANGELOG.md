@@ -25,6 +25,10 @@
 * Action-API vollständig auf `browser.action` umgestellt
 * Modernisierungsdoku für Schritt 6 ergänzt (Action-API-Refactor)
 * Schritt-6-Doku präzisiert (keine Action-Aufrufe in UI-Skripten gefunden)
+* Event-Listener im Background werden nun synchron registriert und nutzen eine idempotente Initialisierung
+* Autoscanner-Alarm wird nur angelegt, wenn er fehlt (kein Rescheduling bei jedem Wake)
+* Modernisierungsdoku für Schritt 7 ergänzt (MV3-Lifecycle)
+* Queue-State-Antwort im Background nutzt nun den Message-Return-Pfad
 
 ## 4.6.0beta2
 
