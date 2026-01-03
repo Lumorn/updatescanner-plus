@@ -46,6 +46,16 @@ describe('Scan Queue', function() {
 
       expect(scanQueue.queue).toEqual([page1, page2]);
     });
+
+    it('doesn\'t add a page if its id is already queued', function() {
+      const scanQueue = new ScanQueue();
+      const page1 = new Page(1, {});
+      const page2 = new Page(1, {});
+
+      scanQueue.add([page1, page2]);
+
+      expect(scanQueue.queue).toEqual([page1]);
+    });
   });
 
   describe('scan', function() {
