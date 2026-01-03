@@ -39,6 +39,8 @@
 * Storage/IndexedDB-Initialisierung mit Promise-Guard und Write-Queue gehärtet
 * Debug-Logs für Init/Settings/Scan-Ergebnisse ergänzt
 * Modernisierungsdoku für Schritt 11 ergänzt (Storage/IndexedDB)
+* Host-Permissions bereinigt (redundante Einträge entfernt)
+* Modernisierungsdoku für Schritt 12 ergänzt (Permission-Audit)
 
 ## 4.6.0beta2
 

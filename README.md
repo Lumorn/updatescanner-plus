@@ -159,11 +159,12 @@ unterteilt.
   - Storage-Operationen funktionieren im Worker.
   - Keine Datenverluste beim Neustart.
   - Notizen: `docs/modernization/11-storage-indexeddb.md`.
-- [ ] 12. Permission-Audit und Minimalprinzip (ohne Funktionsverlust)  
+- [x] 12. Permission-Audit und Minimalprinzip (ohne Funktionsverlust)  
   Permissions auf das nötige Minimum reduzieren und dokumentieren.  
   Done:
   - Manifest enthält nur benötigte Permissions.
   - Funktionsumfang ist vollständig erhalten.
+  - Notizen: `docs/modernization/12-permission-audit.md`.
 - [ ] 13. Packaging/Build/Dev-Tooling modernisieren (kleiner Schritt)  
   Build/Release-Tools an MV3 anpassen, ohne große Umbauten.  
   Done:
