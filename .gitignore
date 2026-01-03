@@ -5,7 +5,6 @@
 *.xpi
 /coverage/
 .build_settings.json*
-/src/dependencies/
 /test/dependencies/
 /src/.web-extension-id
 /.web-extension-id
