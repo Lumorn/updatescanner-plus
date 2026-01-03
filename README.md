@@ -18,7 +18,6 @@ Sidebar.
 * Automatische Scans in wählbaren Intervallen sowie manuelle Scans.
 * Benachrichtigungen bei gefundenen Änderungen.
 * Popup- und Sidebar-Ansicht für die Verwaltung der Einträge.
-* Popup mit Suche, Filter-Chips und Status-Badges für schnellere Orientierung.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
