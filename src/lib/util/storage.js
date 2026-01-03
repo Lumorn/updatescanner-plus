@@ -1,7 +1,13 @@
 /**
+ * Serielle Schreibkette, um parallele Writes zu vermeiden.
+ */
+let storageWriteChain = Promise.resolve();
+
+/**
  * Static functions to save and load data from storage.
  */
 export class Storage {
+
   /**
    * Save an object to storage.
    *
@@ -12,7 +18,9 @@ export class Storage {
    * has completed, or rejected if the operation fails.
    */
   static save(key, data) {
-    return browser.storage.local.set({[key]: data});
+    return Storage._queueWrite('save', key, () => (
+      browser.storage.local.set({[key]: data})
+    ));
   }
 
   /**
@@ -42,7 +50,9 @@ export class Storage {
    * completed, or rejected if the operation fails.
    */
   static remove(key) {
-    return browser.storage.local.remove(key);
+    return Storage._queueWrite('remove', key, () => (
+      browser.storage.local.remove(key)
+    ));
   }
 
   /**
@@ -67,5 +77,35 @@ export class Storage {
    */
   static removeListener(listener) {
     browser.storage.onChanged.removeListener(listener);
+  }
+
+  /**
+   * Stellt sicher, dass Schreibzugriffe seriell ausgeführt werden.
+   *
+   * @param {string} action - Schreibaktion zur Protokollierung.
+   * @param {string} key - Storage-Key.
+   * @param {Function} writeFn - Auszuführende Schreibfunktion.
+   *
+   * @returns {Promise<void>} Promise für die Schreiboperation.
+   */
+  static _queueWrite(action, key, writeFn) {
+    storageWriteChain = storageWriteChain.then(writeFn, writeFn);
+    storageWriteChain = storageWriteChain.catch((error) => {
+      Storage._logWriteError(action, key, error);
+    });
+    return storageWriteChain;
+  }
+
+  /**
+   * Loggt Speicherfehler mit Kontext, ohne den Ablauf abzubrechen.
+   *
+   * @param {string} action - Schreibaktion.
+   * @param {string} key - Storage-Key.
+   * @param {Error} error - Fehlerobjekt.
+   */
+  static _logWriteError(action, key, error) {
+    const isQuotaError = error && error.name === 'QuotaExceededError';
+    const reason = isQuotaError ? 'Quota überschritten' : 'Speicherfehler';
+    console.error(`${reason} bei storage.local ${action} (${key}).`, error);
   }
 }

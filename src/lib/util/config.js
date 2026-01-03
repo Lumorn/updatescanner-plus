@@ -1,4 +1,5 @@
 import {Storage} from './storage.js';
+import {log} from './log.js';
 
 /**
  * Class used to access configuration settings.
@@ -47,6 +48,7 @@ export class Config {
    */
   async load() {
     this._data = await Storage.load('config') || {};
+    log(`Einstellungen geladen: ${Object.keys(this._data).length}.`);
     return this;
   }
 
@@ -57,7 +59,9 @@ export class Config {
    * or is rejected if the storage operation fails.
    */
   save() {
-    return Storage.save('config', this._data);
+    const result = Storage.save('config', this._data);
+    log('Einstellungen gespeichert.');
+    return result;
   }
 
   /**

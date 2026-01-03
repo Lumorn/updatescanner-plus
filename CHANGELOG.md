@@ -36,6 +36,9 @@
 * Modernisierungsdoku für Schritt 9 ergänzt (scripting API, nicht zutreffend)
 * Modernisierungsdoku für Schritt 10 ergänzt (web_accessible_resources, nicht erforderlich)
 * README-Checklist für Schritt 10 aktualisiert
+* Storage/IndexedDB-Initialisierung mit Promise-Guard und Write-Queue gehärtet
+* Debug-Logs für Init/Settings/Scan-Ergebnisse ergänzt
+* Modernisierungsdoku für Schritt 11 ergänzt (Storage/IndexedDB)
 
 ## 4.6.0beta2
 

@@ -206,5 +206,6 @@ async function updatePageState(page, prevHtmlData, scannedHtmlData) {
   updatedPage.newScanTime = Date.now();
 
   await updatedPage.save();
+  __.log(`Scan-Ergebnis gespeichert für URL: ${updatedPage.url}`);
   return changeType === changeEnum.MAJOR_CHANGE;
 }
