@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Update Scanner Plus",
+  "name": "Update Scanner Plus (Fork)",
   "short_name": "Updatescan",
   "version": "4.6.0.2",
   "description": "Monitors webpages for updates.",

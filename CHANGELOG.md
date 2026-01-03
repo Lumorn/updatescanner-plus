@@ -3,7 +3,7 @@
 ## Unreleased
 
 * Manifest-Version auf numerisches Format korrigiert, eigene Gecko-ID gesetzt und `background.persistent` entfernt
-* Add-on-Name im Manifest auf „Update Scanner Plus“ angepasst
+* Add-on-Name im Manifest auf „Update Scanner Plus (Fork)“ angepasst
 * AMO-Publishing-Dokumentation mit Submission-Guide, Review-Notes-Vorlage und Release-Checklist ergänzt
 * SECURITY.md und PRIVACY.md ergänzt sowie Publishing-Links im README hinzugefügt
 * Dev-/Build-Tooling mit zentraler web-ext-Config und Quickstart dokumentiert

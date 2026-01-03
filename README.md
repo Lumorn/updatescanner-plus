@@ -1,4 +1,4 @@
-# Update Scanner Plus
+# Update Scanner Plus (Fork)
 
 **Fork von https://github.com/sneakypete81/updatescanner**
 
@@ -8,7 +8,7 @@ bestehen.
 
 ## Überblick
 
-„Update Scanner Plus“ überwacht Webseiten auf Änderungen und zeigt die
+„Update Scanner Plus (Fork)“ überwacht Webseiten auf Änderungen und zeigt die
 Unterschiede an. Die Erweiterung läuft als Firefox-WebExtension mit Popup und
 Sidebar.
 
@@ -72,7 +72,9 @@ Das Manifest liegt in `src/`, die Build-Artefakte landen in `dist/`.
 Hinweis für MV3: eine feste Extension-ID ist wichtig für Updates und Signing
 (`browser_specific_settings.gecko.id` im Manifest).
 Für dieses Fork ist die feste ID `updatescanner-plus@lumorn` gesetzt, damit die
-Erweiterung parallel zum Original installierbar ist.
+Erweiterung parallel zum Original installierbar ist. Der Anzeigename im
+Manifest lautet „Update Scanner Plus (Fork)“, um beide Add-ons eindeutig zu
+unterscheiden.
 
 ## Lizenz
 
