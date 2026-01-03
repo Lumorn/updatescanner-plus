@@ -28,6 +28,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Popup- und Sidebar-Ansicht für die Verwaltung der Einträge.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
 * Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
+* Globale Einstellung für den Standard-Scan über einen versteckten Tab bei neuen Seiten.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).

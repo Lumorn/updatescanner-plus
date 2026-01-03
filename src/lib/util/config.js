@@ -15,6 +15,7 @@ export class Config {
       'isFirstRun': true, // Is this the first time the extension has run
       'updateVersion': 0, // Used to determine if update tasks are required
       'language': 'en', // Sprache der Benutzeroberfläche
+      'useHiddenTabScanByDefault': false, // Standard für versteckten Tab bei neuen Scans
     };
   }
 

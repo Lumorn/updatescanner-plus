@@ -82,6 +82,15 @@ export function bindLanguageChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn der Default geändert wird.
+ */
+export function bindHiddenTabScanDefaultChange(handler) {
+  $on(qs('#hidden-tab-scan-default'), 'change', (event) => {
+    handler(event.target.checked);
+  });
+}
+
+/**
  * Setzt die aktuelle Sprache und aktualisiert die UI-Texte.
  *
  * @param {string} language - Sprachcode.
@@ -89,6 +98,15 @@ export function bindLanguageChange(handler) {
 export function setLanguage(language) {
   const activeLanguage = applyLanguage(language);
   qs('#language-select').value = activeLanguage;
+}
+
+/**
+ * Setzt den Default-Status für versteckte Tabs in den Einstellungen.
+ *
+ * @param {boolean} enabled - Aktiviert den Default für versteckte Tabs.
+ */
+export function setHiddenTabScanDefault(enabled) {
+  qs('#hidden-tab-scan-default').checked = enabled;
 }
 
 /**

@@ -31,6 +31,9 @@ const translations = {
     'settings.language.description': 'Select the language for the interface.',
     'settings.language.option.en': 'English',
     'settings.language.option.de': 'German',
+    'settings.hiddenTabScan.label': 'Use hidden tab for scans by default',
+    'settings.hiddenTabScan.description':
+      'Use a background tab as the default scan source for new pages.',
     'scan.progress': 'Scan in progress {progress}% ({scanned}/{total})',
     'backup.filename': 'Update Scanner Backup.json',
     'page.defaultTitle': 'Update Scanner Website',
@@ -196,6 +199,9 @@ const translations = {
     'settings.language.description': 'Wähle die Sprache der Oberfläche aus.',
     'settings.language.option.en': 'Englisch',
     'settings.language.option.de': 'Deutsch',
+    'settings.hiddenTabScan.label': 'Versteckten Tab für Scans verwenden',
+    'settings.hiddenTabScan.description':
+      'Verwendet einen Hintergrund-Tab als Standard-Scanquelle für neue Seiten.',
     'scan.progress': 'Scan läuft {progress}% ({scanned}/{total})',
     'backup.filename': 'Update Scanner Sicherung.json',
     'page.defaultTitle': 'Update Scanner Webseite',

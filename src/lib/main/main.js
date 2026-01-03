@@ -7,6 +7,7 @@ import {Page} from '/lib/page/page.js';
 import {PageFolder} from '/lib/page/page_folder.js';
 import {diff} from '/lib/diff/diff.js';
 import {log} from '/lib/util/log.js';
+import {Config} from '/lib/util/config.js';
 import {applyTranslations, loadLanguageFromConfig, translate}
   from '/lib/util/i18n.js';
 
@@ -140,7 +141,13 @@ export class Main {
       url = undefined;
     }
 
-    const temporaryPage = new Page(-1, {title: title, url: url});
+    const useHiddenTabScanByDefault =
+      await Config.loadSingleSetting('useHiddenTabScanByDefault');
+    const temporaryPage = new Page(-1, {
+      title: title,
+      url: url,
+      useHiddenTabScan: useHiddenTabScanByDefault,
+    });
     const newSettings = await dialog.openPageDialog(temporaryPage);
 
     if (newSettings == null) {
