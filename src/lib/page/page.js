@@ -34,6 +34,7 @@ export class Page {
       contentMode: Page.contentModeEnum.TEXT,
       requireExactMatchCount: false,
       partialScan: false,
+      newHtmlHash: null,
     };
   }
 
@@ -127,6 +128,7 @@ export class Page {
    *   match.
    * @property {boolean} partialScan - True if selectors should be used for
    *   selecting parts of the page to scan.
+   * @property {?string} newHtmlHash - Hash der zuletzt gespeicherten NEW-HTML.
    */
   constructor(
     id,
@@ -150,6 +152,7 @@ export class Page {
       contentMode = Page.DEFAULTS.contentMode,
       requireExactMatchCount = Page.DEFAULTS.requireExactMatchCount,
       partialScan = Page.DEFAULTS.partialScan,
+      newHtmlHash = Page.DEFAULTS.newHtmlHash,
     },
   ) {
     this.id = id;
@@ -172,6 +175,7 @@ export class Page {
     this.contentMode = contentMode;
     this.requireExactMatchCount = requireExactMatchCount;
     this.partialScan = partialScan;
+    this.newHtmlHash = newHtmlHash;
   }
 
   /**
@@ -200,6 +204,7 @@ export class Page {
       contentMode: this.contentMode,
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
+      newHtmlHash: this.newHtmlHash,
     };
   }
 
@@ -225,6 +230,7 @@ export class Page {
       contentMode: this.contentMode,
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
+      newHtmlHash: this.newHtmlHash,
       // state: this.state,
       // lastAutoscanTime: this.lastAutoscanTime,
       // oldScanTime: this.oldScanTime,
