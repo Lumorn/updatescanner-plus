@@ -29,6 +29,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
 * Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
 * Globale Einstellung für den Standard-Scan über einen versteckten Tab bei neuen Seiten.
+* Aktion im Settings-Panel, um den versteckten Tab-Scan für alle bestehenden Seiten zu aktivieren/deaktivieren.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).

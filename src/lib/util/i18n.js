@@ -34,6 +34,9 @@ const translations = {
     'settings.hiddenTabScan.label': 'Use hidden tab for scans by default',
     'settings.hiddenTabScan.description':
       'Use a background tab as the default scan source for new pages.',
+    'settings.hiddenTabScanAll.label': 'Use hidden tab scan for all pages',
+    'settings.hiddenTabScanAll.description':
+      'Apply the hidden tab scan setting to all existing pages.',
     'scan.progress': 'Scan in progress {progress}% ({scanned}/{total})',
     'backup.filename': 'Update Scanner Backup.json',
     'page.defaultTitle': 'Update Scanner Website',
@@ -202,6 +205,10 @@ const translations = {
     'settings.hiddenTabScan.label': 'Versteckten Tab für Scans verwenden',
     'settings.hiddenTabScan.description':
       'Verwendet einen Hintergrund-Tab als Standard-Scanquelle für neue Seiten.',
+    'settings.hiddenTabScanAll.label':
+      'Versteckten Tab-Scan für alle Seiten aktivieren/deaktivieren',
+    'settings.hiddenTabScanAll.description':
+      'Überträgt die Einstellung für den versteckten Tab auf alle vorhandenen Seiten.',
     'scan.progress': 'Scan läuft {progress}% ({scanned}/{total})',
     'backup.filename': 'Update Scanner Sicherung.json',
     'page.defaultTitle': 'Update Scanner Webseite',

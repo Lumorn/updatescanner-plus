@@ -52,8 +52,12 @@ export class Popup {
     view.bindHiddenTabScanDefaultChange(
       this._handleHiddenTabScanDefaultChange.bind(this),
     );
+    view.bindHiddenTabScanAllChange(
+      this._handleHiddenTabScanAllChange.bind(this),
+    );
     view.setLanguage(this.config.get('language'));
     view.setHiddenTabScanDefault(this.config.get('useHiddenTabScanByDefault'));
+    this._syncHiddenTabScanAllState();
     view.setVersion(this.version);
 
     browser.runtime.onMessage.addListener(this._handleMessage.bind(this));
@@ -223,5 +227,31 @@ export class Popup {
     this.config.set('useHiddenTabScanByDefault', enabled);
     await this.config.save();
     view.setHiddenTabScanDefault(enabled);
+  }
+
+  /**
+   * Überträgt die Einstellung für den versteckten Tab auf alle vorhandenen Seiten.
+   *
+   * @param {boolean} enabled - Neuer Wert für alle Seiten.
+   */
+  async _handleHiddenTabScanAllChange(enabled) {
+    const pages = this.pageStore.getPageList();
+    await Promise.all(pages.map(async (page) => {
+      page.useHiddenTabScan = enabled;
+      await page.save();
+    }));
+    this._syncHiddenTabScanAllState();
+  }
+
+  /**
+   * Ermittelt den Sammelstatus für versteckte Tabs und aktualisiert die UI.
+   */
+  _syncHiddenTabScanAllState() {
+    const pages = this.pageStore.getPageList();
+    const total = pages.length;
+    const enabledCount = pages.filter((page) => page.useHiddenTabScan).length;
+    const checked = total > 0 && enabledCount === total;
+    const indeterminate = enabledCount > 0 && enabledCount < total;
+    view.setHiddenTabScanAllState({checked, indeterminate});
   }
 }
