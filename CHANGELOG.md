@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Typografie-Tokens um zusätzliche Schriftgrößen und Font-Weights erweitert und die Hierarchie in Hauptansicht/Popup geschärft
 * Gemeinsame Button- und Menü-Variablen eingeführt, damit Popup und Hauptansicht identische Hover-/Active-/Focus-Zustände nutzen
 * Dark-Mode-Overrides in ein gemeinsames Theme-Token-Set ausgelagert
 * Popup-Footer-Knöpfe für Neu/Sidebar/Menü auf gleiche Breite gebracht

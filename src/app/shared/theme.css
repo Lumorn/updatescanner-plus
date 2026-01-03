@@ -4,6 +4,12 @@
   --font-size-200: 1rem;
   --font-size-300: 1.125rem;
   --font-size-400: 1.5rem;
+  --font-size-500: 1.75rem;
+  --font-size-600: 2rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
   --line-height-tight: 1.2;
   --line-height-normal: 1.5;
   --color-surface: #ffffff;

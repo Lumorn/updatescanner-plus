@@ -29,6 +29,8 @@ Sidebar.
   Sprachverwaltung (Englisch/Deutsch).
 * Zentrales Theme-Token-Set für Farben, Abstände und Typografie mit konsistenten
   Font- und Line-Height-Skalen.
+* Erweiterte Typografie-Skala mit zusätzlichen Schriftgrößen/Font-Weights und klarer
+  Hierarchie für Überschriften, Sektionstitel und Metatexte in Hauptansicht und Popup.
 * Dark-Mode-Varianten für zentrale UI-Farbtokens konsistent im gemeinsamen Theme hinterlegt.
 * Modernisierte Button- und Menü-Styles mit klaren Fokus-/Hover-Zuständen und
   konsistenten Klickflächen.

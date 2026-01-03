@@ -12,17 +12,35 @@ html body {
   background-color: var(--color-surface);
 }
 
+.panel-section {
+  padding: var(--space-4);
+}
+
+.panel-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.text-section-header {
+  font-size: var(--font-size-300);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
 .icon-section-header {
   background-image: url('/images/updatescanner_32.png');
 }
 
 .panel-section-queue-state {
-  padding: var(--space-1);
+  padding: var(--space-2) var(--space-4);
   width: 100%;
   background: var(--color-warning);
 }
 
 .panel-section-queue-state .text-section-header {
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-medium);
   text-align: center;
   width: 100%;
 }
@@ -51,7 +69,9 @@ html body {
 }
 
 p {
-  padding: var(--space-2-5);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-200);
+  line-height: var(--line-height-normal);
 }
 
 .warning {
@@ -74,16 +94,19 @@ p {
   display: flex;
   flex-direction: column;
   gap: var(--space-1-5);
-  padding: 0 var(--space-2-5);
+  padding: 0;
 }
 
 .settings-label {
-  font-weight: 600;
+  font-size: var(--font-size-200);
+  font-weight: var(--font-weight-semibold);
 }
 
 .settings-description {
   margin-top: var(--space-1);
   color: var(--color-text-muted);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-normal);
 }
 
 #language-select {
@@ -95,6 +118,7 @@ p {
   min-height: var(--size-footer-min);
   border-radius: 0;
   border: 0;
+  padding: var(--space-3) var(--space-4);
 }
 
 .panel-section-footer-button {
@@ -153,6 +177,7 @@ p {
 .footer-button-text {
   margin-top: var(--space-1);
   font-size: var(--font-size-100);
+  font-weight: var(--font-weight-medium);
   text-align: center;
 }
 
