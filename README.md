@@ -95,12 +95,13 @@ unterteilt.
   - Manifest V3 lädt ohne Fehler.
   - Extension startet und zeigt UI.
   - Hintergrundseite bleibt als `background.page` aktiv, kein Service Worker.
-- [ ] 2. Host Permissions sauber trennen  
+- [x] 2. Host Permissions sauber trennen  
   Host-Rechte in `host_permissions` auslagern und restliche Permissions
   bereinigen.  
   Done:
   - Host-Rechte sind ausschließlich in `host_permissions`.
   - Keine unnötigen Permissions im Manifest.
+  - Notizen: `docs/modernization/02-host-permissions.md`.
 - [x] 3. Toolbar: browser_action → action  
   Toolbar-Definition auf MV3-`action` umstellen, UI-Icon und Popup prüfen.  
   Done:

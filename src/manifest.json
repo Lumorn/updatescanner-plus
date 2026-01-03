@@ -16,12 +16,14 @@
     "96": "images/updatescanner_96.png"
   },
   "permissions": [
-    "<all_urls>",
     "alarms",
     "notifications",
     "storage",
     "tabs",
-    "unlimitedStorage",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "<all_urls>",
     "*://twitter.com/*",
     "*://www.facebook.com/*"
   ],
