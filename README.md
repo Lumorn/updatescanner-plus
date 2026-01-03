@@ -40,6 +40,8 @@ Sidebar.
 * Popup-Menü reagiert zuverlässig auf den Menüknopf und schließt sauber bei
   Außenklicks.
 * Popup-Menü klappt direkt über dem Menüknopf aus und wird nicht verdeckt.
+* Popup-Bereiche als Karten mit einheitlichen Abständen, Schatten und harmonischer
+  Darstellung für helles und dunkles Farbschema.
 
 ## Roadmap
 

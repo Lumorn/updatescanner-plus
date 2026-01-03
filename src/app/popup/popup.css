@@ -20,6 +20,11 @@ html body {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  margin: var(--space-3) var(--space-4) 0;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-muted);
+  box-shadow: 0 2px 6px rgba(12, 12, 13, 0.08);
 }
 
 .text-section-header {
@@ -47,13 +52,17 @@ html body {
 
 .panel-section-list {
   flex: auto;
-  padding: 0;
-  background-color: var(--color-surface-alt);
+  margin: var(--space-3) var(--space-4);
+  padding: var(--space-2);
+  background-color: var(--color-surface-muted);
+  border-radius: var(--radius-m);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 6px rgba(12, 12, 13, 0.08);
   overflow: auto;
 }
 
 .panel-list-content {
-  background-color: var(--color-surface);
+  background-color: transparent;
 }
 
 .panel-list-item > .text {
@@ -116,15 +125,29 @@ p {
 .panel-section-footer {
   height: auto;
   min-height: var(--size-footer-min);
-  border-radius: 0;
-  border: 0;
-  padding: var(--space-3) var(--space-4);
+  margin: var(--space-3) var(--space-4);
+  padding: var(--space-2);
+  border-radius: var(--radius-m);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-muted);
+  box-shadow: 0 2px 6px rgba(12, 12, 13, 0.08);
 }
 
 .panel-section-footer-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  min-height: var(--size-footer-min);
+  background-color: var(--color-surface);
   border-radius: var(--button-radius);
+  border: 1px solid var(--color-border);
   box-shadow: var(--button-shadow);
   transition: var(--button-transition);
+  text-align: center;
+  cursor: pointer;
 }
 
 .panel-section-footer-button:hover {
@@ -175,10 +198,16 @@ p {
 }
 
 .footer-button-text {
-  margin-top: var(--space-1);
   font-size: var(--font-size-100);
   font-weight: var(--font-weight-medium);
   text-align: center;
+}
+
+.panel-section-footer-separator {
+  width: 1px;
+  margin: var(--space-1) var(--space-2);
+  background-color: var(--color-border);
+  align-self: stretch;
 }
 
 .hidden {
