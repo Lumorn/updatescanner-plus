@@ -83,6 +83,7 @@ const translations = {
     'main.subtitle.newNotScanned': 'This page has not yet been scanned.',
     'main.subtitle.newScanned':
       'This is the new version of the page, scanned {time}.',
+    'scan.notice.hiddenTabFallback': 'Hidden tab failed, fetch was used.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Scan every 5 minutes',
     'main.autoscan.every15': 'Scan every 15 minutes',
@@ -256,6 +257,7 @@ const translations = {
     'main.subtitle.newNotScanned': 'Diese Seite wurde noch nicht gescannt.',
     'main.subtitle.newScanned':
       'Dies ist die neue Version der Seite, gescannt {time}.',
+    'scan.notice.hiddenTabFallback': 'Versteckter Tab fehlgeschlagen, Fetch verwendet.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Alle 5 Minuten scannen',
     'main.autoscan.every15': 'Alle 15 Minuten scannen',

@@ -29,6 +29,7 @@ export const __ = {
 const SCAN_IDLE_MS = 2000;
 const TAB_LOAD_TIMEOUT_MS = 20000;
 const HIDDEN_TAB_DEFAULT_WAIT_MS = 3000;
+const HIDDEN_TAB_RETRY_EXTRA_WAIT_MS = 4000;
 const HIDDEN_TAB_WAIT_FOR_SELECTOR_TIMEOUT_MS = 10000;
 const HIDDEN_TAB_DOM_STABILITY_WINDOW_MS = 1000;
 const HIDDEN_TAB_DOM_STABILITY_TIMEOUT_MS = 8000;
@@ -80,10 +81,16 @@ export async function scanPage(page) {
   }
   __.log(`Scanning "${page.title}"...`);
   try {
-    const html = page.useHiddenTabScan
-      ? await getHtmlFromHiddenTab(page)
-      : await getHtmlFromFetch(page);
-    return processHtml(page, html);
+    let html = '';
+    let scanNoticeKey = null;
+
+    if (page.useHiddenTabScan) {
+      ({html, scanNoticeKey} = await getHtmlFromHiddenTabWithRetry(page));
+    } else {
+      html = await getHtmlFromFetch(page);
+    }
+
+    return processHtml(page, html, scanNoticeKey);
   } catch (error) {
     if (error?.name === 'ScanTimeoutError') {
       __.log(`Scan-Timeout bei "${page.title}": ${error.message}`);
@@ -94,6 +101,7 @@ export async function scanPage(page) {
     if (await page.existsInStorage()) {
       const updatedPage = await Page.load(page.id);
       updatedPage.state = Page.stateEnum.ERROR;
+      updatedPage.lastScanNoticeKey = null;
       updatedPage.save();
     }
   }
@@ -117,12 +125,41 @@ async function getHtmlFromFetch(page) {
 }
 
 /**
+ * Versucht den Hidden-Tab-Scan einmalig erneut und fällt danach auf fetch zurück.
+ *
+ * @param {Page} page - Page object associated with the scan.
+ * @returns {{html: string, scanNoticeKey: ?string}} HTML und optionaler Hinweis-Key.
+ */
+async function getHtmlFromHiddenTabWithRetry(page) {
+  try {
+    return {html: await getHtmlFromHiddenTab(page), scanNoticeKey: null};
+  } catch (error) {
+    logHiddenTabFailure(page, error, '1. Versuch');
+  }
+
+  try {
+    return {
+      html: await getHtmlFromHiddenTab(page, {extraWaitMs: HIDDEN_TAB_RETRY_EXTRA_WAIT_MS}),
+      scanNoticeKey: null,
+    };
+  } catch (error) {
+    logHiddenTabFailure(page, error, 'Retry');
+  }
+
+  __.log(`Hidden-Tab-Scan fehlgeschlagen für "${page.title}", verwende Fetch-Fallback.`);
+  const html = await getHtmlFromFetch(page);
+  return {html, scanNoticeKey: 'scan.notice.hiddenTabFallback'};
+}
+
+/**
  * Lädt HTML über einen versteckten Tab und einen DOM-Snapshot.
  *
  * @param {Page} page - Page object associated with the scan.
+ * @param {object} options - Zusatzoptionen für den Scan.
+ * @param {number} options.extraWaitMs - Zusätzliche Wartezeit vor dem Snapshot.
  * @returns {string} HTML page content.
  */
-async function getHtmlFromHiddenTab(page) {
+async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
   const tab = await browser.tabs.create({
     url: page.url,
     active: false,
@@ -130,8 +167,9 @@ async function getHtmlFromHiddenTab(page) {
 
   try {
     await waitForTabReady(tab.id, page);
-    if (HIDDEN_TAB_DEFAULT_WAIT_MS > 0) {
-      await __.waitForMs(HIDDEN_TAB_DEFAULT_WAIT_MS);
+    const waitMs = HIDDEN_TAB_DEFAULT_WAIT_MS + Math.max(0, extraWaitMs);
+    if (waitMs > 0) {
+      await __.waitForMs(waitMs);
     }
     await waitForDomStability(tab.id, page);
     return await getHtmlFromTab(tab.id);
@@ -139,6 +177,22 @@ async function getHtmlFromHiddenTab(page) {
     await browser.tabs.remove(tab.id).catch(() => {
       __.log(`Konnte Tab nicht schließen: ${page.url}`);
     });
+  }
+}
+
+/**
+ * Protokolliert Fehler beim Hidden-Tab-Scan mit Kontext.
+ *
+ * @param {Page} page - Page object associated with the scan.
+ * @param {Error} error - Fehlerobjekt.
+ * @param {string} attemptLabel - Beschriftung des Versuchs.
+ */
+function logHiddenTabFailure(page, error, attemptLabel) {
+  const prefix = `Hidden-Tab-Scan (${attemptLabel})`;
+  if (error?.name === 'ScanTimeoutError') {
+    __.log(`${prefix} Timeout bei "${page.title}": ${error.message}`);
+  } else {
+    __.log(`${prefix} fehlgeschlagen bei "${page.title}": ${error}`);
   }
 }
 
@@ -341,7 +395,7 @@ async function getHtmlFromResponse(response, page) {
  *
  * @returns {boolean} True if a new major change is detected.
  */
-async function processHtml(page, scannedHtml) {
+async function processHtml(page, scannedHtml, scanNoticeKey = null) {
   // Do nothing if the page no longer exists
   const existsInStorage = await page.existsInStorage();
   if (!existsInStorage) {
@@ -350,7 +404,7 @@ async function processHtml(page, scannedHtml) {
 
   const prevHtml = await PageStore.loadHtml(page.id, PageStore.htmlTypes.NEW);
 
-  return processHtmlWithConditions(page, scannedHtml, prevHtml);
+  return processHtmlWithConditions(page, scannedHtml, prevHtml, scanNoticeKey);
 }
 
 /**
@@ -363,7 +417,7 @@ async function processHtml(page, scannedHtml) {
  *
  * @returns {boolean} True if a new major change is detected.
  */
-async function processHtmlWithConditions(page, scanHtml, prevHtml) {
+async function processHtmlWithConditions(page, scanHtml, prevHtml, scanNoticeKey) {
   if (page.selectors && prevHtml != null) {
     const scanParts = await __.matchHtmlWithSelector(scanHtml, page.selectors);
     const prevParts = await __.matchHtmlWithSelector(prevHtml, page.selectors);
@@ -371,12 +425,14 @@ async function processHtmlWithConditions(page, scanHtml, prevHtml) {
       page,
       new ContentData(prevHtml, prevParts),
       new ContentData(scanHtml, scanParts),
+      scanNoticeKey,
     );
   } else {
     return updatePageState(
       page,
       new ContentData(prevHtml, null),
       new ContentData(scanHtml, null),
+      scanNoticeKey,
     );
   }
 }
@@ -392,9 +448,10 @@ async function processHtmlWithConditions(page, scanHtml, prevHtml) {
  *
  * @returns {boolean} True if a new major change is detected.
  */
-async function updatePageState(page, prevHtmlData, scannedHtmlData) {
+async function updatePageState(page, prevHtmlData, scannedHtmlData, scanNoticeKey = null) {
   const updatedPage = await Page.load(page.id);
   const scannedHtmlHash = computeHtmlHash(scannedHtmlData.html);
+  updatedPage.lastScanNoticeKey = scanNoticeKey;
 
   const changeType = getChanges(
     prevHtmlData,

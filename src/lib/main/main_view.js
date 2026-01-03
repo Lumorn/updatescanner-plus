@@ -65,12 +65,15 @@ export function bindViewDropdownChange(handler) {
 export function viewDiff(page, html) {
   setTitle(page.title, page.url);
   if (page.isError()) {
-    setSubtitle(translate('main.subtitle.error'));
+    setSubtitle(appendScanNotice(page, translate('main.subtitle.error')));
   } else if (page.newScanTime == null) {
-    setSubtitle(translate('main.subtitle.notScanned'));
+    setSubtitle(appendScanNotice(page, translate('main.subtitle.notScanned')));
   } else {
     const scanTime = timeSince(new Date(page.newScanTime));
-    setSubtitle(translate('main.subtitle.lastScanned', {time: scanTime}));
+    setSubtitle(appendScanNotice(
+      page,
+      translate('main.subtitle.lastScanned', {time: scanTime}),
+    ));
   }
   setViewDropdown(ViewTypes.DIFF);
   loadSandboxedIframe(html);
@@ -85,10 +88,13 @@ export function viewDiff(page, html) {
 export function viewOld(page, html) {
   setTitle(page.title, page.url);
   if (page.oldScanTime == null) {
-    setSubtitle(translate('main.subtitle.oldNotAvailable'));
+    setSubtitle(appendScanNotice(page, translate('main.subtitle.oldNotAvailable')));
   } else {
     const scanTime = timeSince(new Date(page.oldScanTime));
-    setSubtitle(translate('main.subtitle.oldScanned', {time: scanTime}));
+    setSubtitle(appendScanNotice(
+      page,
+      translate('main.subtitle.oldScanned', {time: scanTime}),
+    ));
   }
   setViewDropdown(ViewTypes.OLD);
   loadSandboxedIframe(html);
@@ -103,10 +109,13 @@ export function viewOld(page, html) {
 export function viewNew(page, html) {
   setTitle(page.title, page.url);
   if (page.newScanTime == null) {
-    setSubtitle(translate('main.subtitle.newNotScanned'));
+    setSubtitle(appendScanNotice(page, translate('main.subtitle.newNotScanned')));
   } else {
     const scanTime = timeSince(new Date(page.newScanTime));
-    setSubtitle(translate('main.subtitle.newScanned', {time: scanTime}));
+    setSubtitle(appendScanNotice(
+      page,
+      translate('main.subtitle.newScanned', {time: scanTime}),
+    ));
   }
   setViewDropdown(ViewTypes.NEW);
   loadSandboxedIframe(html);
@@ -131,6 +140,21 @@ function setTitle(title, url) {
 function setSubtitle(subtitle) {
   const subtitleElement = qs('#subtitle');
   subtitleElement.textContent = subtitle;
+}
+
+/**
+ * Hängt optionale Scan-Hinweise an den Untertitel an.
+ *
+ * @param {Page} page - Page object to view.
+ * @param {string} subtitle - Basis-Text für den Untertitel.
+ * @returns {string} Untertitel inklusive Hinweis.
+ */
+function appendScanNotice(page, subtitle) {
+  if (!page?.lastScanNoticeKey) {
+    return subtitle;
+  }
+  const noticeText = translate(page.lastScanNoticeKey);
+  return `${subtitle} ${noticeText}`;
 }
 
 /**
