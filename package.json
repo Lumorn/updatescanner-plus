@@ -33,7 +33,7 @@
     "all": "node scripts/build.js && node scripts/lint.js && node scripts/test.js",
     "ci": "node scripts/build.js && node scripts/lint.js && node scripts/test.js",
     "build": "node scripts/build.js && web-ext build -s src -a dist",
-    "lint": "node scripts/lint.js && web-ext lint -s src",
+    "lint": "node scripts/lint.js",
     "test": "node scripts/test.js",
     "test:watch": "node scripts/test-watch.js",
     "test:func": "node scripts/test-func.js",

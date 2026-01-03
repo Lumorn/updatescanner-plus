@@ -15,6 +15,9 @@
 * PR-Template mit Smoke-Test-Checkliste hinzugefügt
 * Manifest auf MV3-Basis umgestellt (manifest_version 3, action statt browser_action, browser_style entfernt, background.page beibehalten)
 * Hintergrund-Toolbar nutzt temporäres Action-Fallback für Icon/Badge
+* Hintergrund-Event-Page aktiviert (background.scripts statt background.page)
+* Modernisierungsdoku für Schritt 4 ergänzt (Event Page)
+* Lint-Workflow nutzt temporäres MV2-Manifest wegen web-ext-4.x-Limitierung
 
 ## 4.6.0beta2
 
