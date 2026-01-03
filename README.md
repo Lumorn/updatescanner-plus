@@ -12,6 +12,14 @@ bestehen.
 Unterschiede an. Die Erweiterung läuft als Firefox-WebExtension mit Popup und
 Sidebar.
 
+## Versionierung (Beta-Hinweis)
+
+Wichtig: Bei jeder Änderung – auch bei kleinen Anpassungen – muss die
+Versionsnummer in `src/manifest.json` aktualisiert werden. Für die aktuelle
+Beta-Phase hängen wir dafür eine zusätzliche Zahl an die bestehende Version an
+(z. B. `4.6.0.3` → `4.6.0.4`). Diese Versionsnummer wird im Popup unter der
+Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
+
 ## Features
 
 * Überwachung von Webseiten auf Änderungen mit Diff-Ansicht.

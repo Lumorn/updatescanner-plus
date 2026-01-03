@@ -22,6 +22,7 @@ export class Popup {
   constructor() {
     this.pageStore = null;
     this.config = null;
+    this.version = null;
   }
 
   /**
@@ -35,6 +36,7 @@ export class Popup {
     this.pageStore.bindPageUpdate(this._handlePageUpdate.bind(this));
 
     this.config = await (new Config()).load();
+    this.version = browser.runtime.getManifest().version;
 
     view.init();
     view.bindShowAllClick(this._handleShowAllClick.bind(this));
@@ -48,6 +50,7 @@ export class Popup {
     view.bindPageClick(this._handlePageClick.bind(this));
     view.bindLanguageChange(this._handleLanguageChange.bind(this));
     view.setLanguage(this.config.get('language'));
+    view.setVersion(this.version);
 
     browser.runtime.onMessage.addListener(this._handleMessage.bind(this));
     browser.runtime.sendMessage({action: uiActionsEnum.QUEUE_STATE_REQUEST})
@@ -204,5 +207,6 @@ export class Popup {
     this.config.set('language', language);
     await this.config.save();
     view.setLanguage(language);
+    view.setVersion(this.version);
   }
 }
