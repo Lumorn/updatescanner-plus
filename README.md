@@ -30,6 +30,8 @@ Sidebar.
 * Zentrales Theme-Token-Set für Farben, Abstände und Typografie mit konsistenten
   Font- und Line-Height-Skalen.
 * Dark-Mode-Varianten für zentrale UI-Farbtokens in Popup, Hauptansicht und Sidebar.
+* Modernisierte Button- und Menü-Styles mit klaren Fokus-/Hover-Zuständen und
+  konsistenten Klickflächen.
 
 ## Roadmap
 

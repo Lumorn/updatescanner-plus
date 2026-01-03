@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Buttons und Menüs in Popup und Hauptansicht modernisiert (Radius, Schatten, Fokuszustände, konsistente Abstände, Mindestklickfläche)
 * Dark-Mode-Tokens für Popup, Hauptansicht und Sidebar ergänzt (Farben, Rahmen, Schatten)
 * Zentrales Theme-Token-Set für Farben, Abstände und Typografie eingeführt und UI-CSS auf Variablen umgestellt
 * Mehrsprachigkeit auf das gesamte Add-on ausgeweitet und Übersetzungen modular erweiterbar gemacht
