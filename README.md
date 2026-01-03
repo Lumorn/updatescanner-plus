@@ -58,6 +58,12 @@ Das Manifest liegt in `src/`, die Build-Artefakte landen in `dist/`.
 **Build**
 * `npm run build:zip` (erzeugt das XPI im Ordner `dist/`)
 
+## Publishing
+
+* Leitfaden: [docs/publish/amo-submission.md](docs/publish/amo-submission.md)
+* Review Notes Vorlage: [docs/publish/review-notes-template.md](docs/publish/review-notes-template.md)
+* Release-Checklist: [docs/publish/release-checklist.md](docs/publish/release-checklist.md)
+
 ### Hinweise zu Signing
 
 `web-ext sign` benötigt AMO API Key/Secret. Hinterlege Secrets lokal in

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* AMO-Publishing-Dokumentation mit Submission-Guide, Review-Notes-Vorlage und Release-Checklist ergänzt
+* SECURITY.md und PRIVACY.md ergänzt sowie Publishing-Links im README hinzugefügt
 * Dev-/Build-Tooling mit zentraler web-ext-Config und Quickstart dokumentiert
 * Lockfile-Konsistenz für npm ci wiederhergestellt
 * Dokumentation für Fork und AMO-Vorbereitung aktualisiert
