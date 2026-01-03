@@ -61,6 +61,7 @@ export function openPageDialog(page) {
 
   form.elements['ignore-numbers'].checked = page.ignoreNumbers;
   form.elements['hidden-tab-scan'].checked = page.useHiddenTabScan;
+  form.elements['send-credentials'].checked = page.sendCredentials;
 
   hideElement(qs('#folder-heading'));
 
@@ -84,6 +85,7 @@ export function openPageDialog(page) {
           requireExactMatchCount: modeData.requireExactMatchCount,
           partialScan: modeData.partialScan,
           useHiddenTabScan: form.elements['hidden-tab-scan'].checked,
+          sendCredentials: form.elements['send-credentials'].checked,
         });
       } else {
         resolve(null);

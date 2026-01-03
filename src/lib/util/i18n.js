@@ -58,6 +58,9 @@ const translations = {
     'main.dialog.hiddenTabScan': 'Use hidden tab for scan',
     'main.dialog.hiddenTabScan.description':
       'Open a background tab and capture the DOM snapshot instead of fetch.',
+    'main.dialog.sendCredentials': 'Send cookies/credentials',
+    'main.dialog.sendCredentials.description':
+      'Include cookies/credentials when fetching this page.',
     'main.dialog.selectors': 'CSS selectors:',
     'main.dialog.selectors.description': 'CSS selectors for more information see',
     'main.dialog.cancel': 'Cancel',
@@ -148,6 +151,7 @@ const translations = {
     'debugInfo.details.markChanges': 'markChanges',
     'debugInfo.details.doPost': 'doPost',
     'debugInfo.details.postParams': 'postParams',
+    'debugInfo.details.sendCredentials': 'sendCredentials',
     'debugInfo.details.state': 'state',
     'debugInfo.details.lastAutoscanTime': 'lastAutoscanTime',
     'debugInfo.details.oldScanTime': 'oldScanTime',
@@ -219,6 +223,9 @@ const translations = {
     'main.dialog.hiddenTabScan': 'Versteckten Tab zum Scannen verwenden',
     'main.dialog.hiddenTabScan.description':
       'Einen Hintergrund-Tab öffnen und den DOM-Snapshot statt fetch verwenden.',
+    'main.dialog.sendCredentials': 'Cookies/Credentials mitsenden',
+    'main.dialog.sendCredentials.description':
+      'Beim Abruf dieser Seite Cookies/Credentials mitsenden.',
     'main.dialog.selectors': 'CSS-Selektoren:',
     'main.dialog.selectors.description':
       'CSS-Selektoren, weitere Infos unter',
@@ -311,6 +318,7 @@ const translations = {
     'debugInfo.details.markChanges': 'markChanges',
     'debugInfo.details.doPost': 'doPost',
     'debugInfo.details.postParams': 'postParams',
+    'debugInfo.details.sendCredentials': 'sendCredentials',
     'debugInfo.details.state': 'state',
     'debugInfo.details.lastAutoscanTime': 'lastAutoscanTime',
     'debugInfo.details.oldScanTime': 'oldScanTime',

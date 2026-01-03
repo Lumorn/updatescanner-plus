@@ -91,7 +91,8 @@ export async function scanPage(page) {
  * @returns {string} HTML page content.
  */
 async function getHtmlFromFetch(page) {
-  const response = await fetch(page.url);
+  const fetchOptions = page.sendCredentials ? {credentials: 'include'} : undefined;
+  const response = await fetch(page.url, fetchOptions);
   if (!response.ok) {
     throw Error(`[${response.status}] ${response.statusText}`);
   }

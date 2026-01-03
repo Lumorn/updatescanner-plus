@@ -214,6 +214,7 @@ export class Main {
       newSettings.requireExactMatchCount;
     this.currentPage.partialScan = newSettings.partialScan;
     this.currentPage.useHiddenTabScan = newSettings.useHiddenTabScan;
+    this.currentPage.sendCredentials = newSettings.sendCredentials;
     await this.currentPage.save();
 
     document.location.replace(getMainDiffUrl(this.currentPage.id));
