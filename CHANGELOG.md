@@ -4,6 +4,11 @@
 
 * Dokumentation für Fork und AMO-Vorbereitung aktualisiert
 * MV3-Modernisierung To-Do-Liste in README ergänzt
+* Modernisierungsdoku für Schritt 0 ergänzt (Arbeitsbasis, Smoke Tests)
+* Development-Abschnitt im README ergänzt
+* Web-Ext-Skripte für Dev/Lint/Build standardisiert
+* Minimale CI für web-ext lint ergänzt
+* PR-Template mit Smoke-Test-Checkliste hinzugefügt
 
 ## 4.6.0beta2
 
