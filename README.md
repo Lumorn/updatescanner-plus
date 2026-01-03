@@ -48,6 +48,16 @@ Dieses Projekt nutzt `web-ext` zum Bauen der XPI-Datei.
 Zum lokalen Testen ohne Build:
 * `npm run run` (startet Firefox mit geladenem Add-on aus `src/`).
 
+## Development (FOC)
+
+Für einen reproduzierbaren Start im Dev-Modus empfiehlt sich `web-ext`.
+Das Manifest liegt in `src/`, daher muss der Source-Ordner gesetzt werden.
+
+* Starten: `npm run dev` (lädt das Add-on aus `src/`)
+* Linten: `npm run lint` (führt zusätzlich `web-ext lint` aus)
+* Build: `npm run build` (erstellt das XPI-Paket in `dist/`)
+* Details und Smoke Tests: `docs/modernization/00-arbeitsbasis.md`
+
 ## Lizenz
 
 GPL-3.0-only. Weitergabe und Änderungen müssen unter der GPL erfolgen und die
