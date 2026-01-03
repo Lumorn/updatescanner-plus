@@ -92,6 +92,15 @@ export function setLanguage(language) {
 }
 
 /**
+ * Setzt die angezeigte Version im Popup.
+ *
+ * @param {string} version - Versionsnummer.
+ */
+export function setVersion(version) {
+  qs('#popup-version').textContent = i18nTranslate('popup.version', {version});
+}
+
+/**
  * Zeigt das Einstellungs-Panel an.
  */
 export function showSettingsPanel() {
