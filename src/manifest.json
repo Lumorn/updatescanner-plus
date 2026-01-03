@@ -23,9 +23,7 @@
     "unlimitedStorage"
   ],
   "host_permissions": [
-    "<all_urls>",
-    "*://twitter.com/*",
-    "*://www.facebook.com/*"
+    "<all_urls>"
   ],
   "background": {
     "scripts": [
