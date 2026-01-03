@@ -34,6 +34,7 @@ Sidebar.
   konsistenten Klickflächen.
 * Popup-Menü reagiert zuverlässig auf den Menüknopf und schließt sauber bei
   Außenklicks.
+* Popup-Menü klappt direkt über dem Menüknopf aus und wird nicht verdeckt.
 
 ## Roadmap
 

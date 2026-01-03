@@ -153,24 +153,24 @@ p {
   display: none;
 }
 
-#menu-container {
-  float: right;
+.menu-wrapper {
   position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 .menu-content {
   position: absolute;
   width: 10em;
-  margin-left: -10em;
-  margin-block-end: inherit;
   padding: var(--space-1);
   margin: 0;
   list-style: none;
   background-color: var(--color-surface-muted);
   box-shadow: var(--shadow-1);
   border-radius: var(--radius-m);
-  z-index: 1;
-  bottom: 100%;
+  z-index: 10;
+  right: 0;
+  bottom: calc(100% + var(--space-1));
 }
 
 .menu-content li {
