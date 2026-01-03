@@ -213,6 +213,7 @@ export class Main {
     this.currentPage.requireExactMatchCount =
       newSettings.requireExactMatchCount;
     this.currentPage.partialScan = newSettings.partialScan;
+    this.currentPage.useHiddenTabScan = newSettings.useHiddenTabScan;
     await this.currentPage.save();
 
     document.location.replace(getMainDiffUrl(this.currentPage.id));

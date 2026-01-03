@@ -27,6 +27,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Benachrichtigungen bei gefundenen Änderungen.
 * Popup- und Sidebar-Ansicht für die Verwaltung der Einträge.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
+* Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
 * Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.

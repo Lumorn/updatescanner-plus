@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Optionaler Scan-Modus ergänzt, der die Seite in einem versteckten Tab lädt und einen DOM-Snapshot erfasst
 * Scan-Queue verarbeitet mehrere Scans parallel, mit Host-basiertem Rate-Limit und adaptiven Delays
 * Versionsanzeige im Popup unter der Buttonreihe ergänzt und Versionierungsregel dokumentiert
 * Scan-Queue auf Deque/Index-Logik umgestellt und Duplikate per Seiten-ID verhindert
