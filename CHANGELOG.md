@@ -1,5 +1,9 @@
 # Update Scanner Changelog
 
+## Unreleased
+
+* Dokumentation für Fork und AMO-Vorbereitung aktualisiert
+
 ## 4.6.0beta2
 
 * Fix issue that prevented editing of page properties
