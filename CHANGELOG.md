@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Dokumentation für Fork und AMO-Vorbereitung aktualisiert
+* MV3-Modernisierung To-Do-Liste in README ergänzt
 
 ## 4.6.0beta2
 
