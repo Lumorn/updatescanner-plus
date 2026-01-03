@@ -37,6 +37,7 @@ export class Page {
       useHiddenTabScan: false,
       sendCredentials: false,
       newHtmlHash: null,
+      lastScanNoticeKey: null,
       waitForSelector: null,
       waitForSelectorTimeoutMs: null,
       hiddenTabDomStabilityWindowMs: null,
@@ -138,6 +139,7 @@ export class Page {
    *   Scan-Quelle statt fetch.
    * @property {boolean} sendCredentials - Sendet Cookies/Credentials beim fetch.
    * @property {?string} newHtmlHash - Hash der zuletzt gespeicherten NEW-HTML.
+   * @property {?string} lastScanNoticeKey - Optionaler Hinweis-Key für die UI.
    * @property {?string} waitForSelector - Optionaler Selektor, auf den beim
    *   Hidden-Tab-Scan gewartet wird.
    * @property {?number} waitForSelectorTimeoutMs - Timeout für den Selektor.
@@ -171,6 +173,7 @@ export class Page {
       useHiddenTabScan = Page.DEFAULTS.useHiddenTabScan,
       sendCredentials = Page.DEFAULTS.sendCredentials,
       newHtmlHash = Page.DEFAULTS.newHtmlHash,
+      lastScanNoticeKey = Page.DEFAULTS.lastScanNoticeKey,
       waitForSelector = Page.DEFAULTS.waitForSelector,
       waitForSelectorTimeoutMs = Page.DEFAULTS.waitForSelectorTimeoutMs,
       hiddenTabDomStabilityWindowMs = Page.DEFAULTS.hiddenTabDomStabilityWindowMs,
@@ -200,6 +203,7 @@ export class Page {
     this.useHiddenTabScan = useHiddenTabScan;
     this.sendCredentials = sendCredentials;
     this.newHtmlHash = newHtmlHash;
+    this.lastScanNoticeKey = lastScanNoticeKey;
     this.waitForSelector = waitForSelector;
     this.waitForSelectorTimeoutMs = waitForSelectorTimeoutMs;
     this.hiddenTabDomStabilityWindowMs = hiddenTabDomStabilityWindowMs;
@@ -235,6 +239,7 @@ export class Page {
       useHiddenTabScan: this.useHiddenTabScan,
       sendCredentials: this.sendCredentials,
       newHtmlHash: this.newHtmlHash,
+      lastScanNoticeKey: this.lastScanNoticeKey,
       waitForSelector: this.waitForSelector,
       waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
       hiddenTabDomStabilityWindowMs: this.hiddenTabDomStabilityWindowMs,

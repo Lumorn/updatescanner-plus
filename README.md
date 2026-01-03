@@ -29,6 +29,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
 * Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
 * Hidden-Tab-Scan wartet optional auf Selektoren, nutzt ein DOM-Stabilitätsfenster und einen globalen Standard-Delay.
+* Hidden-Tab-Scan versucht bei Fehlern einmalig mit längerer Wartezeit erneut und fällt anschließend mit UI-Hinweis auf fetch zurück.
 * Globale Einstellung für den Standard-Scan über einen versteckten Tab bei neuen Seiten.
 * Aktion im Settings-Panel, um den versteckten Tab-Scan für alle bestehenden Seiten zu aktivieren/deaktivieren.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
