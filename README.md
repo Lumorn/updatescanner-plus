@@ -36,27 +36,35 @@ Sidebar.
 
 ## Entwicklung / Build
 
-Dieses Projekt nutzt `web-ext` zum Bauen der XPI-Datei.
+Dieses Projekt nutzt `web-ext` für einen reproduzierbaren Dev- und Build-Workflow.
+Das Manifest liegt in `src/`, die Build-Artefakte landen in `dist/`.
 
-* Abhängigkeiten installieren:
-  * `npm install`
-* Build erstellen:
-  * `npm run build`
-* Ergebnis:
-  * Die XPI-Datei wird im Ordner `dist/` erzeugt.
+### Developer Quickstart
 
-Zum lokalen Testen ohne Build:
-* `npm run run` (startet Firefox mit geladenem Add-on aus `src/`).
+**Voraussetzungen**
+* Node.js LTS (Stand 03.01.2026: 24.x LTS oder `lts/*`)
+* npm
 
-## Development (FOC)
+**Install**
+* `npm ci`
+* Hinweis: `npm ci` nutzt die Versionen aus `npm-shrinkwrap.json`.
 
-Für einen reproduzierbaren Start im Dev-Modus empfiehlt sich `web-ext`.
-Das Manifest liegt in `src/`, daher muss der Source-Ordner gesetzt werden.
+**Lint**
+* `npm run lint:addon`
 
-* Starten: `npm run dev` (lädt das Add-on aus `src/`)
-* Linten: `npm run lint` (führt zusätzlich `web-ext lint` aus; MV3 nutzt dafür ein temporäres MV2-Manifest wegen der web-ext-4.x-Limitierung)
-* Build: `npm run build` (erstellt das XPI-Paket in `dist/`)
-* Details und Smoke Tests: `docs/modernization/00-arbeitsbasis.md`
+**Dev Run**
+* `npm run dev:firefox` (startet Firefox mit temporär installiertem Add-on aus `src/`)
+
+**Build**
+* `npm run build:zip` (erzeugt das XPI im Ordner `dist/`)
+
+### Hinweise zu Signing
+
+`web-ext sign` benötigt AMO API Key/Secret. Hinterlege Secrets lokal in
+`~/.web-ext-config.mjs` und committe sie nicht.
+
+Hinweis für MV3: eine feste Extension-ID ist wichtig für Updates und Signing
+(`browser_specific_settings.gecko.id` im Manifest).
 
 ## Lizenz
 

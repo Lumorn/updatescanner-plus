@@ -1,10 +1,14 @@
 /node_modules/
 /dist/
+/web-ext-artifacts/
+*.zip
+*.xpi
 /coverage/
 .build_settings.json*
 /src/dependencies/
 /test/dependencies/
 /src/.web-extension-id
+/.web-extension-id
 .vscode/
 .DS_Store
 **/.pytest_cache

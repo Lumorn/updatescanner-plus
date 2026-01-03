@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Dev-/Build-Tooling mit zentraler web-ext-Config und Quickstart dokumentiert
+* Lockfile-Konsistenz für npm ci wiederhergestellt
 * Dokumentation für Fork und AMO-Vorbereitung aktualisiert
 * MV3-Modernisierung To-Do-Liste in README ergänzt
 * Modernisierungsdoku für Schritt 0 ergänzt (Arbeitsbasis, Smoke Tests)
