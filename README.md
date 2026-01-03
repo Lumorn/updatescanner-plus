@@ -148,11 +148,11 @@ unterteilt.
   Done:
   - Keine Script- oder CSS-Injektion im Code gefunden (Schritt nicht zutreffend).
   - Notizen: `docs/modernization/09-scripting-api.md`.
-- [ ] 10. Optional: web_accessible_resources (MV3-Syntax)  
+- [x] 10. Optional: web_accessible_resources (MV3-Syntax)  
   `web_accessible_resources` in MV3-Format bringen und Zugriffe prüfen.  
   Done:
-  - MV3-Syntax ist korrekt und minimal.
-  - Ressourcen laden wie zuvor.
+  - Nicht erforderlich, da keine Web-Context-Ladungen erfolgen.
+  - Notizen: `docs/modernization/10-web-accessible-resources.md`.
 - [ ] 11. Storage/IndexedDB im Worker verifizieren  
   Speichern und Laden aus dem Worker prüfen, inklusive Migrationen.  
   Done:
