@@ -53,7 +53,7 @@ Das Manifest liegt in `src/`, die Build-Artefakte landen in `dist/`.
 * `npm run lint:addon`
 
 **Dev Run**
-* `npm run dev:firefox` (startet Firefox mit temporär installiertem Add-on aus `src/`)
+* `npm run dev:firefox` (kopiert Abhängigkeiten nach `src/dependencies` und startet Firefox mit temporär installiertem Add-on aus `src/`)
 
 **Build**
 * `npm run build:zip` (erzeugt das XPI im Ordner `dist/`)
