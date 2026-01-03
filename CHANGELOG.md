@@ -34,6 +34,8 @@
 * README-Checklist für Schritt 8 aktualisiert
 * CSP-Doku präzisiert (keine Optionsseite vorhanden)
 * Modernisierungsdoku für Schritt 9 ergänzt (scripting API, nicht zutreffend)
+* Modernisierungsdoku für Schritt 10 ergänzt (web_accessible_resources, nicht erforderlich)
+* README-Checklist für Schritt 10 aktualisiert
 
 ## 4.6.0beta2
 
