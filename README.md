@@ -64,3 +64,97 @@ Lizenzhinweise beibehalten.
 * Builds werden mit `web-ext` erstellt. Für Releases wird der Quellcode im Repo
   bereitgestellt; falls Minifizierung oder Bundling eingesetzt wird, liegt ein
   entsprechendes Source-Archiv beim Release bei.
+
+## MV3 Modernisierung – To-Do Liste (FOC)
+
+Ziel ist die Umstellung auf Manifest V3 und aktuelle Firefox-Add-on-Technik
+(Stand 03.01.2026). Der Funktionsumfang bleibt identisch, danach folgen
+Feature-Erweiterungen. Die Liste ist in kleine, klar abhakbare Schritte
+unterteilt.
+
+- [ ] 0. Arbeitsbasis und Sicherheitsnetz  
+  Ausgangslage prüfen, sichere Arbeitsbasis schaffen und Rückfalloptionen
+  vorbereiten.  
+  Done:
+  - Basis-Branch und Backup-Tags existieren.
+  - Build und Start laufen lokal reproduzierbar.
+- [ ] 1. Manifest V3 Grundgerüst  
+  MV3-Manifest anlegen, Version und Mindestangaben definieren, ohne Logik zu
+  ändern.  
+  Done:
+  - Manifest V3 lädt ohne Fehler.
+  - Extension startet und zeigt UI.
+- [ ] 2. Host Permissions sauber trennen  
+  Host-Rechte in `host_permissions` auslagern und restliche Permissions
+  bereinigen.  
+  Done:
+  - Host-Rechte sind ausschließlich in `host_permissions`.
+  - Keine unnötigen Permissions im Manifest.
+- [ ] 3. Toolbar: browser_action → action  
+  Toolbar-Definition auf MV3-`action` umstellen, UI-Icon und Popup prüfen.  
+  Done:
+  - `browser_action` ist entfernt.
+  - Toolbar-Popup öffnet wie bisher.
+- [ ] 4. Hintergrundseite entfernen, Service Worker einführen  
+  Hintergrundseite ablösen und Service Worker als zentralen Einstieg setzen.  
+  Done:
+  - Service Worker läuft und registriert Kern-Listener.
+  - Keine `background.page` mehr im Manifest.
+- [ ] 5. Worker-Kompatibilität: window/document eliminieren  
+  Zugriff auf `window`/`document` in Worker-Kontexten entfernen oder ersetzen.  
+  Done:
+  - Keine direkten `window`/`document`-Zugriffe im Worker.
+  - Funktionen laufen im Worker fehlerfrei.
+- [ ] 6. API-Refactor: browser.browserAction → browser.action  
+  API-Aufrufe umstellen, damit Toolbar-Logik MV3-konform ist.  
+  Done:
+  - Keine Nutzung von `browser.browserAction` mehr.
+  - Toolbar-APIs funktionieren unverändert.
+- [ ] 7. Event-Registrierung robust machen (MV3-Lebenszyklus)  
+  Listener so registrieren, dass Wake-up/Shutdown korrekt abgedeckt sind.  
+  Done:
+  - Listener werden beim Start zuverlässig registriert.
+  - Keine verlorenen Events nach Idle/Restart.
+- [ ] 8. CSP und Inline-Skripte prüfen und bereinigen  
+  CSP prüfen, Inline-Skripte entfernen oder ersetzen.  
+  Done:
+  - CSP-Fehler in der Konsole sind eliminiert.
+  - Keine Inline-Skripte in HTML-Dateien.
+- [ ] 9. Optional: Migration von tabs.executeScript → scripting.executeScript  
+  Optionaler API-Wechsel für MV3-Standardpfad, ohne Funktionsverlust.  
+  Done:
+  - `scripting.executeScript` ersetzt alte Aufrufe.
+  - Injects funktionieren in allen Zielseiten.
+- [ ] 10. Optional: web_accessible_resources (MV3-Syntax)  
+  `web_accessible_resources` in MV3-Format bringen und Zugriffe prüfen.  
+  Done:
+  - MV3-Syntax ist korrekt und minimal.
+  - Ressourcen laden wie zuvor.
+- [ ] 11. Storage/IndexedDB im Worker verifizieren  
+  Speichern und Laden aus dem Worker prüfen, inklusive Migrationen.  
+  Done:
+  - Storage-Operationen funktionieren im Worker.
+  - Keine Datenverluste beim Neustart.
+- [ ] 12. Permission-Audit und Minimalprinzip (ohne Funktionsverlust)  
+  Permissions auf das nötige Minimum reduzieren und dokumentieren.  
+  Done:
+  - Manifest enthält nur benötigte Permissions.
+  - Funktionsumfang ist vollständig erhalten.
+- [ ] 13. Packaging/Build/Dev-Tooling modernisieren (kleiner Schritt)  
+  Build/Release-Tools an MV3 anpassen, ohne große Umbauten.  
+  Done:
+  - Build erzeugt lauffähiges MV3-Paket.
+  - Dev-Workflow bleibt stabil.
+- [ ] 14. Doku und Migrationsnotizen (für zukünftige Erweiterungen)  
+  MV3-Migrationsnotizen dokumentieren und Lessons Learned festhalten.  
+  Done:
+  - README enthält MV3-Notizen.
+  - Interne Hinweise sind auffindbar und klar.
+
+### Smoke Tests (nach jedem Schritt)
+
+* Add-on startet ohne Fehler in `about:debugging`.
+* Toolbar-Popup öffnet und zeigt die Liste.
+* Sidebar lädt und zeigt bestehende Einträge.
+* Manuelles Scannen liefert Ergebnis.
+* Benachrichtigung erscheint bei Änderungen.
