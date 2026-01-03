@@ -1,5 +1,7 @@
 import {PageStore} from '/lib/page/page_store.js';
 import {showNotification} from '/lib/scan/notification.js';
+import {applyTranslations, loadLanguageFromConfig, translate}
+  from '/lib/util/i18n.js';
 
 const dataText = document.querySelector('#data');
 const reloadBtn = document.querySelector('#reload');
@@ -17,7 +19,12 @@ notifyBtn.addEventListener('click', notify);
 addFrm.addEventListener('submit', add);
 
 // Display the storage contents once page is loaded
-document.addEventListener('DOMContentLoaded', reload);
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadLanguageFromConfig();
+  applyTranslations();
+  document.title = translate('debug.title');
+  reload();
+});
 
 
 async function reload() {

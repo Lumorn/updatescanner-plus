@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <title>Update Scanner - Restore Pages</title>
+  <title data-i18n="restore.pageTitle">Update Scanner - Restore Pages</title>
   <link rel="stylesheet" href="chrome://browser/content/extension.css">
   <link rel="stylesheet" href="restore.css">
 </head>
@@ -10,19 +10,27 @@
 <body>
   <div>
     <div id="uploading" class="message">
-      <button id="upload-button">Select Backup File</button>
+      <button id="upload-button" data-i18n="restore.selectBackup">
+        Select Backup File
+      </button>
     </div>
     <div id="restoring" class="message hidden">
       <img id="img-loading" src="/images/loading.svg"/>
-      Restoring pages, please wait...
+      <span data-i18n="restore.restoring">
+        Restoring pages, please wait...
+      </span>
     </div>
     <div id="restore-failed" class="message hidden">
       <div id="img-failed" class="image"></div>
-      Failed to restore pages.
+      <span data-i18n="restore.failed">
+        Failed to restore pages.
+      </span>
     </div>
     <div id="restore-complete" class="message hidden">
       <div id="img-complete" class="image"></div>
-      Your pages have been restored successfully.
+      <span data-i18n="restore.complete">
+        Your pages have been restored successfully.
+      </span>
     </div>
   </div>
 

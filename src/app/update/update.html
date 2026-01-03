@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <title>Update Scanner</title>
+  <title data-i18n="update.title">Update Scanner</title>
   <link rel="stylesheet" href="chrome://browser/content/extension.css">
   <link rel="stylesheet" href="update.css">
 </head>
@@ -11,15 +11,21 @@
   <div>
     <div id="updating" class="message hidden">
       <img id="img-loading" src="/images/loading.svg"/>
-      Updating to the latest version of Update Scanner, please wait...
+      <span data-i18n="update.updating">
+        Updating to the latest version of Update Scanner, please wait...
+      </span>
     </div>
     <div id="update-failed" class="message hidden">
       <div id="img-failed" class="image"></div>
-      Failed to update to the latest version of Update Scanner.
+      <span data-i18n="update.failed">
+        Failed to update to the latest version of Update Scanner.
+      </span>
     </div>
     <div id="update-complete" class="message hidden">
       <div id="img-complete" class="image"></div>
-      You have been updated to the latest version of Update Scanner.
+      <span data-i18n="update.complete">
+        You have been updated to the latest version of Update Scanner.
+      </span>
     </div>
   </div>
 

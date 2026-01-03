@@ -1,4 +1,5 @@
 import {$on, qs, showElement, hideElement} from '/lib/util/view_helpers.js';
+import {translate} from '/lib/util/i18n.js';
 
 /**
  * @param {Function} clickHandler - Called when the Upload button is clicked.
@@ -15,8 +16,7 @@ export function showUploadButton(clickHandler) {
  * @returns {boolean} True if the user confirmed the restore.
  */
 export function confirmRestore() {
-  return window.confirm(
-    'Restoring will overwrite your existing pages - are you sure?');
+  return window.confirm(translate('restore.confirmOverwrite'));
 }
 
 /**

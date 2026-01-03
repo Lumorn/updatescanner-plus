@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Mehrsprachigkeit auf das gesamte Add-on ausgeweitet und Übersetzungen modular erweiterbar gemacht
 * Popup-Menü um Einstellungen für die Sprachwahl erweitert (Englisch/Deutsch)
 * Zeichencodierung-Handling beim Scannen gehärtet (UTF-8-Fallback bei fehlender Kodierung)
 * Fehlende Sidebar-Abhängigkeiten unter `src/dependencies` ergänzt, damit jQuery, JSTree, Dialog-Polyfill und idb-file-storage beim Laden verfügbar sind

@@ -5,6 +5,7 @@ import {PageFolder} from '/lib/page/page_folder.js';
 import {PageStore} from '/lib/page/page_store.js';
 import {log} from '/lib/util/log.js';
 import {qs, $on} from '/lib/util/view_helpers.js';
+import {translate} from '/lib/util/i18n.js';
 
 // See https://bugzilla.mozilla.org/show_bug.cgi?id=840640
 import dialogPolyfill
@@ -182,25 +183,25 @@ export class SidebarView {
     return (node) => {
       return {
         newPage: {
-          label: 'New Page',
+          label: translate('sidebar.context.newPage'),
           action: () => this._newPageHandler(node),
         },
         newPageFolder: {
-          label: 'New Folder',
+          label: translate('sidebar.context.newFolder'),
           action: () => this._newPageFolderHandler(node),
         },
         delete: {
           separator_before: true,
-          label: 'Delete',
+          label: translate('sidebar.context.delete'),
           action: () => this._deleteHandler(node),
         },
         scan: {
           separator_before: true,
-          label: 'Scan Now',
+          label: translate('sidebar.context.scanNow'),
           action: () => this._scanItemHandler(node),
         },
         settings: {
-          label: 'Settings',
+          label: translate('sidebar.context.settings'),
           action: () => this._settingsHandler(node),
         },
       };
@@ -332,7 +333,7 @@ export class SidebarView {
     const dialog = qs('#dialog-confirm');
     const message = qs('#dialog-confirm-message');
 
-    message.textContent = 'Delete this item - are you sure?';
+    message.textContent = translate('sidebar.dialog.confirm');
     dialog.showModal();
 
     return new Promise((resolve, reject) => {

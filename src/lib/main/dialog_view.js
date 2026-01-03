@@ -1,4 +1,5 @@
 import {qs, $on, hideElement} from '/lib/util/view_helpers.js';
+import {translate} from '/lib/util/i18n.js';
 
 // See https://bugzilla.mozilla.org/show_bug.cgi?id=840640
 import dialogPolyfill
@@ -124,14 +125,14 @@ export function openPageFolderDialog(pageFolder) {
 }
 
 const AutoscanSliderMap = new Map([
-  [5, 'Scan every 5 minutes'],
-  [15, 'Scan every 15 minutes'],
-  [30, 'Scan every 30 minutes'],
-  [60, 'Scan every hour'],
-  [6 * 60, 'Scan every 6 hours'],
-  [24 * 60, 'Scan every day'],
-  [7 * 24 * 60, 'Scan every week'],
-  [0, 'Manual scan only'],
+  [5, 'main.autoscan.every5'],
+  [15, 'main.autoscan.every15'],
+  [30, 'main.autoscan.every30'],
+  [60, 'main.autoscan.every60'],
+  [6 * 60, 'main.autoscan.every6hours'],
+  [24 * 60, 'main.autoscan.every24hours'],
+  [7 * 24 * 60, 'main.autoscan.everyWeek'],
+  [0, 'main.autoscan.manual'],
 ]);
 const AutoscanSliderToMins = [...AutoscanSliderMap.keys()];
 const AutoscanSliderDescriptions = [...AutoscanSliderMap.values()];
@@ -165,20 +166,19 @@ function autoscanMinsToSlider(minutes) {
  */
 function updateAutoscanDescription(sliderValue) {
   qs('#settings-form').elements['autoscan-description'].value =
-    AutoscanSliderDescriptions[sliderValue];
+    translate(AutoscanSliderDescriptions[sliderValue]);
 }
 
 const ScanModeMap = new Map([
   ['anywhere', {
-    description: '',
+    descriptionKey: 'main.scanMode.description.anywhere',
     options: {
       partialScan: false,
       contentMode: Page.contentModeEnum.TEXT,
     },
   }],
   ['inside-elements', {
-    description: `Check only inside selected elements using HTML elements 
-    selector.`,
+    descriptionKey: 'main.scanMode.description.insideElements',
     options: {
       partialScan: true,
       requireExactMatchCount: true,
@@ -186,8 +186,7 @@ const ScanModeMap = new Map([
     },
   }],
   ['count-only', {
-    description: `Check only for change in number of HTML element matches.
-    Content is ignored.`,
+    descriptionKey: 'main.scanMode.description.countOnly',
     options: {
       partialScan: true,
       requireExactMatchCount: true,
@@ -232,8 +231,7 @@ function updateSelectorsDescription(partialScan) {
   if (partialScan) {
     selectorsElement.placeholder = '';
   } else {
-    selectorsElement.placeholder =
-      `Selectors not available in "Anywhere" scan mode.`;
+    selectorsElement.placeholder = translate('main.selectors.unavailable');
   }
 }
 
@@ -245,7 +243,7 @@ function updateSelectorsDescription(partialScan) {
 function updateScanModeDescription(mode) {
   const form = qs('#settings-form');
   const descriptionElement = form.elements['scan-mode-description'];
-  descriptionElement.value = mode.description;
+  descriptionElement.value = translate(mode.descriptionKey);
 }
 
 /**
@@ -320,12 +318,12 @@ function getScanModeName(page) {
 }
 
 const ThresholdSliderMap = new Map([
-  [0, ['All changes are detected', '']],
-  [10, ['Cosmetic changes are ignored', '(less than about 10 characters)']],
-  [50, ['Minor changes are ignored', '(less than about 50 characters)']],
-  [100, ['Small changes are ignored', '(less than about 100 characters)']],
-  [500, ['Medium changes are ignored', '(less than about 500 characters)']],
-  [1000, ['Major changes are ignored', '(less than about 1000 characters)']],
+  [0, ['main.threshold.all', 'main.threshold.all.detail']],
+  [10, ['main.threshold.cosmetic', 'main.threshold.cosmetic.detail']],
+  [50, ['main.threshold.minor', 'main.threshold.minor.detail']],
+  [100, ['main.threshold.small', 'main.threshold.small.detail']],
+  [500, ['main.threshold.medium', 'main.threshold.medium.detail']],
+  [1000, ['main.threshold.major', 'main.threshold.major.detail']],
 ]);
 const ThresholdSliderToChars = [...ThresholdSliderMap.keys()];
 const ThresholdSliderDescriptions = [...ThresholdSliderMap.values()];
@@ -352,7 +350,7 @@ function thresholdCharsToSlider(changeThreshold) {
  */
 function updateThresholdDescription(sliderValue) {
   qs('#settings-form').elements['threshold-description'].value =
-    ThresholdSliderDescriptions[sliderValue][0];
+    translate(ThresholdSliderDescriptions[sliderValue][0]);
   qs('#settings-form').elements['threshold-subdescription'].value =
-    ThresholdSliderDescriptions[sliderValue][1];
+    translate(ThresholdSliderDescriptions[sliderValue][1]);
 }

@@ -4,6 +4,7 @@ import {StorageInfo} from './storage_info.js';
 import {Storage} from '/lib/util/storage.js';
 import {StorageDB} from '/lib/util/storage_db.js';
 import {log} from '/lib/util/log.js';
+import {loadLanguageFromConfig, translate} from '/lib/util/i18n.js';
 
 // Allow function mocking
 export const __ = {
@@ -345,8 +346,9 @@ export class PageStore {
    * @returns {Page} Created Page.
    */
   async createWebsitePage() {
+    await loadLanguageFromConfig();
     const page = await this.createPage(PageStore.ROOT_ID);
-    page.title = 'Update Scanner Website';
+    page.title = translate('page.defaultTitle');
     page.url = 'https://sneakypete81.github.io/updatescanner/';
     await page.save();
     return page;
