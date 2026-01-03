@@ -5,6 +5,9 @@
 * Dokumentation für Fork und AMO-Vorbereitung aktualisiert
 * MV3-Modernisierung To-Do-Liste in README ergänzt
 * Modernisierungsdoku für Schritt 0 ergänzt (Arbeitsbasis, Smoke Tests)
+* Host-Permissions aus `permissions` nach `host_permissions` verschoben (MV3)
+* Modernisierungsdoku für Schritt 2 ergänzt (host_permissions)
+* Hinweise zu optionalen Host-Rechten und Lint-Status in Schritt-2-Doku ergänzt
 * Development-Abschnitt im README ergänzt
 * Web-Ext-Skripte für Dev/Lint/Build standardisiert
 * Minimale CI für web-ext lint ergänzt
