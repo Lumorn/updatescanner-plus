@@ -8,6 +8,7 @@ import {isUpToDate, latestVersion} from '/lib/update/update.js';
 import {openUpdate} from '/lib/update/update_url.js';
 import {log} from '/lib/util/log.js';
 import {Config} from '/lib/util/config.js';
+import {g, getActionApi} from '/lib/util/env.js';
 
 const defaultIcon = {
   18: '/images/updatescanner_18.png',
@@ -115,7 +116,7 @@ export class Background {
    * @private
    */
   _refreshIcon(iconPath) {
-    const actionApi = browser.action || browser.browserAction;
+    const actionApi = getActionApi(browser);
     actionApi.setIcon({path: iconPath});
   }
 
@@ -127,7 +128,7 @@ export class Background {
    * @private
    */
   _refreshBadge(text) {
-    const actionApi = browser.action || browser.browserAction;
+    const actionApi = getActionApi(browser);
     actionApi.setBadgeText({text: text});
   }
 
@@ -186,7 +187,7 @@ export class Background {
    */
   _handleScanComplete({majorChanges, scanCount, isManualScan}) {
     // Wait for pageStore to be fully updated before triggering the notification
-    window.setTimeout(() => {
+    g.setTimeout(() => {
       log(`Scan complete, ${majorChanges} new changes.`);
       log(`${scanCount} pages scanned.`);
 

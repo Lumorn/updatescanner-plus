@@ -1,3 +1,5 @@
+import {g} from '/lib/util/env.js';
+
 /**
  * Wrap setTimeout in a Promise.
  *
@@ -6,7 +8,7 @@
  * @returns {Promise} Promise that resolves after the specified delay.
  */
 export function waitForMs(delayMs) {
-  return new Promise((resolve) => window.setTimeout(resolve, delayMs));
+  return new Promise((resolve) => g.setTimeout(resolve, delayMs));
 }
 
 

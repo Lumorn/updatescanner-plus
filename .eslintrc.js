@@ -48,6 +48,7 @@ module.exports = {
   },
 
   'globals': {
+    'globalThis': 'readonly',
   },
 
   'env': {
