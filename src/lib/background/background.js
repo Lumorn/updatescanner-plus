@@ -288,7 +288,13 @@ export class Background {
     if (sendResponse != null) {
       sendResponse(message);
     } else {
-      browser.runtime.sendMessage(message);
+      // Ohne aktiven Listener kann sendMessage in MV3 fehlschlagen; Fehler bewusst ignorieren.
+      void browser.runtime.sendMessage(message).catch((error) => {
+        if (error?.message?.includes('Receiving end does not exist')) {
+          return;
+        }
+        console.warn('UI-Nachricht konnte nicht zugestellt werden.', error);
+      });
     }
 
     this._refreshToolbar();

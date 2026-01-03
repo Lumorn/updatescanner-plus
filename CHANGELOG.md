@@ -50,6 +50,8 @@
 * Modernisierungsdoku für Schritt 11 ergänzt (Storage/IndexedDB)
 * Host-Permissions bereinigt (redundante Einträge entfernt)
 * Modernisierungsdoku für Schritt 12 ergänzt (Permission-Audit)
+* MV3-kompatible URL-Ermittlung für die Hauptansicht (runtime.getURL) korrigiert
+* UI-Nachrichten im Background tolerieren fehlende Empfänger, um MV3-Fehler zu vermeiden
 
 ## 4.6.0beta2
 

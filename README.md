@@ -22,6 +22,7 @@ Sidebar.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
 * Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.
+* Stabile Öffnung der Hauptansicht über MV3-kompatible URL-Ermittlung.
 
 ## Roadmap
 
