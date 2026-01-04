@@ -16,6 +16,12 @@ html body {
   padding: var(--space-4);
 }
 
+.panel-section-header,
+.panel-section-queue-state,
+.panel-section-footer {
+  flex: 0 0 auto;
+}
+
 .panel-section-header {
   display: flex;
   align-items: center;

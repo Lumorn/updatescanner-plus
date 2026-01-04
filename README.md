@@ -58,6 +58,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Popup-Scan-Leiste bleibt stabil sichtbar, auch wenn die Liste wächst.
 * Abbrechen-Button im Popup, um laufende Scans zu stoppen.
 * Popup-Scan-Status und Abbrechen-Button passen sich dynamisch an die verfügbare Breite an.
+* Popup-Footer mit Buttons und Versionsanzeige bleibt stabil, auch wenn die Liste sehr lang ist.
 * Scan-Queue nutzt ein Deque/Index-Modell und verhindert Duplikate per Seiten-ID.
 * Scan-Queue verarbeitet mehrere Scans parallel und bremst Requests pro Host ab.
 * Scans speichern NEW-HTML nur bei echten Änderungen und merken sich zusätzlich
