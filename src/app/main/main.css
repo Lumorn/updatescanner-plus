@@ -51,6 +51,13 @@ a:hover {
   line-height: var(--line-height-normal);
 }
 
+.scan-notice {
+  margin-top: var(--space-1);
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-normal);
+}
+
 #menu-container {
   float: right;
   position: relative;
