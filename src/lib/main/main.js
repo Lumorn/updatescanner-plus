@@ -234,6 +234,7 @@ export class Main {
     this.currentPage.changeThreshold = newSettings.changeThreshold;
     this.currentPage.ignoreNumbers = newSettings.ignoreNumbers;
     this.currentPage.selectors = newSettings.selectors;
+    this.currentPage.ignoredSelectors = newSettings.ignoredSelectors;
     this.currentPage.contentMode = newSettings.contentMode;
     this.currentPage.requireExactMatchCount =
       newSettings.requireExactMatchCount;

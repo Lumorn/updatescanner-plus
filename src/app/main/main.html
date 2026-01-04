@@ -131,6 +131,20 @@
             https://www.w3schools.com/cssref/css_selectors.asp</a>
         </output>
       </fieldset>
+      <fieldset id="ignoredSelectorsFieldset">
+        <label for="ignored-selectors" data-i18n="main.dialog.ignoredSelectors">
+          Ignored selectors:
+        </label>
+        <input style="width: 100%" id="ignored-selectors" name="ignored-selectors"
+               type="text"
+               placeholder=".ads, .cookie-banner"
+               data-i18n-attr="placeholder:main.dialog.ignoredSelectors.placeholder"/>
+        <output name="ignored-selectors-description" for="ignored-selectors">
+          <span data-i18n="main.dialog.ignoredSelectors.description">
+            CSS selectors that will be removed before comparing HTML.
+          </span>
+        </output>
+      </fieldset>
 
       <fieldset id="scanSourceFieldset">
         <div>

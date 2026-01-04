@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Zentrale HTML-Normalisierung ergänzt, die pro Seite definierte „Ignorierte Selektoren“ entfernt/ersetzt
 * Globale Einstellung ergänzt, um neue Seiten standardmäßig im versteckten Tab zu scannen
 * Aktion im Popup ergänzt, um den versteckten Tab-Scan für alle vorhandenen Seiten zu aktivieren/deaktivieren
 * Option zum Mitsenden von Cookies/Credentials pro Seite beim fetch-Scan ergänzt
