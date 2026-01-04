@@ -33,7 +33,7 @@ const translations = {
     'settings.language.option.de': 'German',
     'settings.hiddenTabScan.label': 'Use hidden tab for scans by default',
     'settings.hiddenTabScan.description':
-      'Use a background tab as the default scan source for new pages.',
+      'Use a hidden background tab as the default scan source for new pages.',
     'settings.hiddenTabScanAll.label': 'Use hidden tab scan for all pages',
     'settings.hiddenTabScanAll.description':
       'Apply the hidden tab scan setting to all existing pages.',
@@ -63,7 +63,7 @@ const translations = {
     'main.dialog.scanMode.countOnly': 'Only count HTML elements',
     'main.dialog.hiddenTabScan': 'Use hidden tab for scan',
     'main.dialog.hiddenTabScan.description':
-      'Open a background tab and capture the DOM snapshot instead of fetch.',
+      'Open a hidden background tab and capture the DOM snapshot instead of fetch.',
     'main.dialog.sendCredentials': 'Send cookies/credentials',
     'main.dialog.sendCredentials.description':
       'Include cookies/credentials when fetching this page.',
@@ -205,7 +205,7 @@ const translations = {
     'settings.language.option.de': 'Deutsch',
     'settings.hiddenTabScan.label': 'Versteckten Tab für Scans verwenden',
     'settings.hiddenTabScan.description':
-      'Verwendet einen Hintergrund-Tab als Standard-Scanquelle für neue Seiten.',
+      'Verwendet einen versteckten Hintergrund-Tab als Standard-Scanquelle für neue Seiten.',
     'settings.hiddenTabScanAll.label':
       'Versteckten Tab-Scan für alle Seiten aktivieren/deaktivieren',
     'settings.hiddenTabScanAll.description':
@@ -236,7 +236,7 @@ const translations = {
     'main.dialog.scanMode.countOnly': 'Nur HTML-Elemente zählen',
     'main.dialog.hiddenTabScan': 'Versteckten Tab zum Scannen verwenden',
     'main.dialog.hiddenTabScan.description':
-      'Einen Hintergrund-Tab öffnen und den DOM-Snapshot statt fetch verwenden.',
+      'Einen versteckten Hintergrund-Tab öffnen und den DOM-Snapshot statt fetch verwenden.',
     'main.dialog.sendCredentials': 'Cookies/Credentials mitsenden',
     'main.dialog.sendCredentials.description':
       'Beim Abruf dieser Seite Cookies/Credentials mitsenden.',

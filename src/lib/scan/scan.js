@@ -165,6 +165,27 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
     active: false,
   });
 
+  // Tab nach Möglichkeit verstecken, damit er für Nutzer unsichtbar bleibt.
+  if (browser.tabs.hide) {
+    try {
+      await browser.tabs.hide(tab.id);
+    } catch (error) {
+      __.log(`Konnte Tab nicht verstecken: ${page.url}. Fehler: ${error}`);
+    }
+  } else if (browser.windows?.create) {
+    // Fallback: Tab in ein minimiertes Popup-Fenster verschieben.
+    try {
+      await browser.windows.create({
+        tabId: tab.id,
+        type: 'popup',
+        state: 'minimized',
+        focused: false,
+      });
+    } catch (error) {
+      __.log(`Konnte Tab nicht in ein minimiertes Fenster verschieben: ${page.url}. Fehler: ${error}`);
+    }
+  }
+
   try {
     await waitForTabReady(tab.id, page);
     const waitMs = HIDDEN_TAB_DEFAULT_WAIT_MS + Math.max(0, extraWaitMs);
