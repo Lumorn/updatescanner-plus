@@ -21,6 +21,7 @@
     "scripting",
     "storage",
     "tabs",
+    "tabHide",
     "unlimitedStorage"
   ],
   "host_permissions": [
