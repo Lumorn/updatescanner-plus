@@ -431,12 +431,23 @@ async function waitForNetworkIdle(tabId, timeoutMs) {
       };
 
       return new Promise((resolve) => {
-        let pending = 0;
         let lastActivity = performance.now();
+        const fetchActivity = {pending: 0, lastStart: 0, lastEnd: 0};
+        const xhrActivity = {pending: 0, lastStart: 0, lastEnd: 0};
         const originalFetch = window.fetch;
+        const originalXhrOpen = typeof XMLHttpRequest !== 'undefined'
+          ? XMLHttpRequest.prototype?.open
+          : null;
         const originalXhrSend = typeof XMLHttpRequest !== 'undefined'
           ? XMLHttpRequest.prototype?.send
           : null;
+        const originalXhrAbort = typeof XMLHttpRequest !== 'undefined'
+          ? XMLHttpRequest.prototype?.abort
+          : null;
+        const originalWebSocket = window.WebSocket;
+        const originalEventSource = window.EventSource;
+        const xhrState = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
+        const longLivedConnections = new Set();
         let observer = null;
         let intervalId = null;
         let timeoutId = null;
@@ -458,35 +469,123 @@ async function waitForNetworkIdle(tabId, timeoutMs) {
           if (originalFetch) {
             window.fetch = originalFetch;
           }
+          if (originalXhrOpen && typeof XMLHttpRequest !== 'undefined') {
+            XMLHttpRequest.prototype.open = originalXhrOpen;
+          }
           if (originalXhrSend && typeof XMLHttpRequest !== 'undefined') {
             XMLHttpRequest.prototype.send = originalXhrSend;
           }
+          if (originalXhrAbort && typeof XMLHttpRequest !== 'undefined') {
+            XMLHttpRequest.prototype.abort = originalXhrAbort;
+          }
+          if (originalWebSocket) {
+            window.WebSocket = originalWebSocket;
+          }
+          if (originalEventSource) {
+            window.EventSource = originalEventSource;
+          }
+          longLivedConnections.clear();
         };
 
-        const decrementPending = () => {
-          pending = Math.max(0, pending - 1);
+        const decrementFetchPending = () => {
+          fetchActivity.pending = Math.max(0, fetchActivity.pending - 1);
+          fetchActivity.lastEnd = performance.now();
+          resetIdle();
+        };
+
+        const decrementXhrPending = (xhrInstance) => {
+          if (xhrState) {
+            const state = xhrState.get(xhrInstance);
+            if (state?.done) {
+              return;
+            }
+            if (state) {
+              state.done = true;
+            }
+          }
+          xhrActivity.pending = Math.max(0, xhrActivity.pending - 1);
+          xhrActivity.lastEnd = performance.now();
           resetIdle();
         };
 
         if (typeof originalFetch === 'function') {
           window.fetch = function(...args) {
-            pending += 1;
+            fetchActivity.pending += 1;
+            fetchActivity.lastStart = performance.now();
             resetIdle();
             const result = originalFetch.apply(this, args);
             Promise.resolve(result)
               .finally(() => {
-                decrementPending();
+                decrementFetchPending();
               });
             return result;
           };
         }
 
-        if (originalXhrSend && typeof XMLHttpRequest !== 'undefined') {
-          XMLHttpRequest.prototype.send = function(...args) {
-            pending += 1;
+        if (
+          originalXhrOpen &&
+          originalXhrSend &&
+          originalXhrAbort &&
+          typeof XMLHttpRequest !== 'undefined'
+        ) {
+          // XHR-Aktivität mit Pending-Counter erfassen, damit Idle erst nach Abschluss greift.
+          XMLHttpRequest.prototype.open = function(...args) {
+            if (xhrState) {
+              xhrState.set(this, {openedAt: performance.now(), done: false});
+            }
             resetIdle();
-            this.addEventListener('loadend', decrementPending, {once: true});
+            return originalXhrOpen.apply(this, args);
+          };
+
+          XMLHttpRequest.prototype.send = function(...args) {
+            xhrActivity.pending += 1;
+            xhrActivity.lastStart = performance.now();
+            resetIdle();
+            const markDone = () => decrementXhrPending(this);
+            this.addEventListener('loadend', markDone, {once: true});
+            this.addEventListener('error', markDone, {once: true});
+            this.addEventListener('timeout', markDone, {once: true});
+            this.addEventListener('abort', markDone, {once: true});
             return originalXhrSend.apply(this, args);
+          };
+
+          XMLHttpRequest.prototype.abort = function(...args) {
+            decrementXhrPending(this);
+            return originalXhrAbort.apply(this, args);
+          };
+        }
+
+        // WebSocket-Verbindungen zählen nicht als Pending, sollen aber Aktivität melden.
+        if (typeof originalWebSocket === 'function') {
+          window.WebSocket = function(...args) {
+            const socket = new originalWebSocket(...args);
+            longLivedConnections.add(socket);
+            const markActivity = () => resetIdle();
+            socket.addEventListener('open', markActivity);
+            socket.addEventListener('message', markActivity);
+            socket.addEventListener('error', markActivity);
+            socket.addEventListener('close', () => {
+              longLivedConnections.delete(socket);
+              resetIdle();
+            });
+            return socket;
+          };
+        }
+
+        // EventSource verhält sich häufig long-lived und darf den Idle-Check nicht blockieren.
+        if (typeof originalEventSource === 'function') {
+          window.EventSource = function(...args) {
+            const source = new originalEventSource(...args);
+            longLivedConnections.add(source);
+            const markActivity = () => resetIdle();
+            source.addEventListener('open', markActivity);
+            source.addEventListener('message', markActivity);
+            source.addEventListener('error', markActivity);
+            source.addEventListener('close', () => {
+              longLivedConnections.delete(source);
+              resetIdle();
+            });
+            return source;
           };
         }
 
@@ -503,11 +602,13 @@ async function waitForNetworkIdle(tabId, timeoutMs) {
           }
         }
 
+        const hasPendingRequests = () => fetchActivity.pending > 0 || xhrActivity.pending > 0;
+
         const checkIdle = () => {
           const now = performance.now();
-          const idleEnough = pending === 0 && now - lastActivity >= idleWindowMs;
+          const idleEnough = !hasPendingRequests() && now - lastActivity >= idleWindowMs;
           const hydrated = hasHydrationSignal();
-          if ((idleEnough || hydrated) && pending === 0) {
+          if ((idleEnough || hydrated) && !hasPendingRequests()) {
             cleanup();
             resolve({idle: true, hydrated});
           }
