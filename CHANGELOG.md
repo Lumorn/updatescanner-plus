@@ -6,6 +6,8 @@
 * Globale Einstellung ergänzt, um neue Seiten standardmäßig im versteckten Tab zu scannen
 * Aktion im Popup ergänzt, um den versteckten Tab-Scan für alle vorhandenen Seiten zu aktivieren/deaktivieren
 * Option zum Mitsenden von Cookies/Credentials pro Seite beim fetch-Scan ergänzt
+* Fetch-Scan um konfigurierbare Cache-/Mode-/Redirect-Policies und benutzerdefinierte Header erweitert
+* Text-Diff-Modus ergänzt, um statt HTML nur extrahierten Text (optional per Selektoren) zu vergleichen
 * Optionaler Scan-Modus ergänzt, der die Seite in einem versteckten Tab lädt und einen DOM-Snapshot erfasst
 * Hidden-Tab-Scan versteckt Tabs per `tabs.hide`, mit Fallback in minimierte Popup-Fenster
 * Manifest um die Permission `tabHide` ergänzt, damit versteckte Tabs genutzt werden können

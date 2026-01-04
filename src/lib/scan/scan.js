@@ -121,13 +121,76 @@ export async function scanPage(page) {
  * @returns {string} HTML page content.
  */
 async function getHtmlFromFetch(page) {
-  const fetchOptions = page.sendCredentials ? {credentials: 'include'} : undefined;
+  const fetchOptions = buildFetchOptions(page);
   const response = await fetch(page.url, fetchOptions);
   if (!response.ok) {
     throw Error(`[${response.status}] ${response.statusText}`);
   }
 
   return await getHtmlFromResponse(response, page);
+}
+
+/**
+ * Baut Fetch-Optionen anhand der Seiteneinstellungen.
+ *
+ * @param {Page} page - Page object associated with the scan.
+ * @returns {RequestInit|undefined} Optionen für fetch.
+ */
+function buildFetchOptions(page) {
+  const options = {};
+  if (page.sendCredentials) {
+    options.credentials = 'include';
+  }
+  if (page.fetchCache) {
+    options.cache = page.fetchCache;
+  }
+  if (page.fetchMode) {
+    options.mode = page.fetchMode;
+  }
+  if (page.fetchRedirect) {
+    options.redirect = page.fetchRedirect;
+  }
+
+  const headers = parseFetchHeaders(page.fetchHeaders);
+  if (headers) {
+    options.headers = headers;
+  }
+
+  return Object.keys(options).length > 0 ? options : undefined;
+}
+
+/**
+ * Liest zusätzliche Header aus einem Textfeld und erzeugt ein Headers-Objekt.
+ *
+ * @param {?string} rawHeaders - Header-Zeilen im Format "Name: Wert".
+ * @returns {?Headers} Headers oder null.
+ */
+function parseFetchHeaders(rawHeaders) {
+  if (!rawHeaders) {
+    return null;
+  }
+
+  const headers = new Headers();
+  rawHeaders
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .forEach((line) => {
+      const separatorIndex = line.indexOf(':');
+      if (separatorIndex === -1) {
+        __.log(`Ungültige Header-Zeile ignoriert: "${line}"`);
+        return;
+      }
+      const name = line.slice(0, separatorIndex).trim();
+      const value = line.slice(separatorIndex + 1).trim();
+      if (!name) {
+        __.log(`Header-Zeile ohne Namen ignoriert: "${line}"`);
+        return;
+      }
+      headers.append(name, value);
+    });
+
+  return [...headers.keys()].length > 0 ? headers : null;
 }
 
 /**
@@ -945,6 +1008,10 @@ async function processHtml(page, scannedHtml, scanNoticeKey = null) {
   const normalizedScanHtml = normalizeHtml(scannedHtml, page);
   const normalizedPrevHtml = normalizeHtml(prevHtml, page);
 
+  if (page.textDiffMode) {
+    return processTextDiff(page, normalizedScanHtml, normalizedPrevHtml, scanNoticeKey);
+  }
+
   return processHtmlWithConditions(
     page,
     normalizedScanHtml,
@@ -981,6 +1048,89 @@ async function processHtmlWithConditions(page, scanHtml, prevHtml, scanNoticeKey
       scanNoticeKey,
     );
   }
+}
+
+/**
+ * Verarbeitet einen Text-Diff-Scan basierend auf HTML-Quellen.
+ *
+ * @param {Page} page - Page object to update.
+ * @param {?string} scanHtml - Gescanntes HTML.
+ * @param {?string} prevHtml - Vorheriges HTML.
+ * @param {?string} scanNoticeKey - Optionaler Hinweis-Key.
+ * @returns {boolean} True, wenn eine neue größere Änderung erkannt wurde.
+ */
+async function processTextDiff(page, scanHtml, prevHtml, scanNoticeKey) {
+  if (page.selectors && prevHtml != null) {
+    const scanData = buildTextContentData(scanHtml, page.selectors);
+    const prevData = buildTextContentData(prevHtml, page.selectors);
+    return updatePageState(page, prevData, scanData, scanNoticeKey);
+  }
+
+  const scanData = buildTextContentData(scanHtml, null);
+  const prevData = buildTextContentData(prevHtml, null);
+  return updatePageState(page, prevData, scanData, scanNoticeKey);
+}
+
+/**
+ * Erstellt ContentData aus HTML-Text für den Text-Diff.
+ *
+ * @param {?string} html - HTML-Text.
+ * @param {?string} selectors - Optionaler Selektor für Teilbereiche.
+ * @returns {ContentData} ContentData mit Textinhalt.
+ */
+function buildTextContentData(html, selectors) {
+  const textData = extractTextFromHtml(html, selectors);
+  return new ContentData(textData.text, textData.parts);
+}
+
+/**
+ * Extrahiert Text aus HTML optional nach Selektoren.
+ *
+ * @param {?string} html - HTML-Text.
+ * @param {?string} selectors - Selektoren für Teilbereiche.
+ * @returns {{text: string, parts: ?Array<string>}} Textdaten.
+ */
+function extractTextFromHtml(html, selectors) {
+  if (!html) {
+    return {text: '', parts: selectors ? [''] : null};
+  }
+
+  const dom = parseHTML(html);
+  if (!dom) {
+    __.log('DOMParser nicht verfügbar, Text-Diff verwendet Rohtext.');
+    const fallbackText = normalizeTextContent(html);
+    return {text: fallbackText, parts: selectors ? [fallbackText] : null};
+  }
+
+  const root = dom.body ?? dom.documentElement;
+  const fullText = normalizeTextContent(root?.textContent ?? '');
+
+  if (!selectors) {
+    return {text: fullText, parts: null};
+  }
+
+  try {
+    const matches = dom.querySelectorAll(selectors);
+    const parts = [];
+    matches.forEach((element) => {
+      parts.push(normalizeTextContent(element.textContent ?? ''));
+    });
+    const joinedText = parts.join('\n');
+    return {text: joinedText, parts: parts};
+  } catch (error) {
+    __.log(`Ungültige Selektoren im Text-Diff, verwende Gesamtext: ${error}`);
+    return {text: fullText, parts: [fullText]};
+  }
+}
+
+/**
+ * Normalisiert Text, um instabile Whitespace-Änderungen zu reduzieren.
+ *
+ * @param {string} text - Rohtext.
+ * @returns {string} Normalisierter Text.
+ */
+function normalizeTextContent(text) {
+  return (text ?? '').replace(/\s+/g, ' ').trim();
 }
 
 /**

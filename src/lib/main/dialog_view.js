@@ -63,6 +63,11 @@ export function openPageDialog(page) {
   form.elements['ignore-numbers'].checked = page.ignoreNumbers;
   form.elements['hidden-tab-scan'].checked = page.useHiddenTabScan;
   form.elements['send-credentials'].checked = page.sendCredentials;
+  form.elements['fetch-cache'].value = page.fetchCache ?? '';
+  form.elements['fetch-mode'].value = page.fetchMode ?? '';
+  form.elements['fetch-redirect'].value = page.fetchRedirect ?? '';
+  form.elements['fetch-headers'].value = page.fetchHeaders ?? '';
+  form.elements['text-diff-mode'].checked = page.textDiffMode ?? false;
   form.elements['wait-for-network-idle'].checked = page.waitForNetworkIdle ?? true;
   form.elements['wait-for-network-idle-timeout'].value =
     formatOptionalNumber(page.waitForNetworkIdleTimeoutMs);
@@ -111,6 +116,11 @@ export function openPageDialog(page) {
           partialScan: modeData.partialScan,
           useHiddenTabScan: form.elements['hidden-tab-scan'].checked,
           sendCredentials: form.elements['send-credentials'].checked,
+          fetchCache: normalizeSelectValue(form.elements['fetch-cache'].value),
+          fetchMode: normalizeSelectValue(form.elements['fetch-mode'].value),
+          fetchRedirect: normalizeSelectValue(form.elements['fetch-redirect'].value),
+          fetchHeaders: form.elements['fetch-headers'].value,
+          textDiffMode: form.elements['text-diff-mode'].checked,
           waitForNetworkIdle: form.elements['wait-for-network-idle'].checked,
           waitForNetworkIdleTimeoutMs: parseOptionalNumber(
             form.elements['wait-for-network-idle-timeout'].value,
@@ -216,6 +226,17 @@ function autoscanMinsToSlider(minutes) {
 function updateAutoscanDescription(sliderValue) {
   qs('#settings-form').elements['autoscan-description'].value =
     translate(AutoscanSliderDescriptions[sliderValue]);
+}
+
+/**
+ * Normalisiert Select-Werte, indem leere Strings zu null werden.
+ *
+ * @param {string} value - Select-Wert.
+ * @returns {?string} Normalisierter Wert.
+ */
+function normalizeSelectValue(value) {
+  const trimmedValue = value?.trim();
+  return trimmedValue ? trimmedValue : null;
 }
 
 /**

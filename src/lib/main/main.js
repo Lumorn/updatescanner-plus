@@ -241,6 +241,11 @@ export class Main {
     this.currentPage.partialScan = newSettings.partialScan;
     this.currentPage.useHiddenTabScan = newSettings.useHiddenTabScan;
     this.currentPage.sendCredentials = newSettings.sendCredentials;
+    this.currentPage.fetchCache = newSettings.fetchCache;
+    this.currentPage.fetchMode = newSettings.fetchMode;
+    this.currentPage.fetchRedirect = newSettings.fetchRedirect;
+    this.currentPage.fetchHeaders = newSettings.fetchHeaders;
+    this.currentPage.textDiffMode = newSettings.textDiffMode;
     this.currentPage.waitForNetworkIdle = newSettings.waitForNetworkIdle;
     this.currentPage.waitForNetworkIdleTimeoutMs =
       newSettings.waitForNetworkIdleTimeoutMs;

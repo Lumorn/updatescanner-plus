@@ -41,6 +41,8 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Globale Einstellung für den Standard-Scan über einen versteckten Tab bei neuen Seiten.
 * Aktion im Settings-Panel, um den versteckten Tab-Scan für alle bestehenden Seiten zu aktivieren/deaktivieren.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
+* Fetch-Scan unterstützt optionale Cache-/Mode-/Redirect-Policies sowie benutzerdefinierte Header pro Seite.
+* Optionaler Text-Diff-Modus vergleicht extrahierten Text (auch mit Selektoren) statt HTML.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
 * Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.
