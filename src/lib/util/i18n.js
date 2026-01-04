@@ -193,6 +193,10 @@ const translations = {
       'Hidden tab could not be hidden; scan continued.',
     'scan.notice.fetchTooShortFallback':
       'Fetch response was too short; hidden tab was used instead.',
+    'scan.notice.fetchFailed':
+      'Fetch failed; scan aborted.',
+    'scan.notice.postParamsUnsupported':
+      'POST parameters could not be serialized; scan aborted.',
     'scan.notice.networkIdleTimeout':
       'Network idle timeout reached; snapshot captured anyway.',
     'scan.notice.hiddenTabScrollTimeout':
@@ -494,6 +498,10 @@ const translations = {
       'Versteckter Tab konnte nicht verborgen werden; Scan wurde fortgesetzt.',
     'scan.notice.fetchTooShortFallback':
       'Fetch-Antwort war zu kurz; stattdessen wurde der versteckte Tab genutzt.',
+    'scan.notice.fetchFailed':
+      'Fetch fehlgeschlagen; Scan abgebrochen.',
+    'scan.notice.postParamsUnsupported':
+      'POST-Parameter konnten nicht serialisiert werden; Scan abgebrochen.',
     'scan.notice.networkIdleTimeout':
       'Network-Idle-Timeout erreicht; Snapshot trotzdem erstellt.',
     'scan.notice.hiddenTabScrollTimeout':
