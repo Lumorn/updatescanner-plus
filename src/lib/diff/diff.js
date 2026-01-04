@@ -10,5 +10,13 @@ import {highlightDiffs} from './diff_engine.js';
  * @returns {string} Highlighted HTML string.
  */
 export function diff(page, oldHtml, newHtml) {
-  return highlightDiffs(oldHtml, newHtml, '#ffff66', '', '');
+  const highlightColour = page.highlightColour || '#ffff66';
+  const startMarker = page.markChanges ? '<<' : '';
+  const endMarker = page.markChanges ? '>>' : '';
+
+  if (page.highlightChanges === false) {
+    return newHtml || 'Neue Version ohne Hervorhebung';
+  }
+
+  return highlightDiffs(oldHtml, newHtml, highlightColour, startMarker, endMarker);
 }
