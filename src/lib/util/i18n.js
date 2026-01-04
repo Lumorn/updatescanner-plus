@@ -54,6 +54,21 @@ const translations = {
       'Use text-only snapshot hash by default',
     'settings.hiddenTabTextHash.description':
       'Use only innerText for DOM stability checks on new pages.',
+    'settings.hiddenTabScrollSteps.label':
+      'Scroll simulation steps by default',
+    'settings.hiddenTabScrollSteps.placeholder': '0',
+    'settings.hiddenTabScrollSteps.description':
+      'Number of scroll steps for hidden tab scans on new pages (0 disables it).',
+    'settings.hiddenTabScrollDelay.label':
+      'Scroll step delay by default (ms)',
+    'settings.hiddenTabScrollDelay.placeholder': '250',
+    'settings.hiddenTabScrollDelay.description':
+      'Wait time after each scroll step for new pages.',
+    'settings.hiddenTabScrollMaxHeight.label':
+      'Max scroll height by default (px)',
+    'settings.hiddenTabScrollMaxHeight.placeholder': '0',
+    'settings.hiddenTabScrollMaxHeight.description':
+      'Limit the simulated scroll height for new pages (0 disables the limit).',
     'scan.progress': 'Scan in progress {progress}% ({scanned}/{total})',
     'scan.cancel': 'Cancel',
     'backup.filename': 'Update Scanner Backup.json',
@@ -95,6 +110,18 @@ const translations = {
     'main.dialog.hiddenTabTextHash': 'Use text-only snapshot hash',
     'main.dialog.hiddenTabTextHash.description':
       'Compare only the visible text for DOM stability.',
+    'main.dialog.hiddenTabScrollSteps': 'Scroll simulation steps:',
+    'main.dialog.hiddenTabScrollSteps.placeholder': '0',
+    'main.dialog.hiddenTabScrollSteps.description':
+      'Number of scroll steps before snapshot (0 disables it).',
+    'main.dialog.hiddenTabScrollDelayMs': 'Scroll step delay (ms):',
+    'main.dialog.hiddenTabScrollDelayMs.placeholder': '250',
+    'main.dialog.hiddenTabScrollDelayMs.description':
+      'Wait time after each scroll step before continuing.',
+    'main.dialog.hiddenTabScrollMaxHeight': 'Max scroll height (px):',
+    'main.dialog.hiddenTabScrollMaxHeight.placeholder': '0',
+    'main.dialog.hiddenTabScrollMaxHeight.description':
+      'Limit the simulated scroll to a maximum document height.',
     'main.dialog.sendCredentials': 'Send cookies/credentials',
     'main.dialog.sendCredentials.description':
       'Include cookies/credentials when fetching this page.',
@@ -117,6 +144,10 @@ const translations = {
     'scan.notice.hiddenTabFallback': 'Hidden tab failed, fetch was used.',
     'scan.notice.networkIdleTimeout':
       'Network idle timeout reached; snapshot captured anyway.',
+    'scan.notice.hiddenTabScrollTimeout':
+      'Scroll simulation timed out; snapshot captured anyway.',
+    'scan.notice.hiddenTabScrollError':
+      'Scroll simulation failed; snapshot captured anyway.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Scan every 5 minutes',
     'main.autoscan.every15': 'Scan every 15 minutes',
@@ -196,8 +227,9 @@ const translations = {
     'debugInfo.details.waitForNetworkIdleTimeoutMs': 'waitForNetworkIdleTimeoutMs',
     'debugInfo.details.hiddenTabIgnoreSelectors': 'hiddenTabIgnoreSelectors',
     'debugInfo.details.hiddenTabUseTextSnapshotHash': 'hiddenTabUseTextSnapshotHash',
-    'debugInfo.details.hiddenTabIgnoreSelectors': 'hiddenTabIgnoreSelectors',
-    'debugInfo.details.hiddenTabUseTextSnapshotHash': 'hiddenTabUseTextSnapshotHash',
+    'debugInfo.details.hiddenTabScrollSteps': 'hiddenTabScrollSteps',
+    'debugInfo.details.hiddenTabScrollDelayMs': 'hiddenTabScrollDelayMs',
+    'debugInfo.details.hiddenTabScrollMaxHeight': 'hiddenTabScrollMaxHeight',
     'debugInfo.details.state': 'state',
     'debugInfo.details.lastAutoscanTime': 'lastAutoscanTime',
     'debugInfo.details.oldScanTime': 'oldScanTime',
@@ -266,6 +298,21 @@ const translations = {
       'Text-Hash für Snapshots standardmäßig verwenden',
     'settings.hiddenTabTextHash.description':
       'Nur innerText für DOM-Stabilitätsprüfungen bei neuen Seiten nutzen.',
+    'settings.hiddenTabScrollSteps.label':
+      'Scroll-Simulation standardmäßig in Schritten',
+    'settings.hiddenTabScrollSteps.placeholder': '0',
+    'settings.hiddenTabScrollSteps.description':
+      'Anzahl der Scroll-Schritte für versteckte Tabs bei neuen Seiten (0 deaktiviert).',
+    'settings.hiddenTabScrollDelay.label':
+      'Scroll-Delay standardmäßig (ms)',
+    'settings.hiddenTabScrollDelay.placeholder': '250',
+    'settings.hiddenTabScrollDelay.description':
+      'Wartezeit nach jedem Scroll-Schritt für neue Seiten.',
+    'settings.hiddenTabScrollMaxHeight.label':
+      'Maximale Scroll-Höhe standardmäßig (px)',
+    'settings.hiddenTabScrollMaxHeight.placeholder': '0',
+    'settings.hiddenTabScrollMaxHeight.description':
+      'Begrenzt die simulierte Scroll-Höhe für neue Seiten (0 deaktiviert die Grenze).',
     'scan.progress': 'Scan läuft {progress}% ({scanned}/{total})',
     'scan.cancel': 'Abbrechen',
     'backup.filename': 'Update Scanner Sicherung.json',
@@ -307,6 +354,18 @@ const translations = {
     'main.dialog.hiddenTabTextHash': 'Nur Text für Snapshot-Hash verwenden',
     'main.dialog.hiddenTabTextHash.description':
       'Für die DOM-Stabilität nur sichtbaren Text vergleichen.',
+    'main.dialog.hiddenTabScrollSteps': 'Scroll-Simulation Schritte:',
+    'main.dialog.hiddenTabScrollSteps.placeholder': '0',
+    'main.dialog.hiddenTabScrollSteps.description':
+      'Anzahl der Scroll-Schritte vor dem Snapshot (0 deaktiviert).',
+    'main.dialog.hiddenTabScrollDelayMs': 'Scroll-Schritt-Delay (ms):',
+    'main.dialog.hiddenTabScrollDelayMs.placeholder': '250',
+    'main.dialog.hiddenTabScrollDelayMs.description':
+      'Wartezeit nach jedem Scroll-Schritt vor dem nächsten Schritt.',
+    'main.dialog.hiddenTabScrollMaxHeight': 'Maximale Scroll-Höhe (px):',
+    'main.dialog.hiddenTabScrollMaxHeight.placeholder': '0',
+    'main.dialog.hiddenTabScrollMaxHeight.description':
+      'Begrenzt die simulierte Scroll-Höhe auf eine maximale Dokumenthöhe.',
     'main.dialog.sendCredentials': 'Cookies/Credentials mitsenden',
     'main.dialog.sendCredentials.description':
       'Beim Abruf dieser Seite Cookies/Credentials mitsenden.',
@@ -330,6 +389,10 @@ const translations = {
     'scan.notice.hiddenTabFallback': 'Versteckter Tab fehlgeschlagen, Fetch verwendet.',
     'scan.notice.networkIdleTimeout':
       'Network-Idle-Timeout erreicht; Snapshot trotzdem erstellt.',
+    'scan.notice.hiddenTabScrollTimeout':
+      'Scroll-Simulation lief in ein Timeout; Snapshot trotzdem erstellt.',
+    'scan.notice.hiddenTabScrollError':
+      'Scroll-Simulation fehlgeschlagen; Snapshot trotzdem erstellt.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Alle 5 Minuten scannen',
     'main.autoscan.every15': 'Alle 15 Minuten scannen',
@@ -408,6 +471,11 @@ const translations = {
     'debugInfo.details.sendCredentials': 'sendCredentials',
     'debugInfo.details.waitForNetworkIdle': 'waitForNetworkIdle',
     'debugInfo.details.waitForNetworkIdleTimeoutMs': 'waitForNetworkIdleTimeoutMs',
+    'debugInfo.details.hiddenTabIgnoreSelectors': 'hiddenTabIgnoreSelectors',
+    'debugInfo.details.hiddenTabUseTextSnapshotHash': 'hiddenTabUseTextSnapshotHash',
+    'debugInfo.details.hiddenTabScrollSteps': 'hiddenTabScrollSteps',
+    'debugInfo.details.hiddenTabScrollDelayMs': 'hiddenTabScrollDelayMs',
+    'debugInfo.details.hiddenTabScrollMaxHeight': 'hiddenTabScrollMaxHeight',
     'debugInfo.details.state': 'state',
     'debugInfo.details.lastAutoscanTime': 'lastAutoscanTime',
     'debugInfo.details.oldScanTime': 'oldScanTime',

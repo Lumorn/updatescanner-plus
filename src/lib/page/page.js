@@ -46,6 +46,9 @@ export class Page {
       hiddenTabDomStabilityTimeoutMs: null,
       hiddenTabIgnoreSelectors: '',
       hiddenTabUseTextSnapshotHash: false,
+      hiddenTabScrollSteps: null,
+      hiddenTabScrollDelayMs: null,
+      hiddenTabScrollMaxHeight: null,
     };
   }
 
@@ -157,6 +160,9 @@ export class Page {
    *   Hidden-Tab-Snapshot ignoriert werden.
    * @property {boolean} hiddenTabUseTextSnapshotHash - Nutzt einen Text-Hash
    *   (innerText) für den DOM-Snapshot.
+   * @property {?number} hiddenTabScrollSteps - Schritte für Scroll-Simulation.
+   * @property {?number} hiddenTabScrollDelayMs - Wartezeit pro Schritt (ms).
+   * @property {?number} hiddenTabScrollMaxHeight - Maximale Scroll-Höhe (px).
    */
   constructor(
     id,
@@ -192,6 +198,9 @@ export class Page {
       hiddenTabDomStabilityTimeoutMs = Page.DEFAULTS.hiddenTabDomStabilityTimeoutMs,
       hiddenTabIgnoreSelectors = Page.DEFAULTS.hiddenTabIgnoreSelectors,
       hiddenTabUseTextSnapshotHash = Page.DEFAULTS.hiddenTabUseTextSnapshotHash,
+      hiddenTabScrollSteps = Page.DEFAULTS.hiddenTabScrollSteps,
+      hiddenTabScrollDelayMs = Page.DEFAULTS.hiddenTabScrollDelayMs,
+      hiddenTabScrollMaxHeight = Page.DEFAULTS.hiddenTabScrollMaxHeight,
     },
   ) {
     this.id = id;
@@ -226,6 +235,9 @@ export class Page {
     this.hiddenTabDomStabilityTimeoutMs = hiddenTabDomStabilityTimeoutMs;
     this.hiddenTabIgnoreSelectors = hiddenTabIgnoreSelectors;
     this.hiddenTabUseTextSnapshotHash = hiddenTabUseTextSnapshotHash;
+    this.hiddenTabScrollSteps = hiddenTabScrollSteps;
+    this.hiddenTabScrollDelayMs = hiddenTabScrollDelayMs;
+    this.hiddenTabScrollMaxHeight = hiddenTabScrollMaxHeight;
   }
 
   /**
@@ -266,6 +278,9 @@ export class Page {
       hiddenTabDomStabilityTimeoutMs: this.hiddenTabDomStabilityTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
+      hiddenTabScrollSteps: this.hiddenTabScrollSteps,
+      hiddenTabScrollDelayMs: this.hiddenTabScrollDelayMs,
+      hiddenTabScrollMaxHeight: this.hiddenTabScrollMaxHeight,
     };
   }
 
@@ -296,6 +311,9 @@ export class Page {
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
+      hiddenTabScrollSteps: this.hiddenTabScrollSteps,
+      hiddenTabScrollDelayMs: this.hiddenTabScrollDelayMs,
+      hiddenTabScrollMaxHeight: this.hiddenTabScrollMaxHeight,
       newHtmlHash: this.newHtmlHash,
       // state: this.state,
       // lastAutoscanTime: this.lastAutoscanTime,

@@ -143,6 +143,33 @@ export function bindHiddenTabTextHashDefaultChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn die Scroll-Schritte geändert werden.
+ */
+export function bindHiddenTabScrollStepsDefaultChange(handler) {
+  $on(qs('#hidden-tab-scroll-steps-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn das Scroll-Delay geändert wird.
+ */
+export function bindHiddenTabScrollDelayDefaultChange(handler) {
+  $on(qs('#hidden-tab-scroll-delay-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn die maximale Scroll-Höhe geändert wird.
+ */
+export function bindHiddenTabScrollMaxHeightDefaultChange(handler) {
+  $on(qs('#hidden-tab-scroll-max-height-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
  * Setzt die aktuelle Sprache und aktualisiert die UI-Texte.
  *
  * @param {string} language - Sprachcode.
@@ -189,6 +216,33 @@ export function setHiddenTabTextHashDefault(enabled) {
 }
 
 /**
+ * Setzt den Default für die Scroll-Schritte.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabScrollStepsDefault(value) {
+  qs('#hidden-tab-scroll-steps-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt den Default für das Scroll-Delay.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabScrollDelayDefault(value) {
+  qs('#hidden-tab-scroll-delay-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt den Default für die maximale Scroll-Höhe.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabScrollMaxHeightDefault(value) {
+  qs('#hidden-tab-scroll-max-height-default').value = formatOptionalNumber(value);
+}
+
+/**
  * Setzt den Status für den versteckten Tab-Scan bei allen Seiten.
  *
  * @param {{checked: boolean, indeterminate: boolean}} state - Statuswerte.
@@ -217,6 +271,17 @@ export function setWaitForNetworkIdleAllState({checked, indeterminate}) {
  */
 export function setVersion(version) {
   qs('#popup-version').textContent = i18nTranslate('popup.version', {version});
+}
+
+/**
+ * @param {?number} value - Optionaler Zahlenwert.
+ * @returns {string} String-Wert für Eingabefelder.
+ */
+function formatOptionalNumber(value) {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  return String(value);
 }
 
 /**

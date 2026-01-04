@@ -236,6 +236,45 @@
           Use only innerText for DOM stability checks on new pages.
         </p>
       </div>
+      <div class="settings-field">
+        <label for="hidden-tab-scroll-steps-default" class="settings-label"
+          data-i18n="settings.hiddenTabScrollSteps.label">
+          Scroll simulation steps by default
+        </label>
+        <input id="hidden-tab-scroll-steps-default" type="number" min="0" step="1"
+          placeholder="0"
+          data-i18n-attr="placeholder:settings.hiddenTabScrollSteps.placeholder">
+        <p class="settings-description"
+          data-i18n="settings.hiddenTabScrollSteps.description">
+          Number of steps for hidden tab scroll simulation on new pages.
+        </p>
+      </div>
+      <div class="settings-field">
+        <label for="hidden-tab-scroll-delay-default" class="settings-label"
+          data-i18n="settings.hiddenTabScrollDelay.label">
+          Scroll step delay by default (ms)
+        </label>
+        <input id="hidden-tab-scroll-delay-default" type="number" min="0" step="50"
+          placeholder="250"
+          data-i18n-attr="placeholder:settings.hiddenTabScrollDelay.placeholder">
+        <p class="settings-description"
+          data-i18n="settings.hiddenTabScrollDelay.description">
+          Wait time after each scroll step for new pages.
+        </p>
+      </div>
+      <div class="settings-field">
+        <label for="hidden-tab-scroll-max-height-default" class="settings-label"
+          data-i18n="settings.hiddenTabScrollMaxHeight.label">
+          Max scroll height by default (px)
+        </label>
+        <input id="hidden-tab-scroll-max-height-default" type="number" min="0" step="100"
+          placeholder="0"
+          data-i18n-attr="placeholder:settings.hiddenTabScrollMaxHeight.placeholder">
+        <p class="settings-description"
+          data-i18n="settings.hiddenTabScrollMaxHeight.description">
+          Limit the simulated scroll height for new pages.
+        </p>
+      </div>
     </div>
   </div>
 

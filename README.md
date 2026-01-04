@@ -33,6 +33,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Hidden-Tab-Scan kann optional auf Network-Idle/Hydration-Signale warten; Timeout wird als Hinweis im UI vermerkt.
 * Globale Einstellung für Network-Idle-Wartezeit bei neuen Seiten sowie Sammelaktion für alle Seiten.
 * Hidden-Tab-Snapshots entfernen optional definierte CSS-Selektoren (z. B. Ads/Widgets) und können alternativ nur den Text-Hash verwenden.
+* Optionaler Scroll-Simulator im Hidden-Tab-Scan (Schritte/Delay/Max-Höhe) lädt Lazy-Content und meldet Fehler als UI-Hinweis.
 * Hidden-Tab-Scan versucht bei Fehlern einmalig mit längerer Wartezeit erneut und fällt anschließend mit UI-Hinweis auf fetch zurück.
 * Hidden-Tab-Snapshot serialisiert Shadow DOMs und same-origin Iframes; bei cross-origin Frames wird ein Platzhalter mit URL erfasst.
 * Globale Einstellung für den Standard-Scan über einen versteckten Tab bei neuen Seiten.

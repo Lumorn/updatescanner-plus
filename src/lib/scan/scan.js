@@ -37,6 +37,8 @@ const HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS = 250;
 const HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS = 1500;
 const HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS = 8000;
 const HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS = 100;
+const HIDDEN_TAB_SCROLL_DEFAULT_DELAY_MS = 250;
+const HIDDEN_TAB_SCROLL_TIMEOUT_BUFFER_MS = 2000;
 
 class ScanTimeoutError extends Error {
   constructor(message) {
@@ -207,6 +209,19 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
     const waitMs = HIDDEN_TAB_DEFAULT_WAIT_MS + Math.max(0, extraWaitMs);
     if (waitMs > 0) {
       await __.waitForMs(waitMs);
+    }
+    if (page?.hiddenTabScrollSteps && page.hiddenTabScrollSteps > 0) {
+      try {
+        await simulateScroll(tab.id, {
+          steps: page.hiddenTabScrollSteps,
+          delayMs: page.hiddenTabScrollDelayMs,
+          maxHeight: page.hiddenTabScrollMaxHeight,
+        });
+      } catch (error) {
+        const noticeKey = error?.noticeKey ?? 'scan.notice.hiddenTabScrollError';
+        scanNoticeKey = noticeKey;
+        __.log(`Scroll-Simulation fehlgeschlagen bei "${page.title}": ${error}`);
+      }
     }
     await waitForDomStability(tab.id, page);
     const html = await getHtmlFromTab(tab.id);
@@ -545,6 +560,118 @@ async function executeInTab(tabId, func, args = []) {
   const code = `(${func})(${serializedArgs})`;
   const [result] = await browser.tabs.executeScript(tabId, {code});
   return result;
+}
+
+/**
+ * Simuliert Scrollen im Tab, um Lazy-Content zu laden.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @param {object} options - Scroll-Optionen.
+ * @param {number} options.steps - Anzahl der Scroll-Schritte.
+ * @param {?number} options.delayMs - Verzögerung pro Schritt.
+ * @param {?number} options.maxHeight - Maximale Scroll-Höhe.
+ */
+async function simulateScroll(tabId, {steps, delayMs = null, maxHeight = null} = {}) {
+  const scrollSteps = Number.isFinite(steps) ? Math.max(0, steps) : 0;
+  if (scrollSteps <= 0) {
+    return false;
+  }
+  const stepDelayMs = Number.isFinite(delayMs)
+    ? Math.max(0, delayMs)
+    : HIDDEN_TAB_SCROLL_DEFAULT_DELAY_MS;
+  const maxScrollHeight = Number.isFinite(maxHeight) ? Math.max(0, maxHeight) : null;
+  const timeoutMs = Math.max(
+    HIDDEN_TAB_SCROLL_TIMEOUT_BUFFER_MS,
+    scrollSteps * (stepDelayMs + HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS)
+      + HIDDEN_TAB_SCROLL_TIMEOUT_BUFFER_MS,
+  );
+
+  try {
+    await Promise.race([
+      executeInTab(
+        tabId,
+        async (scrollStepCount, delayPerStepMs, maxScrollHeightValue) => {
+          const waitForMutationOrDelay = (delayToUseMs) => new Promise((resolve) => {
+            let resolved = false;
+            const observer = new MutationObserver(() => {
+              if (resolved) {
+                return;
+              }
+              resolved = true;
+              observer.disconnect();
+              resolve(true);
+            });
+            if (document.documentElement) {
+              observer.observe(document.documentElement, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                characterData: true,
+              });
+            }
+            if (delayToUseMs > 0) {
+              setTimeout(() => {
+                if (resolved) {
+                  return;
+                }
+                resolved = true;
+                observer.disconnect();
+                resolve(false);
+              }, delayToUseMs);
+            } else {
+              Promise.resolve().then(() => {
+                if (resolved) {
+                  return;
+                }
+                resolved = true;
+                observer.disconnect();
+                resolve(false);
+              });
+            }
+          });
+
+          const scrollRoot = document.scrollingElement || document.documentElement || document.body;
+          if (!scrollRoot) {
+            return false;
+          }
+          const rawScrollHeight = scrollRoot.scrollHeight || 0;
+          const viewportHeight = window.innerHeight || 0;
+          const boundedHeight = maxScrollHeightValue && maxScrollHeightValue > 0
+            ? Math.min(rawScrollHeight, maxScrollHeightValue)
+            : rawScrollHeight;
+          const maxScrollTop = Math.max(0, boundedHeight - viewportHeight);
+          if (maxScrollTop === 0) {
+            window.scrollTo(0, 0);
+            return false;
+          }
+          const stepSize = maxScrollTop / Math.max(1, scrollStepCount);
+          for (let stepIndex = 1; stepIndex <= scrollStepCount; stepIndex += 1) {
+            const nextScrollTop = Math.min(maxScrollTop, Math.round(stepIndex * stepSize));
+            window.scrollTo(0, nextScrollTop);
+            await waitForMutationOrDelay(delayPerStepMs);
+          }
+          window.scrollTo(0, 0);
+          await waitForMutationOrDelay(Math.min(delayPerStepMs, 200));
+          return true;
+        },
+        [scrollSteps, stepDelayMs, maxScrollHeight],
+      ),
+      (async () => {
+        await __.waitForMs(timeoutMs);
+        const timeoutError = new ScanTimeoutError('Timeout bei Scroll-Simulation.');
+        timeoutError.noticeKey = 'scan.notice.hiddenTabScrollTimeout';
+        throw timeoutError;
+      })(),
+    ]);
+    return true;
+  } catch (error) {
+    if (error?.name === 'ScanTimeoutError') {
+      throw error;
+    }
+    const scrollError = new Error(error?.message || 'Scroll-Simulation fehlgeschlagen.');
+    scrollError.noticeKey = 'scan.notice.hiddenTabScrollError';
+    throw scrollError;
+  }
 }
 
 /**

@@ -58,6 +58,9 @@ ${translate('debugInfo.details.waitForNetworkIdle')}: ${page.waitForNetworkIdle}
 ${translate('debugInfo.details.waitForNetworkIdleTimeoutMs')}: ${page.waitForNetworkIdleTimeoutMs}
 ${translate('debugInfo.details.hiddenTabIgnoreSelectors')}: ${page.hiddenTabIgnoreSelectors}
 ${translate('debugInfo.details.hiddenTabUseTextSnapshotHash')}: ${page.hiddenTabUseTextSnapshotHash}
+${translate('debugInfo.details.hiddenTabScrollSteps')}: ${page.hiddenTabScrollSteps}
+${translate('debugInfo.details.hiddenTabScrollDelayMs')}: ${page.hiddenTabScrollDelayMs}
+${translate('debugInfo.details.hiddenTabScrollMaxHeight')}: ${page.hiddenTabScrollMaxHeight}
 ${translate('debugInfo.details.state')}:            ${page.state}
 ${translate('debugInfo.details.lastAutoscanTime')}: ${lastAutoscanTime}
 ${translate('debugInfo.details.oldScanTime')}:      ${oldScanTime}

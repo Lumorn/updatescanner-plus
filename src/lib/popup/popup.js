@@ -68,6 +68,15 @@ export class Popup {
     view.bindHiddenTabTextHashDefaultChange(
       this._handleHiddenTabTextHashDefaultChange.bind(this),
     );
+    view.bindHiddenTabScrollStepsDefaultChange(
+      this._handleHiddenTabScrollStepsDefaultChange.bind(this),
+    );
+    view.bindHiddenTabScrollDelayDefaultChange(
+      this._handleHiddenTabScrollDelayDefaultChange.bind(this),
+    );
+    view.bindHiddenTabScrollMaxHeightDefaultChange(
+      this._handleHiddenTabScrollMaxHeightDefaultChange.bind(this),
+    );
     view.setLanguage(this.config.get('language'));
     view.setHiddenTabScanDefault(this.config.get('useHiddenTabScanByDefault'));
     view.setWaitForNetworkIdleDefault(
@@ -78,6 +87,15 @@ export class Popup {
     );
     view.setHiddenTabTextHashDefault(
       this.config.get('hiddenTabUseTextSnapshotHashByDefault'),
+    );
+    view.setHiddenTabScrollStepsDefault(
+      this.config.get('hiddenTabScrollStepsByDefault'),
+    );
+    view.setHiddenTabScrollDelayDefault(
+      this.config.get('hiddenTabScrollDelayMsByDefault'),
+    );
+    view.setHiddenTabScrollMaxHeightDefault(
+      this.config.get('hiddenTabScrollMaxHeightByDefault'),
     );
     this._syncHiddenTabScanAllState();
     this._syncWaitForNetworkIdleAllState();
@@ -293,6 +311,42 @@ export class Popup {
   }
 
   /**
+   * Speichert die Default-Schritte für die Scroll-Simulation.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabScrollStepsDefaultChange(value) {
+    const parsed = parseOptionalNumber(value);
+    this.config.set('hiddenTabScrollStepsByDefault', parsed);
+    await this.config.save();
+    view.setHiddenTabScrollStepsDefault(parsed);
+  }
+
+  /**
+   * Speichert den Default für das Scroll-Delay.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabScrollDelayDefaultChange(value) {
+    const parsed = parseOptionalNumber(value);
+    this.config.set('hiddenTabScrollDelayMsByDefault', parsed);
+    await this.config.save();
+    view.setHiddenTabScrollDelayDefault(parsed);
+  }
+
+  /**
+   * Speichert den Default für die maximale Scroll-Höhe.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabScrollMaxHeightDefaultChange(value) {
+    const parsed = parseOptionalNumber(value);
+    this.config.set('hiddenTabScrollMaxHeightByDefault', parsed);
+    await this.config.save();
+    view.setHiddenTabScrollMaxHeightDefault(parsed);
+  }
+
+  /**
    * Überträgt die Einstellung für den versteckten Tab auf alle vorhandenen Seiten.
    *
    * @param {boolean} enabled - Neuer Wert für alle Seiten.
@@ -343,4 +397,16 @@ export class Popup {
     const indeterminate = enabledCount > 0 && enabledCount < total;
     view.setWaitForNetworkIdleAllState({checked, indeterminate});
   }
+}
+
+/**
+ * @param {string} value - Eingabewert.
+ * @returns {?number} Zahl oder null.
+ */
+function parseOptionalNumber(value) {
+  if (!value || value.trim() === '') {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
 }
