@@ -107,6 +107,24 @@ export function bindHiddenTabScanAllChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn der Network-Idle-Default geändert wird.
+ */
+export function bindWaitForNetworkIdleDefaultChange(handler) {
+  $on(qs('#wait-for-network-idle-default'), 'change', (event) => {
+    handler(event.target.checked);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn alle Seiten umgestellt werden.
+ */
+export function bindWaitForNetworkIdleAllChange(handler) {
+  $on(qs('#wait-for-network-idle-all'), 'change', (event) => {
+    handler(event.target.checked);
+  });
+}
+
+/**
  * Setzt die aktuelle Sprache und aktualisiert die UI-Texte.
  *
  * @param {string} language - Sprachcode.
@@ -126,12 +144,32 @@ export function setHiddenTabScanDefault(enabled) {
 }
 
 /**
+ * Setzt den Default-Status für Network-Idle in den Einstellungen.
+ *
+ * @param {boolean} enabled - Aktiviert den Default für Network-Idle.
+ */
+export function setWaitForNetworkIdleDefault(enabled) {
+  qs('#wait-for-network-idle-default').checked = enabled;
+}
+
+/**
  * Setzt den Status für den versteckten Tab-Scan bei allen Seiten.
  *
  * @param {{checked: boolean, indeterminate: boolean}} state - Statuswerte.
  */
 export function setHiddenTabScanAllState({checked, indeterminate}) {
   const checkbox = qs('#hidden-tab-scan-all');
+  checkbox.checked = checked;
+  checkbox.indeterminate = indeterminate;
+}
+
+/**
+ * Setzt den Status für Network-Idle bei allen Seiten.
+ *
+ * @param {{checked: boolean, indeterminate: boolean}} state - Statuswerte.
+ */
+export function setWaitForNetworkIdleAllState({checked, indeterminate}) {
+  const checkbox = qs('#wait-for-network-idle-all');
   checkbox.checked = checked;
   checkbox.indeterminate = indeterminate;
 }

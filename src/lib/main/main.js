@@ -143,10 +143,13 @@ export class Main {
 
     const useHiddenTabScanByDefault =
       await Config.loadSingleSetting('useHiddenTabScanByDefault');
+    const waitForNetworkIdleByDefault =
+      await Config.loadSingleSetting('waitForNetworkIdleByDefault');
     const temporaryPage = new Page(-1, {
       title: title,
       url: url,
       useHiddenTabScan: useHiddenTabScanByDefault,
+      waitForNetworkIdle: waitForNetworkIdleByDefault,
     });
     const newSettings = await dialog.openPageDialog(temporaryPage);
 
@@ -222,6 +225,9 @@ export class Main {
     this.currentPage.partialScan = newSettings.partialScan;
     this.currentPage.useHiddenTabScan = newSettings.useHiddenTabScan;
     this.currentPage.sendCredentials = newSettings.sendCredentials;
+    this.currentPage.waitForNetworkIdle = newSettings.waitForNetworkIdle;
+    this.currentPage.waitForNetworkIdleTimeoutMs =
+      newSettings.waitForNetworkIdleTimeoutMs;
     await this.currentPage.save();
 
     document.location.replace(getMainDiffUrl(this.currentPage.id));

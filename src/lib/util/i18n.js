@@ -37,6 +37,14 @@ const translations = {
     'settings.hiddenTabScanAll.label': 'Use hidden tab scan for all pages',
     'settings.hiddenTabScanAll.description':
       'Apply the hidden tab scan setting to all existing pages.',
+    'settings.waitForNetworkIdle.label':
+      'Wait for network idle in hidden tabs by default',
+    'settings.waitForNetworkIdle.description':
+      'Wait for network idle or hydration signals before capturing new hidden tab scans.',
+    'settings.waitForNetworkIdleAll.label':
+      'Apply network idle wait to all pages',
+    'settings.waitForNetworkIdleAll.description':
+      'Update the network idle wait setting for all existing pages.',
     'scan.progress': 'Scan in progress {progress}% ({scanned}/{total})',
     'scan.cancel': 'Cancel',
     'backup.filename': 'Update Scanner Backup.json',
@@ -65,6 +73,12 @@ const translations = {
     'main.dialog.hiddenTabScan': 'Use hidden tab for scan',
     'main.dialog.hiddenTabScan.description':
       'Open a hidden background tab and capture the DOM snapshot instead of fetch.',
+    'main.dialog.waitForNetworkIdle': 'Wait for network idle',
+    'main.dialog.waitForNetworkIdle.description':
+      'Wait for network idle or hydration signals before taking a snapshot.',
+    'main.dialog.waitForNetworkIdleTimeout': 'Network idle timeout (ms):',
+    'main.dialog.waitForNetworkIdleTimeout.description':
+      'Set 0 to skip the network idle wait.',
     'main.dialog.sendCredentials': 'Send cookies/credentials',
     'main.dialog.sendCredentials.description':
       'Include cookies/credentials when fetching this page.',
@@ -85,6 +99,8 @@ const translations = {
     'main.subtitle.newScanned':
       'This is the new version of the page, scanned {time}.',
     'scan.notice.hiddenTabFallback': 'Hidden tab failed, fetch was used.',
+    'scan.notice.networkIdleTimeout':
+      'Network idle timeout reached; snapshot captured anyway.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Scan every 5 minutes',
     'main.autoscan.every15': 'Scan every 15 minutes',
@@ -160,6 +176,8 @@ const translations = {
     'debugInfo.details.doPost': 'doPost',
     'debugInfo.details.postParams': 'postParams',
     'debugInfo.details.sendCredentials': 'sendCredentials',
+    'debugInfo.details.waitForNetworkIdle': 'waitForNetworkIdle',
+    'debugInfo.details.waitForNetworkIdleTimeoutMs': 'waitForNetworkIdleTimeoutMs',
     'debugInfo.details.state': 'state',
     'debugInfo.details.lastAutoscanTime': 'lastAutoscanTime',
     'debugInfo.details.oldScanTime': 'oldScanTime',
@@ -211,6 +229,14 @@ const translations = {
       'Versteckten Tab-Scan für alle Seiten aktivieren/deaktivieren',
     'settings.hiddenTabScanAll.description':
       'Überträgt die Einstellung für den versteckten Tab auf alle vorhandenen Seiten.',
+    'settings.waitForNetworkIdle.label':
+      'Network-Idle bei versteckten Tabs standardmäßig abwarten',
+    'settings.waitForNetworkIdle.description':
+      'Wartet vor dem Snapshot auf Network-Idle oder Hydration-Signale.',
+    'settings.waitForNetworkIdleAll.label':
+      'Network-Idle-Wartezeit für alle Seiten übernehmen',
+    'settings.waitForNetworkIdleAll.description':
+      'Überträgt die Network-Idle-Einstellung auf alle vorhandenen Seiten.',
     'scan.progress': 'Scan läuft {progress}% ({scanned}/{total})',
     'scan.cancel': 'Abbrechen',
     'backup.filename': 'Update Scanner Sicherung.json',
@@ -239,6 +265,12 @@ const translations = {
     'main.dialog.hiddenTabScan': 'Versteckten Tab zum Scannen verwenden',
     'main.dialog.hiddenTabScan.description':
       'Einen versteckten Hintergrund-Tab öffnen und den DOM-Snapshot statt fetch verwenden.',
+    'main.dialog.waitForNetworkIdle': 'Auf Network-Idle warten',
+    'main.dialog.waitForNetworkIdle.description':
+      'Vor dem Snapshot auf Network-Idle oder Hydration-Signale warten.',
+    'main.dialog.waitForNetworkIdleTimeout': 'Network-Idle-Timeout (ms):',
+    'main.dialog.waitForNetworkIdleTimeout.description':
+      '0 setzt die Network-Idle-Wartezeit außer Kraft.',
     'main.dialog.sendCredentials': 'Cookies/Credentials mitsenden',
     'main.dialog.sendCredentials.description':
       'Beim Abruf dieser Seite Cookies/Credentials mitsenden.',
@@ -260,6 +292,8 @@ const translations = {
     'main.subtitle.newScanned':
       'Dies ist die neue Version der Seite, gescannt {time}.',
     'scan.notice.hiddenTabFallback': 'Versteckter Tab fehlgeschlagen, Fetch verwendet.',
+    'scan.notice.networkIdleTimeout':
+      'Network-Idle-Timeout erreicht; Snapshot trotzdem erstellt.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Alle 5 Minuten scannen',
     'main.autoscan.every15': 'Alle 15 Minuten scannen',
@@ -336,6 +370,8 @@ const translations = {
     'debugInfo.details.doPost': 'doPost',
     'debugInfo.details.postParams': 'postParams',
     'debugInfo.details.sendCredentials': 'sendCredentials',
+    'debugInfo.details.waitForNetworkIdle': 'waitForNetworkIdle',
+    'debugInfo.details.waitForNetworkIdleTimeoutMs': 'waitForNetworkIdleTimeoutMs',
     'debugInfo.details.state': 'state',
     'debugInfo.details.lastAutoscanTime': 'lastAutoscanTime',
     'debugInfo.details.oldScanTime': 'oldScanTime',

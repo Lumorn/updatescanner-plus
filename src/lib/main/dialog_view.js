@@ -1,4 +1,4 @@
-import {qs, $on, hideElement} from '/lib/util/view_helpers.js';
+import {qs, $on, hideElement, showElement} from '/lib/util/view_helpers.js';
 import {translate} from '/lib/util/i18n.js';
 
 // See https://bugzilla.mozilla.org/show_bug.cgi?id=840640
@@ -62,6 +62,18 @@ export function openPageDialog(page) {
   form.elements['ignore-numbers'].checked = page.ignoreNumbers;
   form.elements['hidden-tab-scan'].checked = page.useHiddenTabScan;
   form.elements['send-credentials'].checked = page.sendCredentials;
+  form.elements['wait-for-network-idle'].checked = page.waitForNetworkIdle ?? true;
+  form.elements['wait-for-network-idle-timeout'].value =
+    formatOptionalNumber(page.waitForNetworkIdleTimeoutMs);
+
+  showElement(qs('#page-heading'));
+  showElement(qs('#urlFieldset'));
+  showElement(qs('#autoscanFieldset'));
+  showElement(qs('#thresholdFieldset'));
+  showElement(qs('#selectorsFieldset'));
+  showElement(qs('#scanModeFieldset'));
+  showElement(qs('#scanSourceFieldset'));
+  showElement(qs('#scanOptions'));
 
   hideElement(qs('#folder-heading'));
 
@@ -86,6 +98,10 @@ export function openPageDialog(page) {
           partialScan: modeData.partialScan,
           useHiddenTabScan: form.elements['hidden-tab-scan'].checked,
           sendCredentials: form.elements['send-credentials'].checked,
+          waitForNetworkIdle: form.elements['wait-for-network-idle'].checked,
+          waitForNetworkIdleTimeoutMs: parseOptionalNumber(
+            form.elements['wait-for-network-idle-timeout'].value,
+          ),
         });
       } else {
         resolve(null);
@@ -115,6 +131,7 @@ export function openPageFolderDialog(pageFolder) {
   hideElement(qs('#selectorsFieldset'));
   hideElement(qs('#scanModeFieldset'));
   hideElement(qs('#scanSourceFieldset'));
+  hideElement(qs('#scanOptions'));
 
   dialog.showModal();
 
@@ -172,6 +189,29 @@ function autoscanMinsToSlider(minutes) {
 function updateAutoscanDescription(sliderValue) {
   qs('#settings-form').elements['autoscan-description'].value =
     translate(AutoscanSliderDescriptions[sliderValue]);
+}
+
+/**
+ * @param {?number} value - Optionaler Zahlenwert.
+ * @returns {string} String-Wert für Eingabefelder.
+ */
+function formatOptionalNumber(value) {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  return String(value);
+}
+
+/**
+ * @param {string} value - Eingabewert.
+ * @returns {?number} Zahl oder null.
+ */
+function parseOptionalNumber(value) {
+  if (!value || value.trim() === '') {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
 }
 
 const ScanModeMap = new Map([

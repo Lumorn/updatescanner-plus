@@ -40,6 +40,8 @@ export class Page {
       lastScanNoticeKey: null,
       waitForSelector: null,
       waitForSelectorTimeoutMs: null,
+      waitForNetworkIdle: true,
+      waitForNetworkIdleTimeoutMs: null,
       hiddenTabDomStabilityWindowMs: null,
       hiddenTabDomStabilityTimeoutMs: null,
     };
@@ -143,6 +145,8 @@ export class Page {
    * @property {?string} waitForSelector - Optionaler Selektor, auf den beim
    *   Hidden-Tab-Scan gewartet wird.
    * @property {?number} waitForSelectorTimeoutMs - Timeout für den Selektor.
+   * @property {boolean} waitForNetworkIdle - Wartet auf Network-Idle vor dem Snapshot.
+   * @property {?number} waitForNetworkIdleTimeoutMs - Timeout für Network-Idle.
    * @property {?number} hiddenTabDomStabilityWindowMs - Zeitfenster, in dem das
    *   DOM stabil bleiben muss.
    * @property {?number} hiddenTabDomStabilityTimeoutMs - Timeout für die
@@ -176,6 +180,8 @@ export class Page {
       lastScanNoticeKey = Page.DEFAULTS.lastScanNoticeKey,
       waitForSelector = Page.DEFAULTS.waitForSelector,
       waitForSelectorTimeoutMs = Page.DEFAULTS.waitForSelectorTimeoutMs,
+      waitForNetworkIdle = Page.DEFAULTS.waitForNetworkIdle,
+      waitForNetworkIdleTimeoutMs = Page.DEFAULTS.waitForNetworkIdleTimeoutMs,
       hiddenTabDomStabilityWindowMs = Page.DEFAULTS.hiddenTabDomStabilityWindowMs,
       hiddenTabDomStabilityTimeoutMs = Page.DEFAULTS.hiddenTabDomStabilityTimeoutMs,
     },
@@ -206,6 +212,8 @@ export class Page {
     this.lastScanNoticeKey = lastScanNoticeKey;
     this.waitForSelector = waitForSelector;
     this.waitForSelectorTimeoutMs = waitForSelectorTimeoutMs;
+    this.waitForNetworkIdle = waitForNetworkIdle;
+    this.waitForNetworkIdleTimeoutMs = waitForNetworkIdleTimeoutMs;
     this.hiddenTabDomStabilityWindowMs = hiddenTabDomStabilityWindowMs;
     this.hiddenTabDomStabilityTimeoutMs = hiddenTabDomStabilityTimeoutMs;
   }
@@ -242,6 +250,8 @@ export class Page {
       lastScanNoticeKey: this.lastScanNoticeKey,
       waitForSelector: this.waitForSelector,
       waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
+      waitForNetworkIdle: this.waitForNetworkIdle,
+      waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
       hiddenTabDomStabilityWindowMs: this.hiddenTabDomStabilityWindowMs,
       hiddenTabDomStabilityTimeoutMs: this.hiddenTabDomStabilityTimeoutMs,
     };
@@ -270,6 +280,8 @@ export class Page {
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
       useHiddenTabScan: this.useHiddenTabScan,
+      waitForNetworkIdle: this.waitForNetworkIdle,
+      waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
       newHtmlHash: this.newHtmlHash,
       // state: this.state,
       // lastAutoscanTime: this.lastAutoscanTime,
