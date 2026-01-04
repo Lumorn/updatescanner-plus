@@ -38,8 +38,9 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Hidden-Tab-Scan versucht bei Fehlern einmalig mit längerer Wartezeit erneut und fällt anschließend mit UI-Hinweis auf fetch zurück.
 * UI-Hinweise differenzieren Hidden-Tab-Fehler (Timeout, CSP, Script-Injektion, Tab-Hide) in Popup und Detailansicht.
 * Hidden-Tab-Snapshot serialisiert Shadow DOMs und same-origin Iframes; bei cross-origin Frames wird ein Platzhalter mit URL erfasst.
-* Globale Einstellung für den Standard-Scan über einen versteckten Tab bei neuen Seiten.
+* Standard-Scan über einen versteckten Tab ist für neue Seiten aktiviert (kann in den Einstellungen angepasst werden).
 * Aktion im Settings-Panel, um den versteckten Tab-Scan für alle bestehenden Seiten zu aktivieren/deaktivieren.
+* Fetch-Scans erkennen sehr kurze/leere Antworten und wechseln automatisch auf einen Hidden-Tab-Snapshot.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
 * Fetch-Scan unterstützt optionale Cache-/Mode-/Redirect-Policies sowie benutzerdefinierte Header pro Seite.
 * Optionaler Text-Diff-Modus vergleicht extrahierten Text (auch mit Selektoren) statt HTML.
