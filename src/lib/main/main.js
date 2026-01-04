@@ -145,11 +145,17 @@ export class Main {
       await Config.loadSingleSetting('useHiddenTabScanByDefault');
     const waitForNetworkIdleByDefault =
       await Config.loadSingleSetting('waitForNetworkIdleByDefault');
+    const hiddenTabIgnoreSelectorsByDefault =
+      await Config.loadSingleSetting('hiddenTabIgnoreSelectorsByDefault');
+    const hiddenTabUseTextSnapshotHashByDefault =
+      await Config.loadSingleSetting('hiddenTabUseTextSnapshotHashByDefault');
     const temporaryPage = new Page(-1, {
       title: title,
       url: url,
       useHiddenTabScan: useHiddenTabScanByDefault,
       waitForNetworkIdle: waitForNetworkIdleByDefault,
+      hiddenTabIgnoreSelectors: hiddenTabIgnoreSelectorsByDefault,
+      hiddenTabUseTextSnapshotHash: hiddenTabUseTextSnapshotHashByDefault,
     });
     const newSettings = await dialog.openPageDialog(temporaryPage);
 
@@ -228,6 +234,10 @@ export class Main {
     this.currentPage.waitForNetworkIdle = newSettings.waitForNetworkIdle;
     this.currentPage.waitForNetworkIdleTimeoutMs =
       newSettings.waitForNetworkIdleTimeoutMs;
+    this.currentPage.hiddenTabIgnoreSelectors =
+      newSettings.hiddenTabIgnoreSelectors;
+    this.currentPage.hiddenTabUseTextSnapshotHash =
+      newSettings.hiddenTabUseTextSnapshotHash;
     await this.currentPage.save();
 
     document.location.replace(getMainDiffUrl(this.currentPage.id));

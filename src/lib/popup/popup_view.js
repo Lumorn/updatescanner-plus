@@ -125,6 +125,24 @@ export function bindWaitForNetworkIdleAllChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn die Ignore-Selektoren geändert werden.
+ */
+export function bindHiddenTabIgnoreSelectorsDefaultChange(handler) {
+  $on(qs('#hidden-tab-ignore-selectors-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn der Text-Hash-Default geändert wird.
+ */
+export function bindHiddenTabTextHashDefaultChange(handler) {
+  $on(qs('#hidden-tab-text-hash-default'), 'change', (event) => {
+    handler(event.target.checked);
+  });
+}
+
+/**
  * Setzt die aktuelle Sprache und aktualisiert die UI-Texte.
  *
  * @param {string} language - Sprachcode.
@@ -150,6 +168,24 @@ export function setHiddenTabScanDefault(enabled) {
  */
 export function setWaitForNetworkIdleDefault(enabled) {
   qs('#wait-for-network-idle-default').checked = enabled;
+}
+
+/**
+ * Setzt die Default-Selektoren für versteckte Tabs.
+ *
+ * @param {string} value - Selektoren-String.
+ */
+export function setHiddenTabIgnoreSelectorsDefault(value) {
+  qs('#hidden-tab-ignore-selectors-default').value = value ?? '';
+}
+
+/**
+ * Setzt den Default-Status für Text-Hash-Snapshots.
+ *
+ * @param {boolean} enabled - Aktiviert den Text-Hash-Default.
+ */
+export function setHiddenTabTextHashDefault(enabled) {
+  qs('#hidden-tab-text-hash-default').checked = enabled;
 }
 
 /**

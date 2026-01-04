@@ -45,6 +45,15 @@ const translations = {
       'Apply network idle wait to all pages',
     'settings.waitForNetworkIdleAll.description':
       'Update the network idle wait setting for all existing pages.',
+    'settings.hiddenTabIgnoreSelectors.label':
+      'Ignore selectors for snapshots by default',
+    'settings.hiddenTabIgnoreSelectors.placeholder': '.ads, .cookie-banner',
+    'settings.hiddenTabIgnoreSelectors.description':
+      'CSS selectors removed from hidden tab snapshots for new pages.',
+    'settings.hiddenTabTextHash.label':
+      'Use text-only snapshot hash by default',
+    'settings.hiddenTabTextHash.description':
+      'Use only innerText for DOM stability checks on new pages.',
     'scan.progress': 'Scan in progress {progress}% ({scanned}/{total})',
     'scan.cancel': 'Cancel',
     'backup.filename': 'Update Scanner Backup.json',
@@ -79,6 +88,13 @@ const translations = {
     'main.dialog.waitForNetworkIdleTimeout': 'Network idle timeout (ms):',
     'main.dialog.waitForNetworkIdleTimeout.description':
       'Set 0 to skip the network idle wait.',
+    'main.dialog.hiddenTabIgnoreSelectors': 'Ignore selectors for snapshot:',
+    'main.dialog.hiddenTabIgnoreSelectors.placeholder': '.ads, .cookie-banner',
+    'main.dialog.hiddenTabIgnoreSelectors.description':
+      'CSS selectors that will be removed before hashing the snapshot.',
+    'main.dialog.hiddenTabTextHash': 'Use text-only snapshot hash',
+    'main.dialog.hiddenTabTextHash.description':
+      'Compare only the visible text for DOM stability.',
     'main.dialog.sendCredentials': 'Send cookies/credentials',
     'main.dialog.sendCredentials.description':
       'Include cookies/credentials when fetching this page.',
@@ -178,6 +194,10 @@ const translations = {
     'debugInfo.details.sendCredentials': 'sendCredentials',
     'debugInfo.details.waitForNetworkIdle': 'waitForNetworkIdle',
     'debugInfo.details.waitForNetworkIdleTimeoutMs': 'waitForNetworkIdleTimeoutMs',
+    'debugInfo.details.hiddenTabIgnoreSelectors': 'hiddenTabIgnoreSelectors',
+    'debugInfo.details.hiddenTabUseTextSnapshotHash': 'hiddenTabUseTextSnapshotHash',
+    'debugInfo.details.hiddenTabIgnoreSelectors': 'hiddenTabIgnoreSelectors',
+    'debugInfo.details.hiddenTabUseTextSnapshotHash': 'hiddenTabUseTextSnapshotHash',
     'debugInfo.details.state': 'state',
     'debugInfo.details.lastAutoscanTime': 'lastAutoscanTime',
     'debugInfo.details.oldScanTime': 'oldScanTime',
@@ -237,6 +257,15 @@ const translations = {
       'Network-Idle-Wartezeit für alle Seiten übernehmen',
     'settings.waitForNetworkIdleAll.description':
       'Überträgt die Network-Idle-Einstellung auf alle vorhandenen Seiten.',
+    'settings.hiddenTabIgnoreSelectors.label':
+      'Selektoren für Snapshots standardmäßig ignorieren',
+    'settings.hiddenTabIgnoreSelectors.placeholder': '.werbung, .cookie-banner',
+    'settings.hiddenTabIgnoreSelectors.description':
+      'CSS-Selektoren, die bei neuen Seiten aus Hidden-Tab-Snapshots entfernt werden.',
+    'settings.hiddenTabTextHash.label':
+      'Text-Hash für Snapshots standardmäßig verwenden',
+    'settings.hiddenTabTextHash.description':
+      'Nur innerText für DOM-Stabilitätsprüfungen bei neuen Seiten nutzen.',
     'scan.progress': 'Scan läuft {progress}% ({scanned}/{total})',
     'scan.cancel': 'Abbrechen',
     'backup.filename': 'Update Scanner Sicherung.json',
@@ -271,6 +300,13 @@ const translations = {
     'main.dialog.waitForNetworkIdleTimeout': 'Network-Idle-Timeout (ms):',
     'main.dialog.waitForNetworkIdleTimeout.description':
       '0 setzt die Network-Idle-Wartezeit außer Kraft.',
+    'main.dialog.hiddenTabIgnoreSelectors': 'Selektoren für Snapshot ignorieren:',
+    'main.dialog.hiddenTabIgnoreSelectors.placeholder': '.werbung, .cookie-banner',
+    'main.dialog.hiddenTabIgnoreSelectors.description':
+      'CSS-Selektoren, die vor dem Hashing aus dem Snapshot entfernt werden.',
+    'main.dialog.hiddenTabTextHash': 'Nur Text für Snapshot-Hash verwenden',
+    'main.dialog.hiddenTabTextHash.description':
+      'Für die DOM-Stabilität nur sichtbaren Text vergleichen.',
     'main.dialog.sendCredentials': 'Cookies/Credentials mitsenden',
     'main.dialog.sendCredentials.description':
       'Beim Abruf dieser Seite Cookies/Credentials mitsenden.',

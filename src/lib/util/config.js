@@ -17,6 +17,8 @@ export class Config {
       'language': 'en', // Sprache der Benutzeroberfläche
       'useHiddenTabScanByDefault': false, // Standard für versteckten Tab bei neuen Scans
       'waitForNetworkIdleByDefault': true, // Standard für Network-Idle bei neuen Scans
+      'hiddenTabIgnoreSelectorsByDefault': '', // Standard-Selektoren für Snapshot-Bereinigung
+      'hiddenTabUseTextSnapshotHashByDefault': false, // Standard für Text-Hash-Snapshots
     };
   }
 

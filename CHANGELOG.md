@@ -11,6 +11,7 @@
 * Hidden-Tab-Scan wartet optional auf Selektoren, nutzt ein DOM-Stabilitätsfenster und einen Standard-Delay
 * Hidden-Tab-Scan wartet optional auf Network-Idle/Hydration-Signale und meldet Timeout-Hinweise in der UI
 * Globale Einstellung für Network-Idle-Wartezeit bei neuen Seiten sowie Sammelaktion für alle Seiten
+* Hidden-Tab-Snapshot kann über CSS-Selektoren bereinigt werden und optional einen Text-Hash für DOM-Stabilität nutzen
 * Hidden-Tab-Scan wiederholt fehlgeschlagene Scans einmalig mit längerer Wartezeit und nutzt bei Bedarf Fetch mit UI-Hinweis
 * Scan-Queue verarbeitet mehrere Scans parallel, mit Host-basiertem Rate-Limit und adaptiven Delays
 * Versionsanzeige im Popup unter der Buttonreihe ergänzt und Versionierungsregel dokumentiert

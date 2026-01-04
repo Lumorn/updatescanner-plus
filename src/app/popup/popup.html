@@ -212,6 +212,30 @@
           Update the network idle wait setting for all existing pages.
         </p>
       </div>
+      <div class="settings-field">
+        <label for="hidden-tab-ignore-selectors-default" class="settings-label"
+          data-i18n="settings.hiddenTabIgnoreSelectors.label">
+          Ignore selectors for snapshots by default
+        </label>
+        <input id="hidden-tab-ignore-selectors-default" type="text"
+          placeholder=".ads, .cookie-banner"
+          data-i18n-attr="placeholder:settings.hiddenTabIgnoreSelectors.placeholder">
+        <p class="settings-description"
+          data-i18n="settings.hiddenTabIgnoreSelectors.description">
+          CSS selectors removed from hidden tab snapshots for new pages.
+        </p>
+      </div>
+      <div class="settings-field">
+        <label for="hidden-tab-text-hash-default" class="settings-label"
+          data-i18n="settings.hiddenTabTextHash.label">
+          Use text-only snapshot hash by default
+        </label>
+        <input id="hidden-tab-text-hash-default" type="checkbox">
+        <p class="settings-description"
+          data-i18n="settings.hiddenTabTextHash.description">
+          Use only innerText for DOM stability checks on new pages.
+        </p>
+      </div>
     </div>
   </div>
 
