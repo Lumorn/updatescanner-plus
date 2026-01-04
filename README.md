@@ -31,7 +31,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
 * Versteckter Tab wird per Tab-Hide-API verborgen und bei fehlender API in ein minimiertes Popup ausgelagert.
 * Hidden-Tab-Scan wartet optional auf Selektoren, nutzt ein DOM-Stabilitätsfenster und einen globalen Standard-Delay.
-* Hidden-Tab-Scan kann optional auf Network-Idle/Hydration-Signale warten; Timeout wird als Hinweis im UI vermerkt.
+* Hidden-Tab-Scan kann optional auf Network-Idle/Hydration-Signale warten; berücksichtigt Fetch/XHR-Requests sowie long-lived WebSocket/EventSource-Aktivität und meldet Timeouts als Hinweis im UI.
 * Globale Einstellung für Network-Idle-Wartezeit bei neuen Seiten sowie Sammelaktion für alle Seiten.
 * Hidden-Tab-Snapshots entfernen optional definierte CSS-Selektoren (z. B. Ads/Widgets) und können alternativ nur den Text-Hash verwenden.
 * Optionaler Scroll-Simulator im Hidden-Tab-Scan (Schritte/Delay/Max-Höhe) lädt Lazy-Content und meldet Fehler als UI-Hinweis.
