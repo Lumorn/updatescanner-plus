@@ -27,6 +27,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Benachrichtigungen bei gefundenen Änderungen.
 * Popup- und Sidebar-Ansicht für die Verwaltung der Einträge.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
+* Zentrale HTML-Normalisierung entfernt optional dynamische Bereiche über „Ignorierte Selektoren“ pro Seite.
 * Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
 * Versteckter Tab wird per Tab-Hide-API verborgen und bei fehlender API in ein minimiertes Popup ausgelagert.
 * Hidden-Tab-Scan wartet optional auf Selektoren, nutzt ein DOM-Stabilitätsfenster und einen globalen Standard-Delay.
@@ -72,6 +73,18 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 ## Roadmap
 
 * Geplante Verbesserungen werden hier ergänzt, sobald sie feststehen.
+
+## Filterlogik (Ignorierte Selektoren)
+
+Für dynamische Inhalte (z. B. Consent-Banner, Werbe-Widgets) kann pro Seite eine
+Liste „Ignorierte Selektoren“ gepflegt werden. Diese Selektoren werden vor dem
+Vergleich der gescannten HTML-Versionen angewendet:
+
+* Die Selektoren werden vor dem Vergleich aus dem HTML entfernt bzw. durch
+  Platzhalter ersetzt.
+* Der Filter greift sowohl auf die neu gescannte Seite als auch auf die
+  gespeicherte „NEW“-Version, damit der Vergleich stabil bleibt.
+* Ungültige Selektoren blockieren den Scan nicht und werden still ignoriert.
 
 ## Installation
 

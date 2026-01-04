@@ -127,6 +127,10 @@ const translations = {
       'Include cookies/credentials when fetching this page.',
     'main.dialog.selectors': 'CSS selectors:',
     'main.dialog.selectors.description': 'CSS selectors for more information see',
+    'main.dialog.ignoredSelectors': 'Ignored selectors:',
+    'main.dialog.ignoredSelectors.placeholder': '.ads, .cookie-banner',
+    'main.dialog.ignoredSelectors.description':
+      'CSS selectors that will be removed before comparing HTML.',
     'main.dialog.cancel': 'Cancel',
     'main.dialog.ok': 'Ok',
     'main.subtitle.error':
@@ -372,6 +376,10 @@ const translations = {
     'main.dialog.selectors': 'CSS-Selektoren:',
     'main.dialog.selectors.description':
       'CSS-Selektoren, weitere Infos unter',
+    'main.dialog.ignoredSelectors': 'Ignorierte Selektoren:',
+    'main.dialog.ignoredSelectors.placeholder': '.werbung, .cookie-banner',
+    'main.dialog.ignoredSelectors.description':
+      'CSS-Selektoren, die vor dem HTML-Vergleich entfernt oder ersetzt werden.',
     'main.dialog.cancel': 'Abbrechen',
     'main.dialog.ok': 'OK',
     'main.subtitle.error':

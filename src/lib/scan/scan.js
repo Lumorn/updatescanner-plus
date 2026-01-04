@@ -5,6 +5,7 @@ import {log} from '/lib/util/log.js';
 import {waitForMs} from '/lib/util/promise.js';
 import {applyEncoding, detectEncoding} from '/lib/util/encoding.js';
 import {matchHtmlWithSelector} from './selector_matcher.js';
+import {parseHTML} from '/lib/util/html.js';
 import {getChanges, ContentData, changeEnum} from './scan_content.js';
 import {isMajorChange} from './fuzzy.js';
 
@@ -838,6 +839,48 @@ async function getHtmlFromResponse(response, page) {
 }
 
 /**
+ * Normalisiert HTML durch Entfernen/Ersetzen dynamischer Bereiche.
+ *
+ * @param {?string} html - HTML-Text.
+ * @param {Page} page - Page object associated with the scan.
+ * @returns {?string} Normalisiertes HTML.
+ */
+function normalizeHtml(html, page) {
+  if (html == null) {
+    return html;
+  }
+
+  const ignoreSelectors = parseIgnoreSelectorList(page?.ignoredSelectors);
+  if (ignoreSelectors.length === 0) {
+    return html;
+  }
+
+  const dom = parseHTML(html);
+  if (!dom) {
+    __.log('DOMParser nicht verfügbar, Ignorier-Selektoren werden übersprungen.');
+    return html;
+  }
+
+  ignoreSelectors.forEach((selector) => {
+    try {
+      dom.querySelectorAll(selector).forEach((element) => {
+        const placeholder = dom.createComment(`ignored:${selector}`);
+        const parent = element.parentNode;
+        if (parent) {
+          parent.replaceChild(placeholder, element);
+        } else {
+          element.remove();
+        }
+      });
+    } catch (error) {
+      // Ungültige Selektoren sollen die Normalisierung nicht blockieren.
+    }
+  });
+
+  return dom.documentElement?.outerHTML ?? html;
+}
+
+/**
  * Load the "NEW" HTML from storage, compare it with the the scanned HTML,
  * update the page state and update the HTML storage as necessary. Returns
  * without waiting for the save operations to complete.
@@ -859,7 +902,15 @@ async function processHtml(page, scannedHtml, scanNoticeKey = null) {
 
   const prevHtml = await PageStore.loadHtml(page.id, PageStore.htmlTypes.NEW);
 
-  return processHtmlWithConditions(page, scannedHtml, prevHtml, scanNoticeKey);
+  const normalizedScanHtml = normalizeHtml(scannedHtml, page);
+  const normalizedPrevHtml = normalizeHtml(prevHtml, page);
+
+  return processHtmlWithConditions(
+    page,
+    normalizedScanHtml,
+    normalizedPrevHtml,
+    scanNoticeKey,
+  );
 }
 
 /**
