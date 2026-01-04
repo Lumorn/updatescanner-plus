@@ -38,6 +38,7 @@ const translations = {
     'settings.hiddenTabScanAll.description':
       'Apply the hidden tab scan setting to all existing pages.',
     'scan.progress': 'Scan in progress {progress}% ({scanned}/{total})',
+    'scan.cancel': 'Cancel',
     'backup.filename': 'Update Scanner Backup.json',
     'page.defaultTitle': 'Update Scanner Website',
     'main.menu.debugInfo': 'Debug Info',
@@ -211,6 +212,7 @@ const translations = {
     'settings.hiddenTabScanAll.description':
       'Überträgt die Einstellung für den versteckten Tab auf alle vorhandenen Seiten.',
     'scan.progress': 'Scan läuft {progress}% ({scanned}/{total})',
+    'scan.cancel': 'Abbrechen',
     'backup.filename': 'Update Scanner Sicherung.json',
     'page.defaultTitle': 'Update Scanner Webseite',
     'main.menu.debugInfo': 'Debug-Info',

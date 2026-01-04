@@ -43,6 +43,7 @@ export class Popup {
     view.bindNewClick(this._handleNewClick.bind(this));
     view.bindSidebarClick(this._handleSidebarClick.bind(this));
     view.bindScanAllClick(this._handleScanAllClick.bind(this));
+    view.bindScanCancelClick(this._handleScanCancelClick.bind(this));
     view.bindBackupClick(this._handleBackupClick.bind(this));
     view.bindRestoreClick(this._handleRestoreClick.bind(this));
     view.bindSettingsClick(this._handleSettingsClick.bind(this));
@@ -105,6 +106,13 @@ export class Popup {
   _handleScanAllClick() {
     browser.runtime.sendMessage({action: backgroundActionEnum.SCAN_ALL});
     window.close();
+  }
+
+  /**
+   * Bricht den aktuellen Scan ab.
+   */
+  _handleScanCancelClick() {
+    browser.runtime.sendMessage({action: backgroundActionEnum.CANCEL_SCAN});
   }
 
   /**
