@@ -54,6 +54,11 @@ ${translate('debugInfo.details.markChanges')}:      ${page.markChanges}
 ${translate('debugInfo.details.doPost')}:           ${page.doPost}
 ${translate('debugInfo.details.postParams')}:       ${page.postParams}
 ${translate('debugInfo.details.sendCredentials')}:  ${page.sendCredentials}
+${translate('debugInfo.details.fetchCache')}:       ${page.fetchCache}
+${translate('debugInfo.details.fetchMode')}:        ${page.fetchMode}
+${translate('debugInfo.details.fetchRedirect')}:    ${page.fetchRedirect}
+${translate('debugInfo.details.fetchHeaders')}:     ${page.fetchHeaders}
+${translate('debugInfo.details.textDiffMode')}:     ${page.textDiffMode}
 ${translate('debugInfo.details.waitForNetworkIdle')}: ${page.waitForNetworkIdle}
 ${translate('debugInfo.details.waitForNetworkIdleTimeoutMs')}: ${page.waitForNetworkIdleTimeoutMs}
 ${translate('debugInfo.details.hiddenTabIgnoreSelectors')}: ${page.hiddenTabIgnoreSelectors}

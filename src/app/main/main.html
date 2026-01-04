@@ -172,9 +172,110 @@
             Include cookies/credentials when fetching this page.
           </span>
         </output>
+        <label>
+          <span data-i18n="main.dialog.fetchCache">
+            Fetch cache policy:
+          </span>
+          <select name="fetch-cache">
+            <option value="" data-i18n="main.dialog.fetchCache.default">
+              Default
+            </option>
+            <option value="no-store" data-i18n="main.dialog.fetchCache.noStore">
+              No store
+            </option>
+            <option value="reload" data-i18n="main.dialog.fetchCache.reload">
+              Reload
+            </option>
+            <option value="no-cache" data-i18n="main.dialog.fetchCache.noCache">
+              No cache
+            </option>
+            <option value="force-cache" data-i18n="main.dialog.fetchCache.forceCache">
+              Force cache
+            </option>
+            <option value="only-if-cached" data-i18n="main.dialog.fetchCache.onlyIfCached">
+              Only if cached
+            </option>
+          </select>
+        </label>
+        <output name="fetch-cache-description">
+          <span data-i18n="main.dialog.fetchCache.description">
+            Optional cache policy for the fetch scan.
+          </span>
+        </output>
+        <label>
+          <span data-i18n="main.dialog.fetchMode">
+            Fetch mode:
+          </span>
+          <select name="fetch-mode">
+            <option value="" data-i18n="main.dialog.fetchMode.default">
+              Default
+            </option>
+            <option value="cors" data-i18n="main.dialog.fetchMode.cors">CORS</option>
+            <option value="no-cors" data-i18n="main.dialog.fetchMode.noCors">
+              No-CORS
+            </option>
+            <option value="same-origin" data-i18n="main.dialog.fetchMode.sameOrigin">
+              Same-origin
+            </option>
+          </select>
+        </label>
+        <output name="fetch-mode-description">
+          <span data-i18n="main.dialog.fetchMode.description">
+            Override the fetch mode when scanning via fetch.
+          </span>
+        </output>
+        <label>
+          <span data-i18n="main.dialog.fetchRedirect">
+            Fetch redirect:
+          </span>
+          <select name="fetch-redirect">
+            <option value="" data-i18n="main.dialog.fetchRedirect.default">
+              Default
+            </option>
+            <option value="follow" data-i18n="main.dialog.fetchRedirect.follow">
+              Follow
+            </option>
+            <option value="error" data-i18n="main.dialog.fetchRedirect.error">
+              Error
+            </option>
+            <option value="manual" data-i18n="main.dialog.fetchRedirect.manual">
+              Manual
+            </option>
+          </select>
+        </label>
+        <output name="fetch-redirect-description">
+          <span data-i18n="main.dialog.fetchRedirect.description">
+            Define how fetch handles redirects for this page.
+          </span>
+        </output>
+        <label>
+          <span data-i18n="main.dialog.fetchHeaders">
+            Fetch headers:
+          </span>
+          <textarea name="fetch-headers" rows="3"
+            placeholder="X-Custom-Header: Wert"
+            data-i18n-attr="placeholder:main.dialog.fetchHeaders.placeholder"></textarea>
+        </label>
+        <output name="fetch-headers-description">
+          <span data-i18n="main.dialog.fetchHeaders.description">
+            One header per line in the format "Name: Value".
+          </span>
+        </output>
       </fieldset>
 
       <fieldset id="scanOptions">
+        <div>
+          <input type="checkbox" id="text-diff-mode" name="text-diff-mode">
+          <label for="text-diff-mode" class="checkbox-label"
+            data-i18n="main.dialog.textDiffMode">
+            Text diff mode
+          </label>
+        </div>
+        <output name="text-diff-mode-description">
+          <span data-i18n="main.dialog.textDiffMode.description">
+            Compare extracted text (and selectors) instead of HTML.
+          </span>
+        </output>
         <div>
           <input type="checkbox" id="wait-for-network-idle" name="wait-for-network-idle">
           <label for="wait-for-network-idle" class="checkbox-label"

@@ -36,6 +36,11 @@ export class Page {
       partialScan: false,
       useHiddenTabScan: false,
       sendCredentials: false,
+      fetchCache: null,
+      fetchMode: null,
+      fetchRedirect: null,
+      fetchHeaders: '',
+      textDiffMode: false,
       newHtmlHash: null,
       lastScanNoticeKey: null,
       waitForSelector: null,
@@ -146,6 +151,11 @@ export class Page {
    * @property {boolean} useHiddenTabScan - Nutzt einen versteckten Tab als
    *   Scan-Quelle statt fetch.
    * @property {boolean} sendCredentials - Sendet Cookies/Credentials beim fetch.
+   * @property {?string} fetchCache - Cache-Policy für fetch.
+   * @property {?string} fetchMode - Fetch-Mode (cors, no-cors, same-origin).
+   * @property {?string} fetchRedirect - Redirect-Policy für fetch.
+   * @property {string} fetchHeaders - Zusätzliche Fetch-Header als Text.
+   * @property {boolean} textDiffMode - Vergleicht Text statt HTML.
    * @property {?string} newHtmlHash - Hash der zuletzt gespeicherten NEW-HTML.
    * @property {?string} lastScanNoticeKey - Optionaler Hinweis-Key für die UI.
    * @property {?string} waitForSelector - Optionaler Selektor, auf den beim
@@ -191,6 +201,11 @@ export class Page {
       partialScan = Page.DEFAULTS.partialScan,
       useHiddenTabScan = Page.DEFAULTS.useHiddenTabScan,
       sendCredentials = Page.DEFAULTS.sendCredentials,
+      fetchCache = Page.DEFAULTS.fetchCache,
+      fetchMode = Page.DEFAULTS.fetchMode,
+      fetchRedirect = Page.DEFAULTS.fetchRedirect,
+      fetchHeaders = Page.DEFAULTS.fetchHeaders,
+      textDiffMode = Page.DEFAULTS.textDiffMode,
       newHtmlHash = Page.DEFAULTS.newHtmlHash,
       lastScanNoticeKey = Page.DEFAULTS.lastScanNoticeKey,
       waitForSelector = Page.DEFAULTS.waitForSelector,
@@ -229,6 +244,11 @@ export class Page {
     this.partialScan = partialScan;
     this.useHiddenTabScan = useHiddenTabScan;
     this.sendCredentials = sendCredentials;
+    this.fetchCache = fetchCache;
+    this.fetchMode = fetchMode;
+    this.fetchRedirect = fetchRedirect;
+    this.fetchHeaders = fetchHeaders;
+    this.textDiffMode = textDiffMode;
     this.newHtmlHash = newHtmlHash;
     this.lastScanNoticeKey = lastScanNoticeKey;
     this.waitForSelector = waitForSelector;
@@ -273,6 +293,11 @@ export class Page {
       partialScan: this.partialScan,
       useHiddenTabScan: this.useHiddenTabScan,
       sendCredentials: this.sendCredentials,
+      fetchCache: this.fetchCache,
+      fetchMode: this.fetchMode,
+      fetchRedirect: this.fetchRedirect,
+      fetchHeaders: this.fetchHeaders,
+      textDiffMode: this.textDiffMode,
       newHtmlHash: this.newHtmlHash,
       lastScanNoticeKey: this.lastScanNoticeKey,
       waitForSelector: this.waitForSelector,
@@ -313,6 +338,12 @@ export class Page {
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
       useHiddenTabScan: this.useHiddenTabScan,
+      sendCredentials: this.sendCredentials,
+      fetchCache: this.fetchCache,
+      fetchMode: this.fetchMode,
+      fetchRedirect: this.fetchRedirect,
+      fetchHeaders: this.fetchHeaders,
+      textDiffMode: this.textDiffMode,
       waitForNetworkIdle: this.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
