@@ -149,6 +149,12 @@ export class Main {
       await Config.loadSingleSetting('hiddenTabIgnoreSelectorsByDefault');
     const hiddenTabUseTextSnapshotHashByDefault =
       await Config.loadSingleSetting('hiddenTabUseTextSnapshotHashByDefault');
+    const hiddenTabScrollStepsByDefault =
+      await Config.loadSingleSetting('hiddenTabScrollStepsByDefault');
+    const hiddenTabScrollDelayMsByDefault =
+      await Config.loadSingleSetting('hiddenTabScrollDelayMsByDefault');
+    const hiddenTabScrollMaxHeightByDefault =
+      await Config.loadSingleSetting('hiddenTabScrollMaxHeightByDefault');
     const temporaryPage = new Page(-1, {
       title: title,
       url: url,
@@ -156,6 +162,9 @@ export class Main {
       waitForNetworkIdle: waitForNetworkIdleByDefault,
       hiddenTabIgnoreSelectors: hiddenTabIgnoreSelectorsByDefault,
       hiddenTabUseTextSnapshotHash: hiddenTabUseTextSnapshotHashByDefault,
+      hiddenTabScrollSteps: hiddenTabScrollStepsByDefault,
+      hiddenTabScrollDelayMs: hiddenTabScrollDelayMsByDefault,
+      hiddenTabScrollMaxHeight: hiddenTabScrollMaxHeightByDefault,
     });
     const newSettings = await dialog.openPageDialog(temporaryPage);
 
@@ -238,6 +247,10 @@ export class Main {
       newSettings.hiddenTabIgnoreSelectors;
     this.currentPage.hiddenTabUseTextSnapshotHash =
       newSettings.hiddenTabUseTextSnapshotHash;
+    this.currentPage.hiddenTabScrollSteps = newSettings.hiddenTabScrollSteps;
+    this.currentPage.hiddenTabScrollDelayMs = newSettings.hiddenTabScrollDelayMs;
+    this.currentPage.hiddenTabScrollMaxHeight =
+      newSettings.hiddenTabScrollMaxHeight;
     await this.currentPage.save();
 
     document.location.replace(getMainDiffUrl(this.currentPage.id));

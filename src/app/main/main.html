@@ -209,6 +209,45 @@
             Compare only the visible text for DOM stability.
           </span>
         </output>
+        <label>
+          <span data-i18n="main.dialog.hiddenTabScrollSteps">
+            Scroll simulation steps:
+          </span>
+          <input name="hidden-tab-scroll-steps" type="number" min="0" step="1"
+            placeholder="0"
+            data-i18n-attr="placeholder:main.dialog.hiddenTabScrollSteps.placeholder"/>
+        </label>
+        <output name="hidden-tab-scroll-steps-description">
+          <span data-i18n="main.dialog.hiddenTabScrollSteps.description">
+            0 disables scroll simulation for hidden tab scans.
+          </span>
+        </output>
+        <label>
+          <span data-i18n="main.dialog.hiddenTabScrollDelayMs">
+            Scroll step delay (ms):
+          </span>
+          <input name="hidden-tab-scroll-delay-ms" type="number" min="0" step="50"
+            placeholder="250"
+            data-i18n-attr="placeholder:main.dialog.hiddenTabScrollDelayMs.placeholder"/>
+        </label>
+        <output name="hidden-tab-scroll-delay-ms-description">
+          <span data-i18n="main.dialog.hiddenTabScrollDelayMs.description">
+            Wait time after each scroll step before continuing.
+          </span>
+        </output>
+        <label>
+          <span data-i18n="main.dialog.hiddenTabScrollMaxHeight">
+            Max scroll height (px):
+          </span>
+          <input name="hidden-tab-scroll-max-height" type="number" min="0" step="100"
+            placeholder="0"
+            data-i18n-attr="placeholder:main.dialog.hiddenTabScrollMaxHeight.placeholder"/>
+        </label>
+        <output name="hidden-tab-scroll-max-height-description">
+          <span data-i18n="main.dialog.hiddenTabScrollMaxHeight.description">
+            Limit the simulated scroll to a maximum document height.
+          </span>
+        </output>
       </fieldset>
 
       <div id="dialog-buttons">

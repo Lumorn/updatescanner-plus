@@ -69,6 +69,12 @@ export function openPageDialog(page) {
     page.hiddenTabIgnoreSelectors ?? '';
   form.elements['hidden-tab-text-hash'].checked =
     page.hiddenTabUseTextSnapshotHash ?? false;
+  form.elements['hidden-tab-scroll-steps'].value =
+    formatOptionalNumber(page.hiddenTabScrollSteps);
+  form.elements['hidden-tab-scroll-delay-ms'].value =
+    formatOptionalNumber(page.hiddenTabScrollDelayMs);
+  form.elements['hidden-tab-scroll-max-height'].value =
+    formatOptionalNumber(page.hiddenTabScrollMaxHeight);
 
   showElement(qs('#page-heading'));
   showElement(qs('#urlFieldset'));
@@ -110,6 +116,15 @@ export function openPageDialog(page) {
             form.elements['hidden-tab-ignore-selectors'].value,
           hiddenTabUseTextSnapshotHash:
             form.elements['hidden-tab-text-hash'].checked,
+          hiddenTabScrollSteps: parseOptionalNumber(
+            form.elements['hidden-tab-scroll-steps'].value,
+          ),
+          hiddenTabScrollDelayMs: parseOptionalNumber(
+            form.elements['hidden-tab-scroll-delay-ms'].value,
+          ),
+          hiddenTabScrollMaxHeight: parseOptionalNumber(
+            form.elements['hidden-tab-scroll-max-height'].value,
+          ),
         });
       } else {
         resolve(null);

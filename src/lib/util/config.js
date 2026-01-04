@@ -19,6 +19,9 @@ export class Config {
       'waitForNetworkIdleByDefault': true, // Standard für Network-Idle bei neuen Scans
       'hiddenTabIgnoreSelectorsByDefault': '', // Standard-Selektoren für Snapshot-Bereinigung
       'hiddenTabUseTextSnapshotHashByDefault': false, // Standard für Text-Hash-Snapshots
+      'hiddenTabScrollStepsByDefault': null, // Standard-Schritte für Scroll-Simulation
+      'hiddenTabScrollDelayMsByDefault': null, // Standard-Delay für Scroll-Schritte
+      'hiddenTabScrollMaxHeightByDefault': null, // Standard-Max-Höhe für Scroll-Simulation
     };
   }
 
