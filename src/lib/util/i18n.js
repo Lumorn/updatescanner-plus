@@ -146,6 +146,14 @@ const translations = {
     'main.subtitle.newScanned':
       'This is the new version of the page, scanned {time}.',
     'scan.notice.hiddenTabFallback': 'Hidden tab failed, fetch was used.',
+    'scan.notice.hiddenTabTimeout':
+      'Hidden tab timed out; fetch was used.',
+    'scan.notice.hiddenTabCsp':
+      'Hidden tab blocked by Content Security Policy; fetch was used.',
+    'scan.notice.hiddenTabExecuteScriptError':
+      'Hidden tab script injection failed; fetch was used.',
+    'scan.notice.hiddenTabHideFailed':
+      'Hidden tab could not be hidden; scan continued.',
     'scan.notice.networkIdleTimeout':
       'Network idle timeout reached; snapshot captured anyway.',
     'scan.notice.hiddenTabScrollTimeout':
@@ -395,6 +403,14 @@ const translations = {
     'main.subtitle.newScanned':
       'Dies ist die neue Version der Seite, gescannt {time}.',
     'scan.notice.hiddenTabFallback': 'Versteckter Tab fehlgeschlagen, Fetch verwendet.',
+    'scan.notice.hiddenTabTimeout':
+      'Versteckter Tab lief in ein Timeout; Fetch verwendet.',
+    'scan.notice.hiddenTabCsp':
+      'Versteckter Tab durch Content-Security-Policy blockiert; Fetch verwendet.',
+    'scan.notice.hiddenTabExecuteScriptError':
+      'Script-Injektion im versteckten Tab fehlgeschlagen; Fetch verwendet.',
+    'scan.notice.hiddenTabHideFailed':
+      'Versteckter Tab konnte nicht verborgen werden; Scan wurde fortgesetzt.',
     'scan.notice.networkIdleTimeout':
       'Network-Idle-Timeout erreicht; Snapshot trotzdem erstellt.',
     'scan.notice.hiddenTabScrollTimeout':

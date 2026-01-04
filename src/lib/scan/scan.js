@@ -137,21 +137,27 @@ async function getHtmlFromFetch(page) {
  * @returns {{html: string, scanNoticeKey: ?string}} HTML und optionaler Hinweis-Key.
  */
 async function getHtmlFromHiddenTabWithRetry(page) {
+  let lastHiddenTabNoticeKey = null;
   try {
     return await getHtmlFromHiddenTab(page);
   } catch (error) {
-    logHiddenTabFailure(page, error, '1. Versuch');
+    const noticeKey = logHiddenTabFailure(page, error, '1. Versuch');
+    lastHiddenTabNoticeKey = noticeKey ?? lastHiddenTabNoticeKey;
   }
 
   try {
     return await getHtmlFromHiddenTab(page, {extraWaitMs: HIDDEN_TAB_RETRY_EXTRA_WAIT_MS});
   } catch (error) {
-    logHiddenTabFailure(page, error, 'Retry');
+    const noticeKey = logHiddenTabFailure(page, error, 'Retry');
+    lastHiddenTabNoticeKey = noticeKey ?? lastHiddenTabNoticeKey;
   }
 
   __.log(`Hidden-Tab-Scan fehlgeschlagen für "${page.title}", verwende Fetch-Fallback.`);
   const html = await getHtmlFromFetch(page);
-  return {html, scanNoticeKey: 'scan.notice.hiddenTabFallback'};
+  return {
+    html,
+    scanNoticeKey: lastHiddenTabNoticeKey ?? 'scan.notice.hiddenTabFallback',
+  };
 }
 
 /**
@@ -160,7 +166,7 @@ async function getHtmlFromHiddenTabWithRetry(page) {
  * @param {Page} page - Page object associated with the scan.
  * @param {object} options - Zusatzoptionen für den Scan.
  * @param {number} options.extraWaitMs - Zusätzliche Wartezeit vor dem Snapshot.
- * @returns {string} HTML page content.
+ * @returns {{html: string, scanNoticeKey: ?string}} HTML und optionaler Hinweis-Key.
  */
 async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
   const tab = await browser.tabs.create({
@@ -168,12 +174,17 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
     active: false,
   });
 
+  let scanNoticeKey = null;
+
   // Tab nach Möglichkeit verstecken, damit er für Nutzer unsichtbar bleibt.
   if (browser.tabs.hide) {
     try {
       await browser.tabs.hide(tab.id);
     } catch (error) {
-      __.log(`Konnte Tab nicht verstecken: ${page.url}. Fehler: ${error}`);
+      const hideError = new Error(`Tab konnte nicht versteckt werden: ${error}`);
+      hideError.noticeKey = 'scan.notice.hiddenTabHideFailed';
+      const noticeKey = logHiddenTabFailure(page, hideError, 'Tab verstecken');
+      scanNoticeKey = noticeKey ?? scanNoticeKey;
     }
   } else if (browser.windows?.create) {
     // Fallback: Tab in ein minimiertes Popup-Fenster verschieben.
@@ -188,8 +199,6 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
       __.log(`Konnte Tab nicht in ein minimiertes Fenster verschieben: ${page.url}. Fehler: ${error}`);
     }
   }
-
-  let scanNoticeKey = null;
 
   try {
     await waitForTabReady(tab.id, page);
@@ -240,14 +249,45 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
  * @param {Page} page - Page object associated with the scan.
  * @param {Error} error - Fehlerobjekt.
  * @param {string} attemptLabel - Beschriftung des Versuchs.
+ * @returns {?string} Hinweis-Key für die UI.
  */
 function logHiddenTabFailure(page, error, attemptLabel) {
   const prefix = `Hidden-Tab-Scan (${attemptLabel})`;
+  const noticeKey = getHiddenTabFailureNoticeKey(error);
+  const noticeSuffix = noticeKey ? ` [${noticeKey}]` : '';
   if (error?.name === 'ScanTimeoutError') {
-    __.log(`${prefix} Timeout bei "${page.title}": ${error.message}`);
+    __.log(`${prefix}${noticeSuffix} Timeout bei "${page.title}": ${error.message}`);
   } else {
-    __.log(`${prefix} fehlgeschlagen bei "${page.title}": ${error}`);
+    __.log(`${prefix}${noticeSuffix} fehlgeschlagen bei "${page.title}": ${error}`);
   }
+  return noticeKey;
+}
+
+/**
+ * Ermittelt einen Hinweis-Key für Hidden-Tab-Fehler.
+ *
+ * @param {Error} error - Fehlerobjekt.
+ * @returns {?string} Hinweis-Key für die UI.
+ */
+function getHiddenTabFailureNoticeKey(error) {
+  if (error?.noticeKey) {
+    return error.noticeKey;
+  }
+  if (error?.name === 'ScanTimeoutError') {
+    return 'scan.notice.hiddenTabTimeout';
+  }
+  const message = String(error?.message ?? error ?? '').toLowerCase();
+  if (message.includes('content security policy') || message.includes('csp')) {
+    return 'scan.notice.hiddenTabCsp';
+  }
+  if (
+    message.includes('executescript') ||
+    message.includes('scripting.execute') ||
+    message.includes('tabs.executescript')
+  ) {
+    return 'scan.notice.hiddenTabExecuteScriptError';
+  }
+  return null;
 }
 
 /**

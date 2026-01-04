@@ -1,4 +1,4 @@
-import {qs, $on, hideElement, toggleElement}
+import {qs, $on, hideElement, showElement, toggleElement}
   from '/lib/util/view_helpers.js';
 import {timeSince} from '/lib/util/date_format.js';
 import {translate} from '/lib/util/i18n.js';
@@ -65,16 +65,14 @@ export function bindViewDropdownChange(handler) {
 export function viewDiff(page, html) {
   setTitle(page.title, page.url);
   if (page.isError()) {
-    setSubtitle(appendScanNotice(page, translate('main.subtitle.error')));
+    setSubtitle(translate('main.subtitle.error'));
   } else if (page.newScanTime == null) {
-    setSubtitle(appendScanNotice(page, translate('main.subtitle.notScanned')));
+    setSubtitle(translate('main.subtitle.notScanned'));
   } else {
     const scanTime = timeSince(new Date(page.newScanTime));
-    setSubtitle(appendScanNotice(
-      page,
-      translate('main.subtitle.lastScanned', {time: scanTime}),
-    ));
+    setSubtitle(translate('main.subtitle.lastScanned', {time: scanTime}));
   }
+  setScanNotice(page);
   setViewDropdown(ViewTypes.DIFF);
   loadSandboxedIframe(html);
 }
@@ -88,14 +86,12 @@ export function viewDiff(page, html) {
 export function viewOld(page, html) {
   setTitle(page.title, page.url);
   if (page.oldScanTime == null) {
-    setSubtitle(appendScanNotice(page, translate('main.subtitle.oldNotAvailable')));
+    setSubtitle(translate('main.subtitle.oldNotAvailable'));
   } else {
     const scanTime = timeSince(new Date(page.oldScanTime));
-    setSubtitle(appendScanNotice(
-      page,
-      translate('main.subtitle.oldScanned', {time: scanTime}),
-    ));
+    setSubtitle(translate('main.subtitle.oldScanned', {time: scanTime}));
   }
+  setScanNotice(page);
   setViewDropdown(ViewTypes.OLD);
   loadSandboxedIframe(html);
 }
@@ -109,14 +105,12 @@ export function viewOld(page, html) {
 export function viewNew(page, html) {
   setTitle(page.title, page.url);
   if (page.newScanTime == null) {
-    setSubtitle(appendScanNotice(page, translate('main.subtitle.newNotScanned')));
+    setSubtitle(translate('main.subtitle.newNotScanned'));
   } else {
     const scanTime = timeSince(new Date(page.newScanTime));
-    setSubtitle(appendScanNotice(
-      page,
-      translate('main.subtitle.newScanned', {time: scanTime}),
-    ));
+    setSubtitle(translate('main.subtitle.newScanned', {time: scanTime}));
   }
+  setScanNotice(page);
   setViewDropdown(ViewTypes.NEW);
   loadSandboxedIframe(html);
 }
@@ -143,18 +137,19 @@ function setSubtitle(subtitle) {
 }
 
 /**
- * Hängt optionale Scan-Hinweise an den Untertitel an.
+ * Zeigt optionale Scan-Hinweise im Detailbereich an.
  *
  * @param {Page} page - Page object to view.
- * @param {string} subtitle - Basis-Text für den Untertitel.
- * @returns {string} Untertitel inklusive Hinweis.
  */
-function appendScanNotice(page, subtitle) {
+function setScanNotice(page) {
+  const noticeElement = qs('#scan-notice');
   if (!page?.lastScanNoticeKey) {
-    return subtitle;
+    noticeElement.textContent = '';
+    hideElement(noticeElement);
+    return;
   }
-  const noticeText = translate(page.lastScanNoticeKey);
-  return `${subtitle} ${noticeText}`;
+  noticeElement.textContent = translate(page.lastScanNoticeKey);
+  showElement(noticeElement);
 }
 
 /**

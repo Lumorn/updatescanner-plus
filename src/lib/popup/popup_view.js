@@ -380,7 +380,18 @@ function createListItem(page) {
 
   const text = document.createElement('div');
   text.className = 'text';
-  text.textContent = page.title;
+
+  const title = document.createElement('div');
+  title.className = 'title';
+  title.textContent = page.title;
+  text.appendChild(title);
+
+  if (page.lastScanNoticeKey) {
+    const notice = document.createElement('div');
+    notice.className = 'notice';
+    notice.textContent = i18nTranslate(page.lastScanNoticeKey);
+    text.appendChild(notice);
+  }
 
   item.appendChild(icon);
   item.appendChild(text);
