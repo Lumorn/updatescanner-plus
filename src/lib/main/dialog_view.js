@@ -65,6 +65,10 @@ export function openPageDialog(page) {
   form.elements['wait-for-network-idle'].checked = page.waitForNetworkIdle ?? true;
   form.elements['wait-for-network-idle-timeout'].value =
     formatOptionalNumber(page.waitForNetworkIdleTimeoutMs);
+  form.elements['hidden-tab-ignore-selectors'].value =
+    page.hiddenTabIgnoreSelectors ?? '';
+  form.elements['hidden-tab-text-hash'].checked =
+    page.hiddenTabUseTextSnapshotHash ?? false;
 
   showElement(qs('#page-heading'));
   showElement(qs('#urlFieldset'));
@@ -102,6 +106,10 @@ export function openPageDialog(page) {
           waitForNetworkIdleTimeoutMs: parseOptionalNumber(
             form.elements['wait-for-network-idle-timeout'].value,
           ),
+          hiddenTabIgnoreSelectors:
+            form.elements['hidden-tab-ignore-selectors'].value,
+          hiddenTabUseTextSnapshotHash:
+            form.elements['hidden-tab-text-hash'].checked,
         });
       } else {
         resolve(null);

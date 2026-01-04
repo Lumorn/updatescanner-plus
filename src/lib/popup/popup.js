@@ -62,10 +62,22 @@ export class Popup {
     view.bindWaitForNetworkIdleAllChange(
       this._handleWaitForNetworkIdleAllChange.bind(this),
     );
+    view.bindHiddenTabIgnoreSelectorsDefaultChange(
+      this._handleHiddenTabIgnoreSelectorsDefaultChange.bind(this),
+    );
+    view.bindHiddenTabTextHashDefaultChange(
+      this._handleHiddenTabTextHashDefaultChange.bind(this),
+    );
     view.setLanguage(this.config.get('language'));
     view.setHiddenTabScanDefault(this.config.get('useHiddenTabScanByDefault'));
     view.setWaitForNetworkIdleDefault(
       this.config.get('waitForNetworkIdleByDefault'),
+    );
+    view.setHiddenTabIgnoreSelectorsDefault(
+      this.config.get('hiddenTabIgnoreSelectorsByDefault'),
+    );
+    view.setHiddenTabTextHashDefault(
+      this.config.get('hiddenTabUseTextSnapshotHashByDefault'),
     );
     this._syncHiddenTabScanAllState();
     this._syncWaitForNetworkIdleAllState();
@@ -256,6 +268,28 @@ export class Popup {
     this.config.set('waitForNetworkIdleByDefault', enabled);
     await this.config.save();
     view.setWaitForNetworkIdleDefault(enabled);
+  }
+
+  /**
+   * Speichert die Default-Selektoren für Snapshot-Bereinigung.
+   *
+   * @param {string} selectors - Selektoren-String.
+   */
+  async _handleHiddenTabIgnoreSelectorsDefaultChange(selectors) {
+    this.config.set('hiddenTabIgnoreSelectorsByDefault', selectors);
+    await this.config.save();
+    view.setHiddenTabIgnoreSelectorsDefault(selectors);
+  }
+
+  /**
+   * Speichert den Default für Text-Hash-Snapshots.
+   *
+   * @param {boolean} enabled - Neuer Standardwert.
+   */
+  async _handleHiddenTabTextHashDefaultChange(enabled) {
+    this.config.set('hiddenTabUseTextSnapshotHashByDefault', enabled);
+    await this.config.save();
+    view.setHiddenTabTextHashDefault(enabled);
   }
 
   /**

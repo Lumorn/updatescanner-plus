@@ -44,6 +44,8 @@ export class Page {
       waitForNetworkIdleTimeoutMs: null,
       hiddenTabDomStabilityWindowMs: null,
       hiddenTabDomStabilityTimeoutMs: null,
+      hiddenTabIgnoreSelectors: '',
+      hiddenTabUseTextSnapshotHash: false,
     };
   }
 
@@ -151,6 +153,10 @@ export class Page {
    *   DOM stabil bleiben muss.
    * @property {?number} hiddenTabDomStabilityTimeoutMs - Timeout für die
    *   DOM-Stabilitätsprüfung.
+   * @property {string} hiddenTabIgnoreSelectors - CSS-Selektoren, die beim
+   *   Hidden-Tab-Snapshot ignoriert werden.
+   * @property {boolean} hiddenTabUseTextSnapshotHash - Nutzt einen Text-Hash
+   *   (innerText) für den DOM-Snapshot.
    */
   constructor(
     id,
@@ -184,6 +190,8 @@ export class Page {
       waitForNetworkIdleTimeoutMs = Page.DEFAULTS.waitForNetworkIdleTimeoutMs,
       hiddenTabDomStabilityWindowMs = Page.DEFAULTS.hiddenTabDomStabilityWindowMs,
       hiddenTabDomStabilityTimeoutMs = Page.DEFAULTS.hiddenTabDomStabilityTimeoutMs,
+      hiddenTabIgnoreSelectors = Page.DEFAULTS.hiddenTabIgnoreSelectors,
+      hiddenTabUseTextSnapshotHash = Page.DEFAULTS.hiddenTabUseTextSnapshotHash,
     },
   ) {
     this.id = id;
@@ -216,6 +224,8 @@ export class Page {
     this.waitForNetworkIdleTimeoutMs = waitForNetworkIdleTimeoutMs;
     this.hiddenTabDomStabilityWindowMs = hiddenTabDomStabilityWindowMs;
     this.hiddenTabDomStabilityTimeoutMs = hiddenTabDomStabilityTimeoutMs;
+    this.hiddenTabIgnoreSelectors = hiddenTabIgnoreSelectors;
+    this.hiddenTabUseTextSnapshotHash = hiddenTabUseTextSnapshotHash;
   }
 
   /**
@@ -254,6 +264,8 @@ export class Page {
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
       hiddenTabDomStabilityWindowMs: this.hiddenTabDomStabilityWindowMs,
       hiddenTabDomStabilityTimeoutMs: this.hiddenTabDomStabilityTimeoutMs,
+      hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
+      hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
     };
   }
 
@@ -282,6 +294,8 @@ export class Page {
       useHiddenTabScan: this.useHiddenTabScan,
       waitForNetworkIdle: this.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
+      hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
+      hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
       newHtmlHash: this.newHtmlHash,
       // state: this.state,
       // lastAutoscanTime: this.lastAutoscanTime,

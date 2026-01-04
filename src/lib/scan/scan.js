@@ -497,12 +497,24 @@ async function waitForDomStability(tabId, page) {
   const timeoutMs = page?.hiddenTabDomStabilityTimeoutMs ?? HIDDEN_TAB_DOM_STABILITY_TIMEOUT_MS;
   const startTime = Date.now();
   let lastChangeTime = startTime;
-  let lastSnapshot = await getDomSnapshotInfo(tabId);
+  const ignoreSelectorList = parseIgnoreSelectorList(page?.hiddenTabIgnoreSelectors);
+  const useTextHash = page?.hiddenTabUseTextSnapshotHash ?? false;
+  let lastSnapshot = await getDomSnapshotInfo(tabId, {
+    ignoreSelectorList,
+    includeTextHash: useTextHash,
+  });
 
   while (Date.now() - startTime < timeoutMs) {
     await __.waitForMs(HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS);
-    const nextSnapshot = await getDomSnapshotInfo(tabId);
-    if (nextSnapshot.hash !== lastSnapshot.hash || nextSnapshot.length !== lastSnapshot.length) {
+    const nextSnapshot = await getDomSnapshotInfo(tabId, {
+      ignoreSelectorList,
+      includeTextHash: useTextHash,
+    });
+    const lastHash = getSnapshotHash(lastSnapshot, useTextHash);
+    const nextHash = getSnapshotHash(nextSnapshot, useTextHash);
+    const lastLength = getSnapshotLength(lastSnapshot, useTextHash);
+    const nextLength = getSnapshotLength(nextSnapshot, useTextHash);
+    if (nextHash !== lastHash || nextLength !== lastLength) {
       lastSnapshot = nextSnapshot;
       lastChangeTime = Date.now();
     }
@@ -518,20 +530,59 @@ async function waitForDomStability(tabId, page) {
  * Liefert Hash und Länge des DOMs aus dem Tab.
  *
  * @param {number} tabId - Tab-ID.
- * @returns {{length: number, hash: string}} Snapshot-Info.
+ * @param {object} options - Optionen für die Snapshot-Ermittlung.
+ * @param {Array<string>} options.ignoreSelectorList - Selektoren, die entfernt werden.
+ * @param {boolean} options.includeTextHash - Ob zusätzlich ein Text-Hash erstellt wird.
+ * @returns {{length: number, hash: string, textLength: number, textHash: ?string}}
+ *   Snapshot-Info.
  */
-async function getDomSnapshotInfo(tabId) {
-  const snapshot = await executeInTab(tabId, () => {
-    const html = document.documentElement?.outerHTML ?? '';
-    let hash = 2166136261;
-    for (let i = 0; i < html.length; i++) {
-      hash ^= html.charCodeAt(i);
-      hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
-    }
-    return {length: html.length, hash: (hash >>> 0).toString(16)};
-  });
+async function getDomSnapshotInfo(
+  tabId,
+  {ignoreSelectorList = [], includeTextHash = false} = {},
+) {
+  const snapshot = await executeInTab(
+    tabId,
+    (selectorsToIgnore, shouldIncludeTextHash) => {
+      const computeHash = (value) => {
+        let hash = 2166136261;
+        const safeValue = value || '';
+        for (let i = 0; i < safeValue.length; i++) {
+          hash ^= safeValue.charCodeAt(i);
+          hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+        }
+        return (hash >>> 0).toString(16);
+      };
+      const root = document.documentElement;
+      if (!root) {
+        return {length: 0, hash: '0', textLength: 0, textHash: null};
+      }
 
-  return snapshot ?? {length: 0, hash: '0'};
+      const cleanedRoot = root.cloneNode(true);
+      const removalSelectors = ['script', 'style', 'meta'];
+      if (Array.isArray(selectorsToIgnore)) {
+        removalSelectors.push(...selectorsToIgnore.filter(Boolean));
+      }
+      removalSelectors.forEach((selector) => {
+        try {
+          cleanedRoot.querySelectorAll(selector).forEach((element) => element.remove());
+        } catch (error) {
+          // Ungültige Selektoren sollen den Snapshot nicht blockieren.
+        }
+      });
+
+      const html = cleanedRoot.outerHTML ?? '';
+      const text = shouldIncludeTextHash ? (cleanedRoot.innerText ?? '') : '';
+      return {
+        length: html.length,
+        hash: computeHash(html),
+        textLength: text.length,
+        textHash: shouldIncludeTextHash ? computeHash(text) : null,
+      };
+    },
+    [ignoreSelectorList, includeTextHash],
+  );
+
+  return snapshot ?? {length: 0, hash: '0', textLength: 0, textHash: null};
 }
 
 /**
@@ -691,4 +742,48 @@ function computeHtmlHash(html) {
     hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
   }
   return (hash >>> 0).toString(16);
+}
+
+/**
+ * Zerlegt Selektorlisten in einzelne Einträge.
+ *
+ * @param {?string} selectors - Selektor-String.
+ * @returns {Array<string>} Bereinigte Selektoren.
+ */
+function parseIgnoreSelectorList(selectors) {
+  if (!selectors) {
+    return [];
+  }
+  return selectors
+    .split(/[\n,]+/)
+    .map((selector) => selector.trim())
+    .filter(Boolean);
+}
+
+/**
+ * Liefert den gewünschten Snapshot-Hash zurück.
+ *
+ * @param {{hash: string, textHash: ?string}} snapshot - Snapshot-Daten.
+ * @param {boolean} useTextHash - Ob der Text-Hash bevorzugt wird.
+ * @returns {string} Hash-Wert.
+ */
+function getSnapshotHash(snapshot, useTextHash) {
+  if (useTextHash && snapshot?.textHash) {
+    return snapshot.textHash;
+  }
+  return snapshot?.hash ?? '0';
+}
+
+/**
+ * Liefert die gewünschte Snapshot-Länge zurück.
+ *
+ * @param {{length: number, textLength: number}} snapshot - Snapshot-Daten.
+ * @param {boolean} useTextHash - Ob die Textlänge bevorzugt wird.
+ * @returns {number} Länge.
+ */
+function getSnapshotLength(snapshot, useTextHash) {
+  if (useTextHash && Number.isFinite(snapshot?.textLength)) {
+    return snapshot.textLength;
+  }
+  return snapshot?.length ?? 0;
 }

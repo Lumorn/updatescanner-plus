@@ -183,6 +183,32 @@
             Set 0 to skip the network idle wait.
           </span>
         </output>
+        <label>
+          <span data-i18n="main.dialog.hiddenTabIgnoreSelectors">
+            Ignore selectors for snapshot:
+          </span>
+          <input name="hidden-tab-ignore-selectors" type="text"
+            placeholder=".ads, .cookie-banner"
+            data-i18n-attr="placeholder:main.dialog.hiddenTabIgnoreSelectors.placeholder"/>
+        </label>
+        <output name="hidden-tab-ignore-selectors-description">
+          <span data-i18n="main.dialog.hiddenTabIgnoreSelectors.description">
+            CSS selectors that will be removed before hashing the snapshot.
+          </span>
+        </output>
+        <div>
+          <input type="checkbox" id="hidden-tab-text-hash"
+            name="hidden-tab-text-hash">
+          <label for="hidden-tab-text-hash" class="checkbox-label"
+            data-i18n="main.dialog.hiddenTabTextHash">
+            Use text-only snapshot hash
+          </label>
+        </div>
+        <output name="hidden-tab-text-hash-description">
+          <span data-i18n="main.dialog.hiddenTabTextHash.description">
+            Compare only the visible text for DOM stability.
+          </span>
+        </output>
       </fieldset>
 
       <div id="dialog-buttons">
