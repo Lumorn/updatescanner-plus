@@ -23,6 +23,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 ## Features
 
 * Überwachung von Webseiten auf Änderungen mit Diff-Ansicht.
+* Diff-Ansicht berücksichtigt pro Seite Highlight-Farbe, Markierungen und optional die neue Version ohne Hervorhebung.
 * Automatische Scans in wählbaren Intervallen sowie manuelle Scans.
 * Benachrichtigungen bei gefundenen Änderungen.
 * Popup- und Sidebar-Ansicht für die Verwaltung der Einträge.

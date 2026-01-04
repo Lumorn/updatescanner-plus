@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Standard für neue Seiten auf Hidden-Tab-Scan umgestellt und Beschreibungstexte aktualisiert
+* Diff-Ausgabe berücksichtigt Highlight-Farbe/Markierungen pro Seite und zeigt bei deaktivierter Hervorhebung die neue Version ohne Highlighting
 * Fetch-Scans erkennen sehr kurze/leere Antworten und wechseln automatisch auf einen Hidden-Tab-Snapshot
 * Zentrale HTML-Normalisierung ergänzt, die pro Seite definierte „Ignorierte Selektoren“ entfernt/ersetzt
 * Globale Einstellung ergänzt, um neue Seiten standardmäßig im versteckten Tab zu scannen
