@@ -126,6 +126,8 @@ export class Background {
         this._scanAll();
       } else if (message.action === backgroundActionEnum.SCAN_ITEM) {
         this._scanItem(message.itemId);
+      } else if (message.action === backgroundActionEnum.CANCEL_SCAN) {
+        this._cancelScan();
       } else if (message.action === uiActionsEnum.QUEUE_STATE_REQUEST) {
         return {
           action: uiActionsEnum.QUEUE_STATE_CHANGED,
@@ -218,6 +220,13 @@ export class Background {
     log(`Pages to manually scan: ${scanList.length}`);
     this.scanQueue.add(scanList);
     this.scanQueue.manualScan();
+  }
+
+  /**
+   * Bricht laufende Scans ab und leert die Queue.
+   */
+  _cancelScan() {
+    this.scanQueue.cancel();
   }
 
   /**

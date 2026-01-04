@@ -66,6 +66,13 @@ export function bindScanAllClick(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn Abbrechen geklickt wird.
+ */
+export function bindScanCancelClick(handler) {
+  $on(qs('#scan-cancel-button'), 'click', handler);
+}
+
+/**
  * @param {Function} handler - Called when the Settings menu item is clicked.
  */
 export function bindSettingsClick(handler) {
@@ -201,7 +208,9 @@ export function setScanState(queueData) {
   if (queueData.state === scanQueueStateEnum.ACTIVE) {
     showElement(scanStateUI);
     const total = queueData.scanned + queueData.queueLength;
-    const progress = Math.floor((queueData.scanned / total) * 100);
+    const progress = total > 0 ?
+      Math.floor((queueData.scanned / total) * 100) :
+      0;
     textWrapper.textContent = i18nTranslate('scan.progress', {
       progress,
       scanned: queueData.scanned,

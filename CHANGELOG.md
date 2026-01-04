@@ -20,6 +20,8 @@
 * Popup-Footer-Knöpfe für Neu/Sidebar/Menü auf gleiche Breite gebracht
 * Popup-Menü reagiert wieder zuverlässig auf den Menüknopf und Außenklicks
 * Popup-Menü wird wieder direkt über dem Menüknopf eingeblendet und nicht verdeckt
+* Popup-Scan-Leiste bleibt stabil sichtbar, auch wenn die Liste länger wird
+* Abbrechen-Button im Popup ergänzt, um laufende Scans zu stoppen
 * Buttons und Menüs in Popup und Hauptansicht modernisiert (Radius, Schatten, Fokuszustände, konsistente Abstände, Mindestklickfläche)
 * Dark-Mode-Tokens für Popup, Hauptansicht und Sidebar ergänzt (Farben, Rahmen, Schatten)
 * Zentrales Theme-Token-Set für Farben, Abstände und Typografie eingeführt und UI-CSS auf Variablen umgestellt

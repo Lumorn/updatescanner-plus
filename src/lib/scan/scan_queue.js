@@ -58,6 +58,7 @@ export class ScanQueue {
     this._isManualScan = false;
     this._activeScans = 0;
     this._lastRequestTime = new Map();
+    this._cancelRequested = false;
   }
 
   /**
@@ -101,6 +102,7 @@ export class ScanQueue {
       return;
     }
 
+    this._cancelRequested = false;
     this._changeScanState(true, 0, 0);
     const {majorChanges, scanCount} = await this._processScanQueue();
     this._changeScanState(false, 0, 0);
@@ -113,6 +115,19 @@ export class ScanQueue {
       });
     }
     this._isManualScan = false;
+  }
+
+  /**
+   * Bricht laufende Scans ab und leert die Queue.
+   */
+  cancel() {
+    this._cancelRequested = true;
+    this.queue = [];
+    this._headIndex = 0;
+    this._queuedIds.clear();
+    this._isManualScan = false;
+    this._changeScanState(this._activeScans > 0, this._scanCompleteCount,
+      this._activeScans);
   }
 
   /**
@@ -175,6 +190,9 @@ export class ScanQueue {
     for (let index = 0; index < workerCount; index++) {
       workers.push((async () => {
         while (true) {
+          if (this._cancelRequested) {
+            return;
+          }
           const page = this._getNextPage();
           if (!page) {
             return;
