@@ -69,6 +69,9 @@ export function openPageDialog(page) {
   form.elements['fetch-headers'].value = page.fetchHeaders ?? '';
   form.elements['text-diff-mode'].checked = page.textDiffMode ?? false;
   form.elements['wait-for-network-idle'].checked = page.waitForNetworkIdle ?? true;
+  form.elements['wait-for-selector'].value = page.waitForSelector ?? '';
+  form.elements['wait-for-selector-timeout'].value =
+    formatOptionalNumber(page.waitForSelectorTimeoutMs);
   form.elements['wait-for-network-idle-timeout'].value =
     formatOptionalNumber(page.waitForNetworkIdleTimeoutMs);
   form.elements['hidden-tab-ignore-selectors'].value =
@@ -122,6 +125,12 @@ export function openPageDialog(page) {
           fetchHeaders: form.elements['fetch-headers'].value,
           textDiffMode: form.elements['text-diff-mode'].checked,
           waitForNetworkIdle: form.elements['wait-for-network-idle'].checked,
+          waitForSelector: normalizeTextValue(
+            form.elements['wait-for-selector'].value,
+          ),
+          waitForSelectorTimeoutMs: parseOptionalNumber(
+            form.elements['wait-for-selector-timeout'].value,
+          ),
           waitForNetworkIdleTimeoutMs: parseOptionalNumber(
             form.elements['wait-for-network-idle-timeout'].value,
           ),
@@ -235,6 +244,17 @@ function updateAutoscanDescription(sliderValue) {
  * @returns {?string} Normalisierter Wert.
  */
 function normalizeSelectValue(value) {
+  const trimmedValue = value?.trim();
+  return trimmedValue ? trimmedValue : null;
+}
+
+/**
+ * Normalisiert Textwerte, indem leere Strings zu null werden.
+ *
+ * @param {string} value - Textwert.
+ * @returns {?string} Normalisierter Textwert.
+ */
+function normalizeTextValue(value) {
   const trimmedValue = value?.trim();
   return trimmedValue ? trimmedValue : null;
 }
