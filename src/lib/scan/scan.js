@@ -424,7 +424,102 @@ async function waitForNetworkIdle(tabId, timeoutMs) {
  * @returns {string} HTML page content.
  */
 async function getHtmlFromTab(tabId) {
-  const result = await executeInTab(tabId, () => document.documentElement.outerHTML);
+  const result = await executeInTab(tabId, () => {
+    const escapeText = (value) => {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    };
+
+    const escapeAttribute = (value) => {
+      return escapeText(value).replace(/"/g, '&quot;');
+    };
+
+    const getIframeScanData = (iframe) => {
+      const srcValue = iframe.getAttribute('src') ?? iframe.src ?? '';
+      try {
+        const doc = iframe.contentDocument;
+        if (doc?.documentElement) {
+          const html = doc.documentElement.outerHTML ?? '';
+          return {content: encodeURIComponent(html), src: srcValue, isCrossOrigin: false};
+        }
+      } catch (error) {
+        // Zugriff auf Cross-Origin-Iframes kann fehlschlagen, dann Platzhalter verwenden.
+      }
+      return {content: 'cross-origin', src: srcValue, isCrossOrigin: true};
+    };
+
+    const serializeAttributes = (element, extraAttributes = {}) => {
+      const parts = [];
+      for (const attr of Array.from(element.attributes ?? [])) {
+        if (attr.name === 'data-scan-content' || attr.name === 'data-scan-src') {
+          continue;
+        }
+        parts.push(`${attr.name}="${escapeAttribute(attr.value)}"`);
+      }
+      for (const [name, value] of Object.entries(extraAttributes)) {
+        if (value == null || value === '') {
+          continue;
+        }
+        parts.push(`${name}="${escapeAttribute(value)}"`);
+      }
+      return parts.length ? ` ${parts.join(' ')}` : '';
+    };
+
+    const serializeChildren = (parentNode) => {
+      let html = '';
+      for (const child of Array.from(parentNode.childNodes ?? [])) {
+        html += serializeNode(child);
+      }
+      return html;
+    };
+
+    const serializeElement = (element) => {
+      const tagName = element.tagName.toLowerCase();
+      let extraAttributes = {};
+      if (tagName === 'iframe') {
+        const iframeData = getIframeScanData(element);
+        extraAttributes = {
+          'data-scan-content': iframeData.content,
+          'data-scan-src': iframeData.src,
+        };
+      }
+      let html = `<${tagName}${serializeAttributes(element, extraAttributes)}>`;
+      if (element.shadowRoot) {
+        const shadowContent = serializeChildren(element.shadowRoot);
+        html += `<template data-shadow-root="${element.shadowRoot.mode}">${shadowContent}</template>`;
+      }
+      html += serializeChildren(element);
+      html += `</${tagName}>`;
+      return html;
+    };
+
+    const serializeNode = (node) => {
+      if (!node) {
+        return '';
+      }
+      switch (node.nodeType) {
+        case Node.DOCUMENT_NODE:
+          return serializeChildren(node);
+        case Node.DOCUMENT_FRAGMENT_NODE:
+          return serializeChildren(node);
+        case Node.DOCUMENT_TYPE_NODE:
+          return `<!DOCTYPE ${node.name}>`;
+        case Node.ELEMENT_NODE:
+          return serializeElement(node);
+        case Node.TEXT_NODE:
+          return escapeText(node.nodeValue);
+        case Node.COMMENT_NODE:
+          return `<!--${node.nodeValue ?? ''}-->`;
+        default:
+          return '';
+      }
+    };
+
+    const doctype = document.doctype ? `<!DOCTYPE ${document.doctype.name}>` : '';
+    return `${doctype}${serializeNode(document.documentElement)}`;
+  });
   return result ?? '';
 }
 
