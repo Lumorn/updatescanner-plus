@@ -21,6 +21,7 @@
 * Popup-Menü reagiert wieder zuverlässig auf den Menüknopf und Außenklicks
 * Popup-Menü wird wieder direkt über dem Menüknopf eingeblendet und nicht verdeckt
 * Popup-Scan-Leiste bleibt stabil sichtbar, auch wenn die Liste länger wird
+* Popup-Scan-Status passt sich dynamisch an die verfügbare Breite an, damit die Buttons nicht verrutschen
 * Abbrechen-Button im Popup ergänzt, um laufende Scans zu stoppen
 * Buttons und Menüs in Popup und Hauptansicht modernisiert (Radius, Schatten, Fokuszustände, konsistente Abstände, Mindestklickfläche)
 * Dark-Mode-Tokens für Popup, Hauptansicht und Sidebar ergänzt (Farben, Rahmen, Schatten)
