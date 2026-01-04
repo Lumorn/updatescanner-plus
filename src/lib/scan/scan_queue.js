@@ -1,5 +1,6 @@
 import {scanPage} from './scan.js';
 import {waitForMs} from '/lib/util/promise.js';
+import {Config} from '/lib/util/config.js';
 
 // Allow function mocking
 export const __ = {
@@ -10,7 +11,7 @@ export const __ = {
 // Maximale Anzahl paralleler Scans in der Queue
 const MAX_PARALLEL_SCANS = 4;
 // Mindestabstand zwischen Requests pro Host
-const HOST_IDLE_MS = 2000;
+const HOST_IDLE_MS_DEFAULT = 2000;
 const COMPACT_QUEUE_MIN_HEAD = 50;
 
 /**
@@ -58,6 +59,9 @@ export class ScanQueue {
     this._isManualScan = false;
     this._activeScans = 0;
     this._lastRequestTime = new Map();
+    this._hostWaitQueue = new Map();
+    this._hostDelayMs = null;
+    this._hostDelayMsPromise = null;
     this._cancelRequested = false;
   }
 
@@ -271,15 +275,60 @@ export class ScanQueue {
       return;
     }
 
-    const lastRequestTime = this._lastRequestTime.get(hostKey);
-    if (lastRequestTime != null) {
-      const elapsed = Date.now() - lastRequestTime;
-      const remaining = HOST_IDLE_MS - elapsed;
-      if (remaining > 0) {
-        await __.waitForMs(remaining);
+    const previousWait = this._hostWaitQueue.get(hostKey) || Promise.resolve();
+    let releaseWait = null;
+    const waitToken = new Promise((resolve) => {
+      releaseWait = resolve;
+    });
+    const queuedWait = previousWait.then(() => waitToken);
+    this._hostWaitQueue.set(hostKey, queuedWait);
+
+    await previousWait;
+    try {
+      const hostDelayMs = await this._getHostDelayMs();
+      const lastRequestTime = this._lastRequestTime.get(hostKey);
+      if (lastRequestTime != null) {
+        const elapsed = Date.now() - lastRequestTime;
+        const remaining = hostDelayMs - elapsed;
+        if (remaining > 0) {
+          await __.waitForMs(remaining);
+        }
+      }
+      this._lastRequestTime.set(hostKey, Date.now());
+    } finally {
+      if (releaseWait) {
+        releaseWait();
+      }
+      if (this._hostWaitQueue.get(hostKey) === queuedWait) {
+        this._hostWaitQueue.delete(hostKey);
       }
     }
-    this._lastRequestTime.set(hostKey, Date.now());
+  }
+
+  /**
+   * Liest den konfigurierten Host-Delay aus der Config.
+   *
+   * @returns {Promise<number>} Konfigurierter Host-Delay in Millisekunden.
+   * @private
+   */
+  async _getHostDelayMs() {
+    if (this._hostDelayMs != null) {
+      return this._hostDelayMs;
+    }
+
+    if (!this._hostDelayMsPromise) {
+      this._hostDelayMsPromise = (async () => {
+        const configValue = await Config.loadSingleSetting('scanHostIdleMs');
+        const parsed = Number(configValue);
+        const resolved = Number.isFinite(parsed) && parsed >= 0 ?
+          parsed :
+          HOST_IDLE_MS_DEFAULT;
+        this._hostDelayMs = resolved;
+        return resolved;
+      })();
+    }
+
+    return this._hostDelayMsPromise;
   }
 
   /**

@@ -26,6 +26,7 @@
 * Hidden-Tab-Fehler werden differenziert (Timeout/CSP/Script-Injektion/Tab-Hide) und als UI-Hinweise in Popup und Detailansicht angezeigt
 * Hidden-Tab-Snapshot erfasst Shadow DOMs sowie same-origin Iframes und legt bei cross-origin Frames Platzhalter mit URL ab
 * Scan-Queue verarbeitet mehrere Scans parallel, mit Host-basiertem Rate-Limit und adaptiven Delays
+* Scan-Queue serialisiert Requests pro Host und nutzt einen konfigurierbaren Host-Delay
 * Versionsanzeige im Popup unter der Buttonreihe ergänzt und Versionierungsregel dokumentiert
 * Scan-Queue auf Deque/Index-Logik umgestellt und Duplikate per Seiten-ID verhindert
 * NEW-HTML wird nur gespeichert, wenn sich der Inhalt ändert; zusätzlich wird ein Hash abgelegt, um redundante Schreibvorgänge zu vermeiden
