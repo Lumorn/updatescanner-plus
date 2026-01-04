@@ -34,6 +34,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Globale Einstellung für Network-Idle-Wartezeit bei neuen Seiten sowie Sammelaktion für alle Seiten.
 * Hidden-Tab-Snapshots entfernen optional definierte CSS-Selektoren (z. B. Ads/Widgets) und können alternativ nur den Text-Hash verwenden.
 * Hidden-Tab-Scan versucht bei Fehlern einmalig mit längerer Wartezeit erneut und fällt anschließend mit UI-Hinweis auf fetch zurück.
+* Hidden-Tab-Snapshot serialisiert Shadow DOMs und same-origin Iframes; bei cross-origin Frames wird ein Platzhalter mit URL erfasst.
 * Globale Einstellung für den Standard-Scan über einen versteckten Tab bei neuen Seiten.
 * Aktion im Settings-Panel, um den versteckten Tab-Scan für alle bestehenden Seiten zu aktivieren/deaktivieren.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.

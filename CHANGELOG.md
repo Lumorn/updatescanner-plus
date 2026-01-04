@@ -13,6 +13,7 @@
 * Globale Einstellung für Network-Idle-Wartezeit bei neuen Seiten sowie Sammelaktion für alle Seiten
 * Hidden-Tab-Snapshot kann über CSS-Selektoren bereinigt werden und optional einen Text-Hash für DOM-Stabilität nutzen
 * Hidden-Tab-Scan wiederholt fehlgeschlagene Scans einmalig mit längerer Wartezeit und nutzt bei Bedarf Fetch mit UI-Hinweis
+* Hidden-Tab-Snapshot erfasst Shadow DOMs sowie same-origin Iframes und legt bei cross-origin Frames Platzhalter mit URL ab
 * Scan-Queue verarbeitet mehrere Scans parallel, mit Host-basiertem Rate-Limit und adaptiven Delays
 * Versionsanzeige im Popup unter der Buttonreihe ergänzt und Versionierungsregel dokumentiert
 * Scan-Queue auf Deque/Index-Logik umgestellt und Duplikate per Seiten-ID verhindert
