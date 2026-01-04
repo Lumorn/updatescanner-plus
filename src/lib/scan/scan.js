@@ -115,7 +115,7 @@ export async function scanPage(page) {
     if (await page.existsInStorage()) {
       const updatedPage = await Page.load(page.id);
       updatedPage.state = Page.stateEnum.ERROR;
-      updatedPage.lastScanNoticeKey = null;
+      updatedPage.lastScanNoticeKey = error?.noticeKey ?? null;
       updatedPage.save();
     }
   }
@@ -129,10 +129,31 @@ export async function scanPage(page) {
  * @returns {string} HTML page content.
  */
 async function getHtmlFromFetch(page) {
-  const fetchOptions = buildFetchOptions(page);
-  const response = await fetch(page.url, fetchOptions);
+  let fetchOptions;
+  try {
+    fetchOptions = buildFetchOptions(page);
+  } catch (error) {
+    if (error?.noticeKey) {
+      __.log(`Fehler bei POST-Konfiguration für "${page.title}": ${error}`);
+    }
+    throw error;
+  }
+
+  let response;
+  try {
+    response = await fetch(page.url, fetchOptions);
+  } catch (error) {
+    __.log(`Fetch fehlgeschlagen für "${page.title}": ${error}`);
+    const fetchError = new Error(`Fetch fehlgeschlagen: ${error}`);
+    fetchError.noticeKey = 'scan.notice.fetchFailed';
+    throw fetchError;
+  }
+
   if (!response.ok) {
-    throw Error(`[${response.status}] ${response.statusText}`);
+    __.log(`Fetch-Statusfehler für "${page.title}": ${response.status} ${response.statusText}`);
+    const statusError = new Error(`[${response.status}] ${response.statusText}`);
+    statusError.noticeKey = 'scan.notice.fetchFailed';
+    throw statusError;
   }
 
   return await getHtmlFromResponse(response, page);
@@ -184,12 +205,83 @@ function buildFetchOptions(page) {
     options.redirect = page.fetchRedirect;
   }
 
-  const headers = parseFetchHeaders(page.fetchHeaders);
+  let headers = parseFetchHeaders(page.fetchHeaders);
+  if (page.doPost) {
+    options.method = 'POST';
+    const {body, contentType} = buildPostBody(page.postParams);
+    if (body !== null) {
+      options.body = body;
+    }
+    if (contentType) {
+      if (!headers) {
+        headers = new Headers();
+      }
+      if (!headers.has('Content-Type')) {
+        headers.set('Content-Type', contentType);
+      }
+    }
+  }
+
   if (headers) {
     options.headers = headers;
   }
 
   return Object.keys(options).length > 0 ? options : undefined;
+}
+
+/**
+ * Bereitet den POST-Body sowie den passenden Content-Type vor.
+ *
+ * @param {?string|object} postParams - POST-Parameter.
+ * @returns {{body: ?string, contentType: ?string}} Body und Content-Type.
+ */
+function buildPostBody(postParams) {
+  if (postParams == null) {
+    return {body: '', contentType: null};
+  }
+
+  if (typeof postParams === 'string') {
+    const trimmed = postParams.trim();
+    if (!trimmed) {
+      return {body: '', contentType: null};
+    }
+    if (looksLikeJson(trimmed)) {
+      return {body: trimmed, contentType: 'application/json; charset=UTF-8'};
+    }
+    const params = new URLSearchParams(trimmed);
+    return {
+      body: params.toString(),
+      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+    };
+  }
+
+  if (typeof postParams === 'object') {
+    const params = new URLSearchParams();
+    Object.entries(postParams).forEach(([key, value]) => {
+      if (value == null) {
+        return;
+      }
+      params.append(key, String(value));
+    });
+    return {
+      body: params.toString(),
+      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+    };
+  }
+
+  const error = new Error(`Nicht unterstützter postParams-Typ: ${typeof postParams}`);
+  error.noticeKey = 'scan.notice.postParamsUnsupported';
+  throw error;
+}
+
+/**
+ * Prüft heuristisch, ob ein String nach JSON aussieht.
+ *
+ * @param {string} value - Eingabewert.
+ * @returns {boolean} true, wenn es wie JSON aussieht.
+ */
+function looksLikeJson(value) {
+  return value.startsWith('{') || value.startsWith('[');
 }
 
 /**
