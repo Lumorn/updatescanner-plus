@@ -100,6 +100,13 @@ const translations = {
     'main.dialog.waitForNetworkIdle': 'Wait for network idle',
     'main.dialog.waitForNetworkIdle.description':
       'Wait for network idle or hydration signals before taking a snapshot.',
+    'main.dialog.waitForSelector': 'Wait for selector:',
+    'main.dialog.waitForSelector.placeholder': '.main-content',
+    'main.dialog.waitForSelector.description':
+      'Optional CSS selector to wait for before taking a snapshot.',
+    'main.dialog.waitForSelectorTimeoutMs': 'Wait for selector timeout (ms):',
+    'main.dialog.waitForSelectorTimeoutMs.description':
+      'Set 0 to disable the selector wait timeout.',
     'main.dialog.waitForNetworkIdleTimeout': 'Network idle timeout (ms):',
     'main.dialog.waitForNetworkIdleTimeout.description':
       'Set 0 to skip the network idle wait.',
@@ -391,6 +398,13 @@ const translations = {
     'main.dialog.waitForNetworkIdle': 'Auf Network-Idle warten',
     'main.dialog.waitForNetworkIdle.description':
       'Vor dem Snapshot auf Network-Idle oder Hydration-Signale warten.',
+    'main.dialog.waitForSelector': 'Auf Selektor warten:',
+    'main.dialog.waitForSelector.placeholder': '.main-content',
+    'main.dialog.waitForSelector.description':
+      'Optionaler CSS-Selektor, auf den vor dem Snapshot gewartet wird.',
+    'main.dialog.waitForSelectorTimeoutMs': 'Selektor-Timeout (ms):',
+    'main.dialog.waitForSelectorTimeoutMs.description':
+      '0 deaktiviert das Timeout für den Selektor.',
     'main.dialog.waitForNetworkIdleTimeout': 'Network-Idle-Timeout (ms):',
     'main.dialog.waitForNetworkIdleTimeout.description':
       '0 setzt die Network-Idle-Wartezeit außer Kraft.',

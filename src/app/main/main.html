@@ -289,6 +289,30 @@
           </span>
         </output>
         <label>
+          <span data-i18n="main.dialog.waitForSelector">
+            Wait for selector:
+          </span>
+          <input name="wait-for-selector" type="text"
+            placeholder=".main-content"
+            data-i18n-attr="placeholder:main.dialog.waitForSelector.placeholder"/>
+        </label>
+        <output name="wait-for-selector-description">
+          <span data-i18n="main.dialog.waitForSelector.description">
+            Optional CSS selector to wait for before taking a snapshot.
+          </span>
+        </output>
+        <label>
+          <span data-i18n="main.dialog.waitForSelectorTimeoutMs">
+            Wait for selector timeout (ms):
+          </span>
+          <input name="wait-for-selector-timeout" type="number" min="0" step="250"/>
+        </label>
+        <output name="wait-for-selector-timeout-description">
+          <span data-i18n="main.dialog.waitForSelectorTimeoutMs.description">
+            0 disables the selector wait timeout.
+          </span>
+        </output>
+        <label>
           <span data-i18n="main.dialog.waitForNetworkIdleTimeout">
             Network idle timeout (ms):
           </span>

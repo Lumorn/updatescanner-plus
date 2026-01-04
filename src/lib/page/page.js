@@ -251,7 +251,7 @@ export class Page {
     this.textDiffMode = textDiffMode;
     this.newHtmlHash = newHtmlHash;
     this.lastScanNoticeKey = lastScanNoticeKey;
-    this.waitForSelector = waitForSelector;
+    this.waitForSelector = waitForSelector?.trim() || null;
     this.waitForSelectorTimeoutMs = waitForSelectorTimeoutMs;
     this.waitForNetworkIdle = waitForNetworkIdle;
     this.waitForNetworkIdleTimeoutMs = waitForNetworkIdleTimeoutMs;
@@ -344,6 +344,8 @@ export class Page {
       fetchRedirect: this.fetchRedirect,
       fetchHeaders: this.fetchHeaders,
       textDiffMode: this.textDiffMode,
+      waitForSelector: this.waitForSelector,
+      waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
       waitForNetworkIdle: this.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,

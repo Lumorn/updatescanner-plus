@@ -12,6 +12,7 @@
 * Hidden-Tab-Scan versteckt Tabs per `tabs.hide`, mit Fallback in minimierte Popup-Fenster
 * Manifest um die Permission `tabHide` ergänzt, damit versteckte Tabs genutzt werden können
 * Hidden-Tab-Scan wartet optional auf Selektoren, nutzt ein DOM-Stabilitätsfenster und einen Standard-Delay
+* Page-Dialog um Felder für waitForSelector und Timeout ergänzt
 * Hidden-Tab-Scan wartet optional auf Network-Idle/Hydration-Signale, berücksichtigt Fetch/XHR sowie long-lived WebSocket/EventSource-Aktivität und meldet Timeout-Hinweise in der UI
 * Globale Einstellung für Network-Idle-Wartezeit bei neuen Seiten sowie Sammelaktion für alle Seiten
 * Hidden-Tab-Snapshot kann über CSS-Selektoren bereinigt werden und optional einen Text-Hash für DOM-Stabilität nutzen
