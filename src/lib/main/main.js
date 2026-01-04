@@ -363,6 +363,9 @@ export class Main {
 async function loadDiff(page) {
   const oldHtml = await loadHtml(page, PageStore.htmlTypes.OLD);
   const newHtml = await loadHtml(page, PageStore.htmlTypes.NEW);
+  if (page.textDiffMode) {
+    return buildTextDiffHtml(oldHtml || '', newHtml || '');
+  }
   return __.diff(page, oldHtml, newHtml);
 }
 
@@ -394,4 +397,44 @@ async function loadHtml(page, htmlType) {
 function _updateHeader(page, html) {
   // @TODO: Only add if there's no existing <base href> tag
   return `<base href="${page.url}" target="_top">` + html;
+}
+
+/**
+ * Erstellt eine Text-Diff-Ansicht aus zwei Textständen.
+ *
+ * @param {string} oldText - Vorheriger Text.
+ * @param {string} newText - Neuer Text.
+ * @returns {string} HTML-Ausgabe für den Text-Diff.
+ */
+function buildTextDiffHtml(oldText, newText) {
+  const safeOldText = escapeTextForHtml(oldText);
+  const safeNewText = escapeTextForHtml(newText);
+
+  return `
+    <div style="font-family: sans-serif; padding: 16px;">
+      <div style="margin-bottom: 16px;">
+        <div style="font-weight: 600; margin-bottom: 4px;">Vorher</div>
+        <pre style="white-space: pre-wrap; margin: 0;">${safeOldText}</pre>
+      </div>
+      <div>
+        <div style="font-weight: 600; margin-bottom: 4px;">Nachher</div>
+        <pre style="white-space: pre-wrap; margin: 0;">${safeNewText}</pre>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Escapt Text für die HTML-Ausgabe.
+ *
+ * @param {string} text - Text, der dargestellt werden soll.
+ * @returns {string} Sicherer HTML-Text.
+ */
+function escapeTextForHtml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }

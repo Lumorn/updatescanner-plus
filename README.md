@@ -45,7 +45,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
 * Fetch-Scan unterstützt optionale Cache-/Mode-/Redirect-Policies sowie benutzerdefinierte Header pro Seite.
 * Fetch-Scan kann optional per POST senden und serialisiert POST-Parameter als URL-Form oder JSON inklusive Content-Type.
-* Optionaler Text-Diff-Modus vergleicht extrahierten Text (auch mit Selektoren) statt HTML.
+* Optionaler Text-Diff-Modus vergleicht extrahierten Text (auch mit Selektoren) statt HTML und rendert die Diff-Ansicht als escapten Text in einer Vor/Nachher-Ansicht.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
 * Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.
