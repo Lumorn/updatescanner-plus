@@ -56,9 +56,19 @@ export class Popup {
     view.bindHiddenTabScanAllChange(
       this._handleHiddenTabScanAllChange.bind(this),
     );
+    view.bindWaitForNetworkIdleDefaultChange(
+      this._handleWaitForNetworkIdleDefaultChange.bind(this),
+    );
+    view.bindWaitForNetworkIdleAllChange(
+      this._handleWaitForNetworkIdleAllChange.bind(this),
+    );
     view.setLanguage(this.config.get('language'));
     view.setHiddenTabScanDefault(this.config.get('useHiddenTabScanByDefault'));
+    view.setWaitForNetworkIdleDefault(
+      this.config.get('waitForNetworkIdleByDefault'),
+    );
     this._syncHiddenTabScanAllState();
+    this._syncWaitForNetworkIdleAllState();
     view.setVersion(this.version);
 
     browser.runtime.onMessage.addListener(this._handleMessage.bind(this));
@@ -238,6 +248,17 @@ export class Popup {
   }
 
   /**
+   * Speichert den Default für Network-Idle bei neuen Scans.
+   *
+   * @param {boolean} enabled - Neuer Standardwert.
+   */
+  async _handleWaitForNetworkIdleDefaultChange(enabled) {
+    this.config.set('waitForNetworkIdleByDefault', enabled);
+    await this.config.save();
+    view.setWaitForNetworkIdleDefault(enabled);
+  }
+
+  /**
    * Überträgt die Einstellung für den versteckten Tab auf alle vorhandenen Seiten.
    *
    * @param {boolean} enabled - Neuer Wert für alle Seiten.
@@ -252,6 +273,20 @@ export class Popup {
   }
 
   /**
+   * Überträgt die Network-Idle-Einstellung auf alle vorhandenen Seiten.
+   *
+   * @param {boolean} enabled - Neuer Wert für alle Seiten.
+   */
+  async _handleWaitForNetworkIdleAllChange(enabled) {
+    const pages = this.pageStore.getPageList();
+    await Promise.all(pages.map(async (page) => {
+      page.waitForNetworkIdle = enabled;
+      await page.save();
+    }));
+    this._syncWaitForNetworkIdleAllState();
+  }
+
+  /**
    * Ermittelt den Sammelstatus für versteckte Tabs und aktualisiert die UI.
    */
   _syncHiddenTabScanAllState() {
@@ -261,5 +296,17 @@ export class Popup {
     const checked = total > 0 && enabledCount === total;
     const indeterminate = enabledCount > 0 && enabledCount < total;
     view.setHiddenTabScanAllState({checked, indeterminate});
+  }
+
+  /**
+   * Ermittelt den Sammelstatus für Network-Idle und aktualisiert die UI.
+   */
+  _syncWaitForNetworkIdleAllState() {
+    const pages = this.pageStore.getPageList();
+    const total = pages.length;
+    const enabledCount = pages.filter((page) => page.waitForNetworkIdle).length;
+    const checked = total > 0 && enabledCount === total;
+    const indeterminate = enabledCount > 0 && enabledCount < total;
+    view.setWaitForNetworkIdleAllState({checked, indeterminate});
   }
 }

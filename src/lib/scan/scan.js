@@ -34,6 +34,9 @@ const HIDDEN_TAB_WAIT_FOR_SELECTOR_TIMEOUT_MS = 10000;
 const HIDDEN_TAB_DOM_STABILITY_WINDOW_MS = 1000;
 const HIDDEN_TAB_DOM_STABILITY_TIMEOUT_MS = 8000;
 const HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS = 250;
+const HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS = 1500;
+const HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS = 8000;
+const HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS = 100;
 
 class ScanTimeoutError extends Error {
   constructor(message) {
@@ -132,16 +135,13 @@ async function getHtmlFromFetch(page) {
  */
 async function getHtmlFromHiddenTabWithRetry(page) {
   try {
-    return {html: await getHtmlFromHiddenTab(page), scanNoticeKey: null};
+    return await getHtmlFromHiddenTab(page);
   } catch (error) {
     logHiddenTabFailure(page, error, '1. Versuch');
   }
 
   try {
-    return {
-      html: await getHtmlFromHiddenTab(page, {extraWaitMs: HIDDEN_TAB_RETRY_EXTRA_WAIT_MS}),
-      scanNoticeKey: null,
-    };
+    return await getHtmlFromHiddenTab(page, {extraWaitMs: HIDDEN_TAB_RETRY_EXTRA_WAIT_MS});
   } catch (error) {
     logHiddenTabFailure(page, error, 'Retry');
   }
@@ -186,14 +186,31 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
     }
   }
 
+  let scanNoticeKey = null;
+
   try {
     await waitForTabReady(tab.id, page);
+    const shouldWaitForNetworkIdle = page?.waitForNetworkIdle ?? true;
+    if (shouldWaitForNetworkIdle) {
+      const networkIdleTimeoutMs =
+        page?.waitForNetworkIdleTimeoutMs ?? HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS;
+      try {
+        await waitForNetworkIdle(tab.id, networkIdleTimeoutMs);
+      } catch (error) {
+        if (error?.noticeKey === 'scan.notice.networkIdleTimeout') {
+          scanNoticeKey = error.noticeKey;
+        } else {
+          throw error;
+        }
+      }
+    }
     const waitMs = HIDDEN_TAB_DEFAULT_WAIT_MS + Math.max(0, extraWaitMs);
     if (waitMs > 0) {
       await __.waitForMs(waitMs);
     }
     await waitForDomStability(tab.id, page);
-    return await getHtmlFromTab(tab.id);
+    const html = await getHtmlFromTab(tab.id);
+    return {html, scanNoticeKey};
   } finally {
     await browser.tabs.remove(tab.id).catch(() => {
       __.log(`Konnte Tab nicht schließen: ${page.url}`);
@@ -254,6 +271,150 @@ async function waitForTabReady(tabId, page) {
   });
 
   await waitForOptionalSelector(tabId, page);
+}
+
+/**
+ * Wartet, bis im Tab keine Netzwerkaktivität mehr stattfindet oder Hydration-Signale erkannt werden.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @param {number} timeoutMs - Timeout für Network-Idle.
+ */
+async function waitForNetworkIdle(tabId, timeoutMs) {
+  if (timeoutMs <= 0) {
+    return;
+  }
+
+  const result = await executeInTab(
+    tabId,
+    async (idleWindowMs, timeoutMsValue, checkIntervalMs) => {
+      const hasHydrationSignal = () => {
+        const root = document.documentElement;
+        const body = document.body;
+        if (root?.classList?.contains('hydrated') || root?.classList?.contains('is-hydrated')) {
+          return true;
+        }
+        if (body?.classList?.contains('hydrated') || body?.classList?.contains('is-hydrated')) {
+          return true;
+        }
+        if (root?.dataset?.hydrated === 'true' || body?.dataset?.hydrated === 'true') {
+          return true;
+        }
+        if (document.querySelector('[data-hydrated="true"],[data-hydration="complete"],[data-hydration-state="complete"]')) {
+          return true;
+        }
+        return Boolean(
+          window.__NUXT__ ||
+          window.__NEXT_DATA__ ||
+          window.__APOLLO_STATE__ ||
+          window.__REMIX_CONTEXT__ ||
+          window.__SVELTEKIT_DATA__,
+        );
+      };
+
+      return new Promise((resolve) => {
+        let pending = 0;
+        let lastActivity = performance.now();
+        const originalFetch = window.fetch;
+        const originalXhrSend = typeof XMLHttpRequest !== 'undefined'
+          ? XMLHttpRequest.prototype?.send
+          : null;
+        let observer = null;
+        let intervalId = null;
+        let timeoutId = null;
+
+        const resetIdle = () => {
+          lastActivity = performance.now();
+        };
+
+        const cleanup = () => {
+          if (intervalId) {
+            clearInterval(intervalId);
+          }
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+          if (observer) {
+            observer.disconnect();
+          }
+          if (originalFetch) {
+            window.fetch = originalFetch;
+          }
+          if (originalXhrSend && typeof XMLHttpRequest !== 'undefined') {
+            XMLHttpRequest.prototype.send = originalXhrSend;
+          }
+        };
+
+        const decrementPending = () => {
+          pending = Math.max(0, pending - 1);
+          resetIdle();
+        };
+
+        if (typeof originalFetch === 'function') {
+          window.fetch = function(...args) {
+            pending += 1;
+            resetIdle();
+            const result = originalFetch.apply(this, args);
+            Promise.resolve(result)
+              .finally(() => {
+                decrementPending();
+              });
+            return result;
+          };
+        }
+
+        if (originalXhrSend && typeof XMLHttpRequest !== 'undefined') {
+          XMLHttpRequest.prototype.send = function(...args) {
+            pending += 1;
+            resetIdle();
+            this.addEventListener('loadend', decrementPending, {once: true});
+            return originalXhrSend.apply(this, args);
+          };
+        }
+
+        if (window.PerformanceObserver) {
+          try {
+            observer = new PerformanceObserver((list) => {
+              if (list.getEntries().length > 0) {
+                resetIdle();
+              }
+            });
+            observer.observe({type: 'resource', buffered: true});
+          } catch (error) {
+            observer = null;
+          }
+        }
+
+        const checkIdle = () => {
+          const now = performance.now();
+          const idleEnough = pending === 0 && now - lastActivity >= idleWindowMs;
+          const hydrated = hasHydrationSignal();
+          if ((idleEnough || hydrated) && pending === 0) {
+            cleanup();
+            resolve({idle: true, hydrated});
+          }
+        };
+
+        intervalId = setInterval(checkIdle, checkIntervalMs);
+        timeoutId = setTimeout(() => {
+          cleanup();
+          resolve({idle: false, hydrated: false});
+        }, timeoutMsValue);
+
+        checkIdle();
+      });
+    },
+    [
+      HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS,
+      timeoutMs,
+      HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS,
+    ],
+  );
+
+  if (!result?.idle) {
+    const timeoutError = new ScanTimeoutError('Timeout beim Warten auf Network-Idle.');
+    timeoutError.noticeKey = 'scan.notice.networkIdleTimeout';
+    throw timeoutError;
+  }
 }
 
 /**

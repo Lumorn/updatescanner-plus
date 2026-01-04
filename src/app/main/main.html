@@ -160,6 +160,29 @@
       </fieldset>
 
       <fieldset id="scanOptions">
+        <div>
+          <input type="checkbox" id="wait-for-network-idle" name="wait-for-network-idle">
+          <label for="wait-for-network-idle" class="checkbox-label"
+            data-i18n="main.dialog.waitForNetworkIdle">
+            Wait for network idle
+          </label>
+        </div>
+        <output name="wait-for-network-idle-description">
+          <span data-i18n="main.dialog.waitForNetworkIdle.description">
+            Wait for network idle or hydration signals before taking a snapshot.
+          </span>
+        </output>
+        <label>
+          <span data-i18n="main.dialog.waitForNetworkIdleTimeout">
+            Network idle timeout (ms):
+          </span>
+          <input name="wait-for-network-idle-timeout" type="number" min="0" step="500"/>
+        </label>
+        <output name="wait-for-network-idle-timeout-description">
+          <span data-i18n="main.dialog.waitForNetworkIdleTimeout.description">
+            Set 0 to skip the network idle wait.
+          </span>
+        </output>
       </fieldset>
 
       <div id="dialog-buttons">

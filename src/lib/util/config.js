@@ -16,6 +16,7 @@ export class Config {
       'updateVersion': 0, // Used to determine if update tasks are required
       'language': 'en', // Sprache der Benutzeroberfläche
       'useHiddenTabScanByDefault': false, // Standard für versteckten Tab bei neuen Scans
+      'waitForNetworkIdleByDefault': true, // Standard für Network-Idle bei neuen Scans
     };
   }
 
