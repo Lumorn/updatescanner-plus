@@ -40,6 +40,7 @@ const HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS = 8000;
 const HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS = 100;
 const HIDDEN_TAB_SCROLL_DEFAULT_DELAY_MS = 250;
 const HIDDEN_TAB_SCROLL_TIMEOUT_BUFFER_MS = 2000;
+const FETCH_FALLBACK_MIN_LENGTH = 200;
 
 class ScanTimeoutError extends Error {
   constructor(message) {
@@ -94,6 +95,13 @@ export async function scanPage(page) {
       ({html, scanNoticeKey} = await getHtmlFromHiddenTabWithRetry(page));
     } else {
       html = await getHtmlFromFetch(page);
+      if (shouldFallbackToHiddenTab(html)) {
+        __.log(`Fetch-Ergebnis zu kurz/leer für "${page.title}", starte Hidden-Tab-Fallback.`);
+        const fallbackResult = await getHtmlFromHiddenTabWithRetry(page);
+        const fallbackNoticeKey =
+          fallbackResult.scanNoticeKey ?? 'scan.notice.fetchTooShortFallback';
+        return processHtml(page, fallbackResult.html, fallbackNoticeKey);
+      }
     }
 
     return processHtml(page, html, scanNoticeKey);
@@ -128,6 +136,31 @@ async function getHtmlFromFetch(page) {
   }
 
   return await getHtmlFromResponse(response, page);
+}
+
+/**
+ * Prüft, ob ein Fetch-HTML so kurz ist, dass ein Hidden-Tab-Fallback sinnvoll ist.
+ *
+ * @param {?string} html - HTML-Text.
+ * @returns {boolean} true, wenn ein Fallback empfohlen wird.
+ */
+function shouldFallbackToHiddenTab(html) {
+  if (html == null) {
+    return true;
+  }
+  const trimmed = html.trim();
+  if (trimmed.length === 0) {
+    return true;
+  }
+  if (trimmed.length < FETCH_FALLBACK_MIN_LENGTH) {
+    const lowerHtml = trimmed.toLowerCase();
+    const hasHtmlMarkers =
+      lowerHtml.includes('<html') ||
+      lowerHtml.includes('<body') ||
+      lowerHtml.includes('<!doctype');
+    return !hasHtmlMarkers;
+  }
+  return false;
 }
 
 /**

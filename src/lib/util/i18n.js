@@ -33,7 +33,7 @@ const translations = {
     'settings.language.option.de': 'German',
     'settings.hiddenTabScan.label': 'Use hidden tab for scans by default',
     'settings.hiddenTabScan.description':
-      'Use a hidden background tab as the default scan source for new pages.',
+      'New pages use a hidden background tab by default for more reliable scans.',
     'settings.hiddenTabScanAll.label': 'Use hidden tab scan for all pages',
     'settings.hiddenTabScanAll.description':
       'Apply the hidden tab scan setting to all existing pages.',
@@ -191,6 +191,8 @@ const translations = {
       'Hidden tab script injection failed; fetch was used.',
     'scan.notice.hiddenTabHideFailed':
       'Hidden tab could not be hidden; scan continued.',
+    'scan.notice.fetchTooShortFallback':
+      'Fetch response was too short; hidden tab was used instead.',
     'scan.notice.networkIdleTimeout':
       'Network idle timeout reached; snapshot captured anyway.',
     'scan.notice.hiddenTabScrollTimeout':
@@ -330,7 +332,7 @@ const translations = {
     'settings.language.option.de': 'Deutsch',
     'settings.hiddenTabScan.label': 'Versteckten Tab für Scans verwenden',
     'settings.hiddenTabScan.description':
-      'Verwendet einen versteckten Hintergrund-Tab als Standard-Scanquelle für neue Seiten.',
+      'Neue Seiten werden standardmäßig im versteckten Hintergrund-Tab gescannt.',
     'settings.hiddenTabScanAll.label':
       'Versteckten Tab-Scan für alle Seiten aktivieren/deaktivieren',
     'settings.hiddenTabScanAll.description':
@@ -490,6 +492,8 @@ const translations = {
       'Script-Injektion im versteckten Tab fehlgeschlagen; Fetch verwendet.',
     'scan.notice.hiddenTabHideFailed':
       'Versteckter Tab konnte nicht verborgen werden; Scan wurde fortgesetzt.',
+    'scan.notice.fetchTooShortFallback':
+      'Fetch-Antwort war zu kurz; stattdessen wurde der versteckte Tab genutzt.',
     'scan.notice.networkIdleTimeout':
       'Network-Idle-Timeout erreicht; Snapshot trotzdem erstellt.',
     'scan.notice.hiddenTabScrollTimeout':
