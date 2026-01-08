@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* Globalen Scan-Modus-Umschalter in die Settings verschoben und dort ganz oben platziert
+* Globalen Scan-Modus-Umschalter im Settings-Panel ergänzt, um den Alt-Modus global zu setzen
 * Alter Scan-Modus arbeitet nur HTML-basiert und blendet nicht benötigte Zusatzoptionen aus
 * Standard für neue Seiten auf Hidden-Tab-Scan umgestellt und Beschreibungstexte aktualisiert
 * Diff-Ausgabe berücksichtigt Highlight-Farbe/Markierungen pro Seite und zeigt bei deaktivierter Hervorhebung die neue Version ohne Highlighting

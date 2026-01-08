@@ -31,6 +31,11 @@ const translations = {
     'settings.language.description': 'Select the language for the interface.',
     'settings.language.option.en': 'English',
     'settings.language.option.de': 'German',
+    'settings.scanEngine.label': 'Global scan mode',
+    'settings.scanEngine.option.legacy': 'Legacy scan mode',
+    'settings.scanEngine.option.new': 'New scan mode',
+    'settings.scanEngine.description':
+      'Choose which scan engine is used across the extension.',
     'settings.hiddenTabScan.label': 'Use hidden tab for scans by default',
     'settings.hiddenTabScan.description':
       'New pages use a hidden background tab by default for more reliable scans.',
@@ -340,6 +345,11 @@ const translations = {
     'settings.language.description': 'Wähle die Sprache der Oberfläche aus.',
     'settings.language.option.en': 'Englisch',
     'settings.language.option.de': 'Deutsch',
+    'settings.scanEngine.label': 'Globaler Scan-Modus',
+    'settings.scanEngine.option.legacy': 'Alter Scan-Modus',
+    'settings.scanEngine.option.new': 'Neuer Scan-Modus',
+    'settings.scanEngine.description':
+      'Wähle, welcher Scan-Modus in der gesamten Erweiterung verwendet wird.',
     'settings.hiddenTabScan.label': 'Versteckten Tab für Scans verwenden',
     'settings.hiddenTabScan.description':
       'Neue Seiten werden standardmäßig im versteckten Hintergrund-Tab gescannt.',
