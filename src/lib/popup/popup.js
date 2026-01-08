@@ -50,6 +50,9 @@ export class Popup {
     view.bindHelpClick(this._handleHelpClick.bind(this));
     view.bindPageClick(this._handlePageClick.bind(this));
     view.bindLanguageChange(this._handleLanguageChange.bind(this));
+    view.bindScanEngineDefaultChange(
+      this._handleScanEngineDefaultChange.bind(this),
+    );
     view.bindHiddenTabScanDefaultChange(
       this._handleHiddenTabScanDefaultChange.bind(this),
     );
@@ -78,6 +81,7 @@ export class Popup {
       this._handleHiddenTabScrollMaxHeightDefaultChange.bind(this),
     );
     view.setLanguage(this.config.get('language'));
+    view.setScanEngineDefault(this.config.get('scanEngineMode'));
     view.setHiddenTabScanDefault(this.config.get('useHiddenTabScanByDefault'));
     view.setWaitForNetworkIdleDefault(
       this.config.get('waitForNetworkIdleByDefault'),
@@ -264,6 +268,17 @@ export class Popup {
     await this.config.save();
     view.setLanguage(language);
     view.setVersion(this.version);
+  }
+
+  /**
+   * Speichert den globalen Scan-Modus.
+   *
+   * @param {string} mode - Scan-Modus.
+   */
+  async _handleScanEngineDefaultChange(mode) {
+    this.config.set('scanEngineMode', mode);
+    await this.config.save();
+    view.setScanEngineDefault(mode);
   }
 
   /**

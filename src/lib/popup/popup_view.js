@@ -89,6 +89,15 @@ export function bindLanguageChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn der Scan-Modus geändert wird.
+ */
+export function bindScanEngineDefaultChange(handler) {
+  $on(qs('#scan-engine-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
  * @param {Function} handler - Wird aufgerufen, wenn der Default geändert wird.
  */
 export function bindHiddenTabScanDefaultChange(handler) {
@@ -177,6 +186,15 @@ export function bindHiddenTabScrollMaxHeightDefaultChange(handler) {
 export function setLanguage(language) {
   const activeLanguage = applyLanguage(language);
   qs('#language-select').value = activeLanguage;
+}
+
+/**
+ * Setzt den globalen Scan-Modus in den Einstellungen.
+ *
+ * @param {string} mode - Scan-Modus.
+ */
+export function setScanEngineDefault(mode) {
+  qs('#scan-engine-default').value = mode;
 }
 
 /**
