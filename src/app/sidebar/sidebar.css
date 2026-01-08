@@ -1,5 +1,13 @@
+#sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 #tree {
   font-weight: normal;
+  overflow: auto;
+  flex: 0 1 45%;
 }
 
 .changed > .jstree-anchor {
@@ -44,6 +52,35 @@ dialog + .backdrop { /* polyfill */
 .dialog-buttons {
   float: right;
   margin-right: var(--space-2);
+}
+
+#preview {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  margin-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+#preview-title {
+  font-weight: 600;
+}
+
+#preview-empty {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-s);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.preview-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-surface);
 }
 
 .hidden {
