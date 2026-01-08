@@ -186,112 +186,119 @@
           Set the default scan engine for new and existing pages.
         </p>
       </div>
-      <div class="settings-field">
-        <label for="hidden-tab-scan-default" class="settings-label"
-          data-i18n="settings.hiddenTabScan.label">
-          Use hidden tab for scans by default
-        </label>
-        <input id="hidden-tab-scan-default" type="checkbox">
-        <p class="settings-description"
-          data-i18n="settings.hiddenTabScan.description">
-          Use a hidden tab as the default scan source for new pages.
-        </p>
-      </div>
-      <div class="settings-field">
-        <label for="hidden-tab-scan-all" class="settings-label"
-          data-i18n="settings.hiddenTabScanAll.label">
-          Use hidden tab for all pages
-        </label>
-        <input id="hidden-tab-scan-all" type="checkbox">
-        <p class="settings-description"
-          data-i18n="settings.hiddenTabScanAll.description">
-          Apply the hidden tab scan setting to all existing pages.
-        </p>
-      </div>
-      <div class="settings-field">
-        <label for="wait-for-network-idle-default" class="settings-label"
-          data-i18n="settings.waitForNetworkIdle.label">
-          Wait for network idle by default
-        </label>
-        <input id="wait-for-network-idle-default" type="checkbox">
-        <p class="settings-description"
-          data-i18n="settings.waitForNetworkIdle.description">
-          Wait for network idle or hydration signals when hidden tab scans run.
-        </p>
-      </div>
-      <div class="settings-field">
-        <label for="wait-for-network-idle-all" class="settings-label"
-          data-i18n="settings.waitForNetworkIdleAll.label">
-          Apply network idle wait to all pages
-        </label>
-        <input id="wait-for-network-idle-all" type="checkbox">
-        <p class="settings-description"
-          data-i18n="settings.waitForNetworkIdleAll.description">
-          Update the network idle wait setting for all existing pages.
-        </p>
-      </div>
-      <div class="settings-field">
-        <label for="hidden-tab-ignore-selectors-default" class="settings-label"
-          data-i18n="settings.hiddenTabIgnoreSelectors.label">
-          Ignore selectors for snapshots by default
-        </label>
-        <input id="hidden-tab-ignore-selectors-default" type="text"
-          placeholder=".ads, .cookie-banner"
-          data-i18n-attr="placeholder:settings.hiddenTabIgnoreSelectors.placeholder">
-        <p class="settings-description"
-          data-i18n="settings.hiddenTabIgnoreSelectors.description">
-          CSS selectors removed from hidden tab snapshots for new pages.
-        </p>
-      </div>
-      <div class="settings-field">
-        <label for="hidden-tab-text-hash-default" class="settings-label"
-          data-i18n="settings.hiddenTabTextHash.label">
-          Use text-only snapshot hash by default
-        </label>
-        <input id="hidden-tab-text-hash-default" type="checkbox">
-        <p class="settings-description"
-          data-i18n="settings.hiddenTabTextHash.description">
-          Use only innerText for DOM stability checks on new pages.
-        </p>
-      </div>
-      <div class="settings-field">
-        <label for="hidden-tab-scroll-steps-default" class="settings-label"
-          data-i18n="settings.hiddenTabScrollSteps.label">
-          Scroll simulation steps by default
-        </label>
-        <input id="hidden-tab-scroll-steps-default" type="number" min="0" step="1"
-          placeholder="0"
-          data-i18n-attr="placeholder:settings.hiddenTabScrollSteps.placeholder">
-        <p class="settings-description"
-          data-i18n="settings.hiddenTabScrollSteps.description">
-          Number of steps for hidden tab scroll simulation on new pages.
-        </p>
-      </div>
-      <div class="settings-field">
-        <label for="hidden-tab-scroll-delay-default" class="settings-label"
-          data-i18n="settings.hiddenTabScrollDelay.label">
-          Scroll step delay by default (ms)
-        </label>
-        <input id="hidden-tab-scroll-delay-default" type="number" min="0" step="50"
-          placeholder="250"
-          data-i18n-attr="placeholder:settings.hiddenTabScrollDelay.placeholder">
-        <p class="settings-description"
-          data-i18n="settings.hiddenTabScrollDelay.description">
-          Wait time after each scroll step for new pages.
-        </p>
-      </div>
-      <div class="settings-field">
-        <label for="hidden-tab-scroll-max-height-default" class="settings-label"
-          data-i18n="settings.hiddenTabScrollMaxHeight.label">
-          Max scroll height by default (px)
-        </label>
-        <input id="hidden-tab-scroll-max-height-default" type="number" min="0" step="100"
-          placeholder="0"
-          data-i18n-attr="placeholder:settings.hiddenTabScrollMaxHeight.placeholder">
-        <p class="settings-description"
-          data-i18n="settings.hiddenTabScrollMaxHeight.description">
-          Limit the simulated scroll height for new pages.
-        </p>
+      <p id="hidden-tab-settings-disabled-hint"
+        class="settings-description hidden"
+        data-i18n="settings.hiddenTabSettings.disabledHint">
+        Hidden tab options are only available in the new scan mode.
+      </p>
+      <div id="hidden-tab-settings">
+        <div class="settings-field">
+          <label for="hidden-tab-scan-default" class="settings-label"
+            data-i18n="settings.hiddenTabScan.label">
+            Use hidden tab for scans by default
+          </label>
+          <input id="hidden-tab-scan-default" type="checkbox">
+          <p class="settings-description"
+            data-i18n="settings.hiddenTabScan.description">
+            Use a hidden tab as the default scan source for new pages.
+          </p>
+        </div>
+        <div class="settings-field">
+          <label for="hidden-tab-scan-all" class="settings-label"
+            data-i18n="settings.hiddenTabScanAll.label">
+            Use hidden tab for all pages
+          </label>
+          <input id="hidden-tab-scan-all" type="checkbox">
+          <p class="settings-description"
+            data-i18n="settings.hiddenTabScanAll.description">
+            Apply the hidden tab scan setting to all existing pages.
+          </p>
+        </div>
+        <div class="settings-field">
+          <label for="wait-for-network-idle-default" class="settings-label"
+            data-i18n="settings.waitForNetworkIdle.label">
+            Wait for network idle by default
+          </label>
+          <input id="wait-for-network-idle-default" type="checkbox">
+          <p class="settings-description"
+            data-i18n="settings.waitForNetworkIdle.description">
+            Wait for network idle or hydration signals when hidden tab scans run.
+          </p>
+        </div>
+        <div class="settings-field">
+          <label for="wait-for-network-idle-all" class="settings-label"
+            data-i18n="settings.waitForNetworkIdleAll.label">
+            Apply network idle wait to all pages
+          </label>
+          <input id="wait-for-network-idle-all" type="checkbox">
+          <p class="settings-description"
+            data-i18n="settings.waitForNetworkIdleAll.description">
+            Update the network idle wait setting for all existing pages.
+          </p>
+        </div>
+        <div class="settings-field">
+          <label for="hidden-tab-ignore-selectors-default" class="settings-label"
+            data-i18n="settings.hiddenTabIgnoreSelectors.label">
+            Ignore selectors for snapshots by default
+          </label>
+          <input id="hidden-tab-ignore-selectors-default" type="text"
+            placeholder=".ads, .cookie-banner"
+            data-i18n-attr="placeholder:settings.hiddenTabIgnoreSelectors.placeholder">
+          <p class="settings-description"
+            data-i18n="settings.hiddenTabIgnoreSelectors.description">
+            CSS selectors removed from hidden tab snapshots for new pages.
+          </p>
+        </div>
+        <div class="settings-field">
+          <label for="hidden-tab-text-hash-default" class="settings-label"
+            data-i18n="settings.hiddenTabTextHash.label">
+            Use text-only snapshot hash by default
+          </label>
+          <input id="hidden-tab-text-hash-default" type="checkbox">
+          <p class="settings-description"
+            data-i18n="settings.hiddenTabTextHash.description">
+            Use only innerText for DOM stability checks on new pages.
+          </p>
+        </div>
+        <div class="settings-field">
+          <label for="hidden-tab-scroll-steps-default" class="settings-label"
+            data-i18n="settings.hiddenTabScrollSteps.label">
+            Scroll simulation steps by default
+          </label>
+          <input id="hidden-tab-scroll-steps-default" type="number" min="0" step="1"
+            placeholder="0"
+            data-i18n-attr="placeholder:settings.hiddenTabScrollSteps.placeholder">
+          <p class="settings-description"
+            data-i18n="settings.hiddenTabScrollSteps.description">
+            Number of steps for hidden tab scroll simulation on new pages.
+          </p>
+        </div>
+        <div class="settings-field">
+          <label for="hidden-tab-scroll-delay-default" class="settings-label"
+            data-i18n="settings.hiddenTabScrollDelay.label">
+            Scroll step delay by default (ms)
+          </label>
+          <input id="hidden-tab-scroll-delay-default" type="number" min="0" step="50"
+            placeholder="250"
+            data-i18n-attr="placeholder:settings.hiddenTabScrollDelay.placeholder">
+          <p class="settings-description"
+            data-i18n="settings.hiddenTabScrollDelay.description">
+            Wait time after each scroll step for new pages.
+          </p>
+        </div>
+        <div class="settings-field">
+          <label for="hidden-tab-scroll-max-height-default" class="settings-label"
+            data-i18n="settings.hiddenTabScrollMaxHeight.label">
+            Max scroll height by default (px)
+          </label>
+          <input id="hidden-tab-scroll-max-height-default" type="number" min="0" step="100"
+            placeholder="0"
+            data-i18n-attr="placeholder:settings.hiddenTabScrollMaxHeight.placeholder">
+          <p class="settings-description"
+            data-i18n="settings.hiddenTabScrollMaxHeight.description">
+            Limit the simulated scroll height for new pages.
+          </p>
+        </div>
       </div>
     </div>
   </div>

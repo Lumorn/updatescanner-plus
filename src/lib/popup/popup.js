@@ -82,6 +82,9 @@ export class Popup {
     );
     view.setLanguage(this.config.get('language'));
     view.setScanEngineDefault(this.config.get('scanEngineMode'));
+    view.setHiddenTabSettingsEnabled(
+      this.config.get('scanEngineMode') === 'new',
+    );
     view.setHiddenTabScanDefault(this.config.get('useHiddenTabScanByDefault'));
     view.setWaitForNetworkIdleDefault(
       this.config.get('waitForNetworkIdleByDefault'),
@@ -279,6 +282,7 @@ export class Popup {
     this.config.set('scanEngineMode', mode);
     await this.config.save();
     view.setScanEngineDefault(mode);
+    view.setHiddenTabSettingsEnabled(mode === 'new');
   }
 
   /**
