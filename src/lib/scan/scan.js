@@ -28,7 +28,7 @@ export const __ = {
 
 // Wait between scanning pages
 const SCAN_IDLE_MS = 2000;
-const TAB_LOAD_TIMEOUT_MS = 20000;
+const TAB_LOAD_TIMEOUT_MS = 45000;
 const HIDDEN_TAB_DEFAULT_WAIT_MS = 3000;
 const HIDDEN_TAB_RETRY_EXTRA_WAIT_MS = 4000;
 const HIDDEN_TAB_WAIT_FOR_SELECTOR_TIMEOUT_MS = 10000;
