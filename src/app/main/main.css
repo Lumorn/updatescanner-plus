@@ -120,6 +120,16 @@ button.browser-style:focus-visible {
   border-radius: var(--menu-radius);
 }
 
+.menu-content li.menu-select {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.menu-content li.menu-select select {
+  width: 100%;
+}
+
 .menu-content li:hover {
   background-color: var(--menu-item-hover-bg);
 }

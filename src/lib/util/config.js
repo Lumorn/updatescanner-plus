@@ -23,6 +23,7 @@ export class Config {
       'hiddenTabScrollDelayMsByDefault': null, // Standard-Delay für Scroll-Schritte
       'hiddenTabScrollMaxHeightByDefault': null, // Standard-Max-Höhe für Scroll-Simulation
       'scanHostIdleMs': 2000, // Mindestabstand zwischen Scan-Requests pro Host
+      'scanEngineMode': 'legacy', // Standard-Scanmodus (legacy oder new)
     };
   }
 

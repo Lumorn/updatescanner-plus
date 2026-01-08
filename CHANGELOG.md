@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Scan-Modus im Hauptmenü ergänzt, um zwischen altem und neuem Scan-Modus umzuschalten
 * Standard für neue Seiten auf Hidden-Tab-Scan umgestellt und Beschreibungstexte aktualisiert
 * Diff-Ausgabe berücksichtigt Highlight-Farbe/Markierungen pro Seite und zeigt bei deaktivierter Hervorhebung die neue Version ohne Highlighting
 * Fetch-Scans erkennen sehr kurze/leere Antworten und wechseln automatisch auf einen Hidden-Tab-Snapshot
