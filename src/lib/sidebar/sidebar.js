@@ -2,8 +2,7 @@ import {SidebarView} from './sidebar_view.js';
 import {PageStore} from '/lib/page/page_store.js';
 import {Page} from '/lib/page/page.js';
 import {PageFolder} from '/lib/page/page_folder.js';
-import {openMain, getMainDiffUrl, paramEnum, actionEnum}
-  from '/lib/main/main_url.js';
+import {openMain, paramEnum, actionEnum} from '/lib/main/main_url.js';
 import {backgroundActionEnum} from '/lib/background/actions.js';
 import {waitForMs} from '/lib/util/promise.js';
 
@@ -70,19 +69,13 @@ export class Sidebar {
   _handleSelect(event, itemId) {
     const item = this.pageStore.getItem(itemId);
     if (item instanceof Page) {
-      const newTab = Boolean(event) &&
-        (event.metaKey || event.ctrlKey || (event.button === 1));
-      if (newTab) {
-        const params = {
-          [paramEnum.ACTION]: actionEnum.SHOW_DIFF,
-          [paramEnum.ID]: item.id,
-        };
-        openMain(params, true);
-      } else {
-        this.sidebar.showPreview(getMainDiffUrl(item.id));
-      }
-    } else {
-      this.sidebar.clearPreview();
+      const params = {
+        [paramEnum.ACTION]: actionEnum.SHOW_DIFF,
+        [paramEnum.ID]: item.id,
+      };
+
+      const newTab = event.metaKey || event.ctrlKey || (event.button === 1);
+      openMain(params, newTab);
     }
   }
 

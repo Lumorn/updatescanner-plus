@@ -264,8 +264,6 @@ const translations = {
     'sidebar.context.delete': 'Delete',
     'sidebar.context.scanNow': 'Scan Now',
     'sidebar.context.settings': 'Settings',
-    'sidebar.preview.title': 'Scan result',
-    'sidebar.preview.empty': 'Select a page to view the scan result.',
     'debug.title': 'Storage API',
     'debug.reload': 'Reload',
     'debug.preload': 'Preload',
@@ -585,9 +583,6 @@ const translations = {
     'sidebar.context.delete': 'Löschen',
     'sidebar.context.scanNow': 'Jetzt scannen',
     'sidebar.context.settings': 'Einstellungen',
-    'sidebar.preview.title': 'Scan-Ergebnis',
-    'sidebar.preview.empty':
-      'Wähle einen Eintrag aus, um das Scan-Ergebnis anzuzeigen.',
     'debug.title': 'Storage-API',
     'debug.reload': 'Neu laden',
     'debug.preload': 'Vorab laden',
