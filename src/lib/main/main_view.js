@@ -29,6 +29,11 @@ function initMenu() {
     event.stopPropagation();
   });
 
+  // Klicks im Menü sollen nicht das Schließen durch den Fenster-Handler auslösen.
+  $on(menu, 'click', (event) => {
+    event.stopPropagation();
+  });
+
   // Hide the menu when something else is clicked
   $on(window, 'click', ({target}) => {
     hideElement(menu);
@@ -41,8 +46,40 @@ function initMenu() {
  * debugHandler - Called when the Debug Info menu item is clicked.
  */
 export function bindMenu({settingsHandler, debugHandler}) {
-  $on(qs('#page-settings'), 'click', settingsHandler);
-  $on(qs('#debug-info'), 'click', debugHandler);
+  $on(qs('#page-settings'), 'click', () => {
+    hideElement(qs('#menu'));
+    settingsHandler();
+  });
+  $on(qs('#debug-info'), 'click', () => {
+    hideElement(qs('#menu'));
+    debugHandler();
+  });
+}
+
+/**
+ * @param {Function} handler - Wird bei Änderung des Scan-Modus aufgerufen.
+ */
+export function bindScanEngineChange(handler) {
+  const scanEngineSelect = qs('#scan-engine');
+  if (!scanEngineSelect) {
+    return;
+  }
+  $on(scanEngineSelect, 'change', ({target}) => {
+    if (target.value) {
+      handler(target.value);
+    }
+  });
+}
+
+/**
+ * @param {string} value - Neuer Wert für den Scan-Modus-Selektor.
+ */
+export function setScanEngineValue(value) {
+  const scanEngineSelect = qs('#scan-engine');
+  if (!scanEngineSelect) {
+    return;
+  }
+  scanEngineSelect.value = value;
 }
 
 /**

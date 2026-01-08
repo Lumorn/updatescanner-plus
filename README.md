@@ -28,6 +28,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Benachrichtigungen bei gefundenen Änderungen.
 * Popup- und Sidebar-Ansicht für die Verwaltung der Einträge.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
+* Menü-Umschalter zwischen altem und neuem Scan-Modus, um beide Engines getrennt zu halten.
 * Zentrale HTML-Normalisierung entfernt optional dynamische Bereiche über „Ignorierte Selektoren“ pro Seite.
 * Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
 * Versteckter Tab wird per Tab-Hide-API verborgen und bei fehlender API in ein minimiertes Popup ausgelagert.
