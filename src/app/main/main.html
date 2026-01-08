@@ -30,19 +30,6 @@
             <li id="page-settings" data-i18n="main.menu.pageSettings">
               Page Settings
             </li>
-            <li class="menu-select">
-              <label for="scan-engine" data-i18n="main.menu.scanEngine">
-                Scan-Modus:
-              </label>
-              <select id="scan-engine">
-                <option value="legacy" data-i18n="main.menu.scanEngine.legacy">
-                  Alter Scan-Modus
-                </option>
-                <option value="new" data-i18n="main.menu.scanEngine.new">
-                  Neuer Scan-Modus
-                </option>
-              </select>
-            </li>
           </ul>
         </div>
         <div>
@@ -66,6 +53,19 @@
       <h1 id="folder-heading" data-i18n="main.dialog.folderSettings">
         Folder Settings
       </h1>
+      <fieldset id="scanEngineFieldset">
+        <label for="scan-engine" data-i18n="main.dialog.scanEngine">
+          Scan-Modus:
+        </label>
+        <select id="scan-engine" name="scan-engine">
+          <option value="legacy" data-i18n="main.dialog.scanEngine.legacy">
+            Alter Scan-Modus
+          </option>
+          <option value="new" data-i18n="main.dialog.scanEngine.new">
+            Neuer Scan-Modus
+          </option>
+        </select>
+      </fieldset>
       <fieldset id="titleFieldset">
         <label>
           <span data-i18n="main.dialog.titleLabel">Title:</span>

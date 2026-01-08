@@ -1,10 +1,19 @@
 import {qs, $on, hideElement, showElement} from '/lib/util/view_helpers.js';
 import {translate} from '/lib/util/i18n.js';
+import {Config} from '/lib/util/config.js';
 
 // See https://bugzilla.mozilla.org/show_bug.cgi?id=840640
 import dialogPolyfill
   from '/dependencies/module/dialog-polyfill/dist/dialog-polyfill.esm.js';
 import {Page} from '../page/page.js';
+
+const ScanEngineMode = {
+  LEGACY: 'legacy',
+  NEW: 'new',
+};
+
+let currentScanEngineMode = ScanEngineMode.LEGACY;
+let currentDialogType = 'page';
 
 /**
  * Initialise the dialog box.
@@ -26,6 +35,13 @@ export function init() {
   $on(form.elements['scan-mode'], 'input', ({target}) =>
     updateModeUI(target.value),
   );
+  $on(form.elements['scan-engine'], 'input', async ({target}) => {
+    if (!target.value) {
+      return;
+    }
+    await persistScanEngineMode(target.value);
+    setScanEngineMode(target.value);
+  });
 
   $on(form, 'reset', () => dialog.close());
 }
@@ -41,6 +57,12 @@ export function init() {
 export function openPageDialog(page) {
   const dialog = qs('#settings-dialog');
   const form = qs('#settings-form');
+
+  currentDialogType = 'page';
+  const scanEngineMode =
+    (await Config.loadSingleSetting('scanEngineMode')) ??
+    ScanEngineMode.LEGACY;
+  form.elements['scan-engine'].value = scanEngineMode;
 
   form.elements['title'].value = page.title;
   form.elements['url'].value = page.url;
@@ -86,6 +108,7 @@ export function openPageDialog(page) {
     formatOptionalNumber(page.hiddenTabScrollMaxHeight);
 
   showElement(qs('#page-heading'));
+  showElement(qs('#scanEngineFieldset'));
   showElement(qs('#urlFieldset'));
   showElement(qs('#autoscanFieldset'));
   showElement(qs('#thresholdFieldset'));
@@ -96,6 +119,7 @@ export function openPageDialog(page) {
   showElement(qs('#scanOptions'));
 
   hideElement(qs('#folder-heading'));
+  setScanEngineMode(scanEngineMode);
 
   dialog.showModal();
 
@@ -104,7 +128,7 @@ export function openPageDialog(page) {
       if (dialog.returnValue === 'ok') {
         const mode = form.elements['scan-mode'].value;
         const modeData = ScanModeMap.get(mode).options;
-        resolve({
+        let settings = {
           title: form.elements['title'].value,
           url: form.elements['url'].value,
           scanRateMinutes:
@@ -147,7 +171,9 @@ export function openPageDialog(page) {
           hiddenTabScrollMaxHeight: parseOptionalNumber(
             form.elements['hidden-tab-scroll-max-height'].value,
           ),
-        });
+        };
+        settings = applyLegacyDefaults(settings);
+        resolve(settings);
       } else {
         resolve(null);
       }
@@ -167,9 +193,16 @@ export function openPageFolderDialog(pageFolder) {
   const dialog = qs('#settings-dialog');
   const form = qs('#settings-form');
 
+  currentDialogType = 'folder';
+  const scanEngineMode =
+    (await Config.loadSingleSetting('scanEngineMode')) ??
+    ScanEngineMode.LEGACY;
+  form.elements['scan-engine'].value = scanEngineMode;
+
   form.elements['title'].value = pageFolder.title;
 
   hideElement(qs('#page-heading'));
+  showElement(qs('#scanEngineFieldset'));
   hideElement(qs('#urlFieldset'));
   hideElement(qs('#autoscanFieldset'));
   hideElement(qs('#thresholdFieldset'));
@@ -179,6 +212,7 @@ export function openPageFolderDialog(pageFolder) {
   hideElement(qs('#scanSourceFieldset'));
   hideElement(qs('#scanOptions'));
 
+  setScanEngineMode(scanEngineMode);
   dialog.showModal();
 
   return new Promise((resolve, reject) => {
@@ -307,6 +341,54 @@ const ScanModeMap = new Map([
     },
   }],
 ]);
+
+function setScanEngineMode(modeName) {
+  currentScanEngineMode = modeName;
+  updateScanEngineUI(modeName);
+}
+
+function updateScanEngineUI(modeName) {
+  const showAdvanced =
+    currentDialogType === 'page' && modeName === ScanEngineMode.NEW;
+  if (showAdvanced) {
+    showElement(qs('#scanSourceFieldset'));
+    showElement(qs('#scanOptions'));
+  } else {
+    hideElement(qs('#scanSourceFieldset'));
+    hideElement(qs('#scanOptions'));
+  }
+}
+
+async function persistScanEngineMode(modeName) {
+  const config = await new Config().load();
+  config.set('scanEngineMode', modeName);
+  await config.save();
+}
+
+function applyLegacyDefaults(settings) {
+  if (currentScanEngineMode !== ScanEngineMode.LEGACY) {
+    return settings;
+  }
+  return {
+    ...settings,
+    useHiddenTabScan: false,
+    sendCredentials: false,
+    fetchCache: null,
+    fetchMode: null,
+    fetchRedirect: null,
+    fetchHeaders: '',
+    textDiffMode: false,
+    waitForNetworkIdle: false,
+    waitForSelector: null,
+    waitForSelectorTimeoutMs: null,
+    waitForNetworkIdleTimeoutMs: null,
+    hiddenTabIgnoreSelectors: '',
+    hiddenTabUseTextSnapshotHash: false,
+    hiddenTabScrollSteps: null,
+    hiddenTabScrollDelayMs: null,
+    hiddenTabScrollMaxHeight: null,
+  };
+}
 
 /**
  * Updates UI based on the mode. Disables fields not allowed in the

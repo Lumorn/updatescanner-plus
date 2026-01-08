@@ -57,32 +57,6 @@ export function bindMenu({settingsHandler, debugHandler}) {
 }
 
 /**
- * @param {Function} handler - Wird bei Änderung des Scan-Modus aufgerufen.
- */
-export function bindScanEngineChange(handler) {
-  const scanEngineSelect = qs('#scan-engine');
-  if (!scanEngineSelect) {
-    return;
-  }
-  $on(scanEngineSelect, 'change', ({target}) => {
-    if (target.value) {
-      handler(target.value);
-    }
-  });
-}
-
-/**
- * @param {string} value - Neuer Wert für den Scan-Modus-Selektor.
- */
-export function setScanEngineValue(value) {
-  const scanEngineSelect = qs('#scan-engine');
-  if (!scanEngineSelect) {
-    return;
-  }
-  scanEngineSelect.value = value;
-}
-
-/**
  * @param {Function} handler - Called when the View Dropdown choice changes.
  */
 export function bindViewDropdownChange(handler) {
