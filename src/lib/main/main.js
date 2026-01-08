@@ -50,10 +50,6 @@ export class Main {
       debugHandler: this._handleMenuDebug.bind(this),
     });
     view.bindViewDropdownChange(this._handleViewDropdownChange.bind(this));
-    view.bindScanEngineChange(this._handleScanEngineChange.bind(this));
-
-    const scanEngineMode = await Config.loadSingleSetting('scanEngineMode');
-    view.setScanEngineValue(scanEngineMode);
 
     dialog.init();
 
@@ -223,17 +219,6 @@ export class Main {
    */
   _handleMenuDebug() {
     openDebugInfo(this.currentPage.id);
-  }
-
-  /**
-   * Reagiert auf Änderungen am Scan-Modus im Menü.
-   *
-   * @param {string} mode - Neuer Scan-Modus.
-   */
-  async _handleScanEngineChange(mode) {
-    const config = await new Config().load();
-    config.set('scanEngineMode', mode);
-    await config.save();
   }
 
   /**

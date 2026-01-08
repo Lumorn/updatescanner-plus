@@ -40,7 +40,6 @@ const HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS = 8000;
 const HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS = 100;
 const HIDDEN_TAB_SCROLL_DEFAULT_DELAY_MS = 250;
 const HIDDEN_TAB_SCROLL_TIMEOUT_BUFFER_MS = 2000;
-const FETCH_FALLBACK_MIN_LENGTH = 200;
 
 class ScanTimeoutError extends Error {
   constructor(message) {
@@ -88,23 +87,8 @@ export async function scanPage(page) {
   }
   __.log(`Scanning "${page.title}"...`);
   try {
-    let html = '';
-    let scanNoticeKey = null;
-
-    if (page.useHiddenTabScan) {
-      ({html, scanNoticeKey} = await getHtmlFromHiddenTabWithRetry(page));
-    } else {
-      html = await getHtmlFromFetch(page);
-      if (shouldFallbackToHiddenTab(html)) {
-        __.log(`Fetch-Ergebnis zu kurz/leer für "${page.title}", starte Hidden-Tab-Fallback.`);
-        const fallbackResult = await getHtmlFromHiddenTabWithRetry(page);
-        const fallbackNoticeKey =
-          fallbackResult.scanNoticeKey ?? 'scan.notice.fetchTooShortFallback';
-        return processHtml(page, fallbackResult.html, fallbackNoticeKey);
-      }
-    }
-
-    return processHtml(page, html, scanNoticeKey);
+    const html = await getHtmlFromFetch(page);
+    return processHtml(page, html, null);
   } catch (error) {
     if (error?.name === 'ScanTimeoutError') {
       __.log(`Scan-Timeout bei "${page.title}": ${error.message}`);
@@ -129,19 +113,9 @@ export async function scanPage(page) {
  * @returns {string} HTML page content.
  */
 async function getHtmlFromFetch(page) {
-  let fetchOptions;
-  try {
-    fetchOptions = buildFetchOptions(page);
-  } catch (error) {
-    if (error?.noticeKey) {
-      __.log(`Fehler bei POST-Konfiguration für "${page.title}": ${error}`);
-    }
-    throw error;
-  }
-
   let response;
   try {
-    response = await fetch(page.url, fetchOptions);
+    response = await fetch(page.url);
   } catch (error) {
     __.log(`Fetch fehlgeschlagen für "${page.title}": ${error}`);
     const fetchError = new Error(`Fetch fehlgeschlagen: ${error}`);
@@ -157,165 +131,6 @@ async function getHtmlFromFetch(page) {
   }
 
   return await getHtmlFromResponse(response, page);
-}
-
-/**
- * Prüft, ob ein Fetch-HTML so kurz ist, dass ein Hidden-Tab-Fallback sinnvoll ist.
- *
- * @param {?string} html - HTML-Text.
- * @returns {boolean} true, wenn ein Fallback empfohlen wird.
- */
-function shouldFallbackToHiddenTab(html) {
-  if (html == null) {
-    return true;
-  }
-  const trimmed = html.trim();
-  if (trimmed.length === 0) {
-    return true;
-  }
-  if (trimmed.length < FETCH_FALLBACK_MIN_LENGTH) {
-    const lowerHtml = trimmed.toLowerCase();
-    const hasHtmlMarkers =
-      lowerHtml.includes('<html') ||
-      lowerHtml.includes('<body') ||
-      lowerHtml.includes('<!doctype');
-    return !hasHtmlMarkers;
-  }
-  return false;
-}
-
-/**
- * Baut Fetch-Optionen anhand der Seiteneinstellungen.
- *
- * @param {Page} page - Page object associated with the scan.
- * @returns {RequestInit|undefined} Optionen für fetch.
- */
-function buildFetchOptions(page) {
-  const options = {};
-  if (page.sendCredentials) {
-    options.credentials = 'include';
-  }
-  if (page.fetchCache) {
-    options.cache = page.fetchCache;
-  }
-  if (page.fetchMode) {
-    options.mode = page.fetchMode;
-  }
-  if (page.fetchRedirect) {
-    options.redirect = page.fetchRedirect;
-  }
-
-  let headers = parseFetchHeaders(page.fetchHeaders);
-  if (page.doPost) {
-    options.method = 'POST';
-    const {body, contentType} = buildPostBody(page.postParams);
-    if (body !== null) {
-      options.body = body;
-    }
-    if (contentType) {
-      if (!headers) {
-        headers = new Headers();
-      }
-      if (!headers.has('Content-Type')) {
-        headers.set('Content-Type', contentType);
-      }
-    }
-  }
-
-  if (headers) {
-    options.headers = headers;
-  }
-
-  return Object.keys(options).length > 0 ? options : undefined;
-}
-
-/**
- * Bereitet den POST-Body sowie den passenden Content-Type vor.
- *
- * @param {?string|object} postParams - POST-Parameter.
- * @returns {{body: ?string, contentType: ?string}} Body und Content-Type.
- */
-function buildPostBody(postParams) {
-  if (postParams == null) {
-    return {body: '', contentType: null};
-  }
-
-  if (typeof postParams === 'string') {
-    const trimmed = postParams.trim();
-    if (!trimmed) {
-      return {body: '', contentType: null};
-    }
-    if (looksLikeJson(trimmed)) {
-      return {body: trimmed, contentType: 'application/json; charset=UTF-8'};
-    }
-    const params = new URLSearchParams(trimmed);
-    return {
-      body: params.toString(),
-      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-    };
-  }
-
-  if (typeof postParams === 'object') {
-    const params = new URLSearchParams();
-    Object.entries(postParams).forEach(([key, value]) => {
-      if (value == null) {
-        return;
-      }
-      params.append(key, String(value));
-    });
-    return {
-      body: params.toString(),
-      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-    };
-  }
-
-  const error = new Error(`Nicht unterstützter postParams-Typ: ${typeof postParams}`);
-  error.noticeKey = 'scan.notice.postParamsUnsupported';
-  throw error;
-}
-
-/**
- * Prüft heuristisch, ob ein String nach JSON aussieht.
- *
- * @param {string} value - Eingabewert.
- * @returns {boolean} true, wenn es wie JSON aussieht.
- */
-function looksLikeJson(value) {
-  return value.startsWith('{') || value.startsWith('[');
-}
-
-/**
- * Liest zusätzliche Header aus einem Textfeld und erzeugt ein Headers-Objekt.
- *
- * @param {?string} rawHeaders - Header-Zeilen im Format "Name: Wert".
- * @returns {?Headers} Headers oder null.
- */
-function parseFetchHeaders(rawHeaders) {
-  if (!rawHeaders) {
-    return null;
-  }
-
-  const headers = new Headers();
-  rawHeaders
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .forEach((line) => {
-      const separatorIndex = line.indexOf(':');
-      if (separatorIndex === -1) {
-        __.log(`Ungültige Header-Zeile ignoriert: "${line}"`);
-        return;
-      }
-      const name = line.slice(0, separatorIndex).trim();
-      const value = line.slice(separatorIndex + 1).trim();
-      if (!name) {
-        __.log(`Header-Zeile ohne Namen ignoriert: "${line}"`);
-        return;
-      }
-      headers.append(name, value);
-    });
-
-  return [...headers.keys()].length > 0 ? headers : null;
 }
 
 /**
@@ -1233,10 +1048,6 @@ async function processHtml(page, scannedHtml, scanNoticeKey = null) {
 
   const normalizedScanHtml = normalizeHtml(scannedHtml, page);
   const normalizedPrevHtml = normalizeHtml(prevHtml, page);
-
-  if (page.textDiffMode) {
-    return processTextDiff(page, normalizedScanHtml, normalizedPrevHtml, scanNoticeKey);
-  }
 
   return processHtmlWithConditions(
     page,
