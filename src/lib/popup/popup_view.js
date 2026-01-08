@@ -198,6 +198,24 @@ export function setScanEngineDefault(mode) {
 }
 
 /**
+ * Schaltet die Hidden-Tab-Einstellungen abhängig vom Scan-Modus.
+ *
+ * @param {boolean} enabled - True, wenn die Hidden-Tab-Einstellungen sichtbar sein sollen.
+ */
+export function setHiddenTabSettingsEnabled(enabled) {
+  const settingsWrapper = qs('#hidden-tab-settings');
+  const hint = qs('#hidden-tab-settings-disabled-hint');
+
+  if (enabled) {
+    showElement(settingsWrapper);
+    hideElement(hint);
+  } else {
+    hideElement(settingsWrapper);
+    showElement(hint);
+  }
+}
+
+/**
  * Setzt den Default-Status für versteckte Tabs in den Einstellungen.
  *
  * @param {boolean} enabled - Aktiviert den Default für versteckte Tabs.
