@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Sidebar zeigt Scan-Ergebnisse direkt in einer Vorschau an
 * Globalen Scan-Modus-Umschalter im Settings-Panel ergänzt, um den Alt-Modus global zu setzen
 * Hidden-Tab-Einstellungen im Popup werden im alten Scan-Modus ausgeblendet, damit nur verfügbare Optionen sichtbar sind
 * Alter Scan-Modus arbeitet nur HTML-basiert und blendet nicht benötigte Zusatzoptionen aus

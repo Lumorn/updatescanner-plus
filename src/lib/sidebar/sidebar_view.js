@@ -4,7 +4,7 @@ import {Page} from '/lib/page/page.js';
 import {PageFolder} from '/lib/page/page_folder.js';
 import {PageStore} from '/lib/page/page_store.js';
 import {log} from '/lib/util/log.js';
-import {qs, $on} from '/lib/util/view_helpers.js';
+import {qs, $on, hideElement, showElement} from '/lib/util/view_helpers.js';
 import {translate} from '/lib/util/i18n.js';
 
 // See https://bugzilla.mozilla.org/show_bug.cgi?id=840640
@@ -85,6 +85,30 @@ export class SidebarView {
     });
 
     this._initDialog();
+  }
+
+  /**
+   * Lädt die Vorschau für das ausgewählte Element.
+   *
+   * @param {string} url - Ziel-URL für die Vorschau.
+   */
+  showPreview(url) {
+    const frame = qs('#preview-frame');
+    const emptyState = qs('#preview-empty');
+    frame.src = url;
+    showElement(frame);
+    hideElement(emptyState);
+  }
+
+  /**
+   * Setzt die Vorschau zurück und zeigt den Platzhalter.
+   */
+  clearPreview() {
+    const frame = qs('#preview-frame');
+    const emptyState = qs('#preview-empty');
+    frame.src = 'about:blank';
+    hideElement(frame);
+    showElement(emptyState);
   }
 
   /**
