@@ -54,6 +54,7 @@
 * Popup-Footer-Buttons und Versionsanzeige bleiben stabil, auch wenn die Liste sehr lang ist
 * Abbrechen-Button im Popup ergänzt, um laufende Scans zu stoppen
 * Buttons und Menüs in Popup und Hauptansicht modernisiert (Radius, Schatten, Fokuszustände, konsistente Abstände, Mindestklickfläche)
+* Popup-Settings in klare Gruppen gegliedert, mit konsistenten Abständen, Label-Ausrichtung und Button-Hierarchie
 * Dark-Mode-Tokens für Popup, Hauptansicht und Sidebar ergänzt (Farben, Rahmen, Schatten)
 * Zentrales Theme-Token-Set für Farben, Abstände und Typografie eingeführt und UI-CSS auf Variablen umgestellt
 * Mehrsprachigkeit auf das gesamte Add-on ausgeweitet und Übersetzungen modular erweiterbar gemacht
