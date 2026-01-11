@@ -74,7 +74,9 @@ export class Sidebar {
         [paramEnum.ID]: item.id,
       };
 
-      const newTab = event.metaKey || event.ctrlKey || (event.button === 1);
+      const newTab = Boolean(
+        event && (event.metaKey || event.ctrlKey || event.button === 1),
+      );
       openMain(params, newTab);
     }
   }
