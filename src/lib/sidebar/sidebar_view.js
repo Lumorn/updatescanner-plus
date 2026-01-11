@@ -34,7 +34,7 @@ export class SidebarView {
       core: {
         multiple: false,
         themes: {
-          icons: false,
+          icons: true,
           dots: false,
         },
         check_callback: (operation, node, parent, position, more) =>
@@ -134,6 +134,7 @@ export class SidebarView {
         result.children.push({
           id: child.id,
           text: child.title,
+          icon: this._getPageIcon(child),
           data: {isFolder: false},
           li_attr: {
             class: this._getStateClass(child.state),
@@ -146,6 +147,18 @@ export class SidebarView {
       }
     }
     return result;
+  }
+
+  /**
+   * @param {Page} page - Page mit optionalem Favicon.
+   *
+   * @returns {string} Icon-Definition für JSTree.
+   */
+  _getPageIcon(page) {
+    if (page.faviconUrl) {
+      return page.faviconUrl;
+    }
+    return 'sidebar-icon sidebar-icon--placeholder';
   }
 
   /**

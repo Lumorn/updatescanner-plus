@@ -4,6 +4,7 @@
 
 * Einstellungsdialoge laden den globalen Scan-Engine-Modus asynchron ohne Syntaxfehler
 * Update-Liste im Popup zeigt Webseiten-Icons nach dem Scan, mit Platzhalter bei fehlendem Icon
+* Sidebar zeigt Webseiten-Icons in der Baumansicht, mit Platzhalter bei fehlendem Icon
 * Abstände und Zeilenhöhen im Popup-Settings-Menü reduziert, damit mehr Optionen sichtbar sind
 * Hauptansicht rendert gespeicherte Seiten wieder korrekt, indem der `<base>`-Tag sauber im `<head>` ergänzt und fehlendes HTML-Grundgerüst aufgebaut wird
 * Hauptansicht zeigt bei fehlenden Seiten eine sichere Fallback-Ansicht mit Empty-State
