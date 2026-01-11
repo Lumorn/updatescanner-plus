@@ -47,6 +47,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Hauptansicht rendert gespeicherte Seiten konsistent, indem der `<base>`-Tag im `<head>` ergänzt und fehlendes HTML-Grundgerüst automatisch erzeugt wird.
 * Hauptansicht zeigt eine sichere Fallback-Ansicht mit Empty-State, wenn die aufgerufene Seite fehlt.
 * Hauptansicht initialisiert zuverlässig auch bei spät geladenen Skripten, damit Menü und Seitenansicht reagieren.
+* Hauptansicht zeigt bei Initialisierungsfehlern eine verständliche Meldung und deaktiviert Menü sowie View-Dropdown.
 * Öffnung der Hauptansicht fällt bei Tab-Update-Fehlern automatisch auf einen neuen Tab zurück.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
 * Fetch-Scan unterstützt optionale Cache-/Mode-/Redirect-Policies sowie benutzerdefinierte Header pro Seite.

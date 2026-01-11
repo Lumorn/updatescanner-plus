@@ -58,6 +58,16 @@ a:hover {
   line-height: var(--line-height-normal);
 }
 
+.error-banner {
+  margin-top: var(--space-1);
+  padding: var(--space-1-5) var(--space-3);
+  border-radius: var(--radius-s);
+  background-color: color-mix(in srgb, var(--color-danger, #b00020) 12%, transparent);
+  color: var(--color-danger, #b00020);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-normal);
+}
+
 #menu-container {
   float: right;
   position: relative;
@@ -72,6 +82,11 @@ a:hover {
   background-position: center center;
   background-repeat: no-repeat;
   border: none;
+}
+
+#menuButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 button.browser-style {
@@ -111,6 +126,11 @@ button.browser-style:focus-visible {
   z-index: 1;
 }
 
+.menu-content.is-disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 .menu-content li {
   display: flex;
   align-items: center;
@@ -147,6 +167,10 @@ button.browser-style:focus-visible {
   margin-top: var(--space-1);
 }
 
+#view-dropdown:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 .frame {
   width: 100%;

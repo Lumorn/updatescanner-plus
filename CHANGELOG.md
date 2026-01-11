@@ -5,6 +5,7 @@
 * Hauptansicht rendert gespeicherte Seiten wieder korrekt, indem der `<base>`-Tag sauber im `<head>` ergänzt und fehlendes HTML-Grundgerüst aufgebaut wird
 * Hauptansicht zeigt bei fehlenden Seiten eine sichere Fallback-Ansicht mit Empty-State
 * Hauptansicht initialisiert zuverlässiger, damit Menü und Ansicht auch nach spätem Script-Load reagieren
+* Hauptansicht zeigt Initialisierungsfehler mit verständlicher Meldung und deaktiviert Menü sowie View-Dropdown
 * Öffnung der Hauptansicht fällt bei fehlgeschlagenen Tab-Updates automatisch auf einen neuen Tab zurück
 * Globalen Scan-Modus-Umschalter im Settings-Panel ergänzt, um den Alt-Modus global zu setzen
 * Hidden-Tab-Einstellungen im Popup werden im alten Scan-Modus ausgeblendet, damit nur verfügbare Optionen sichtbar sind
