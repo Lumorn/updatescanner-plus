@@ -40,6 +40,11 @@ const translations = {
     'settings.scanLegacyIdleMs.placeholder': '2000',
     'settings.scanLegacyIdleMs.description':
       'Delay between legacy scan requests.',
+    'settings.scanHostIdleMs.label':
+      'Host delay (ms) — smaller values speed up legacy scans but cause more requests per host.',
+    'settings.scanHostIdleMs.placeholder': '2000',
+    'settings.scanHostIdleMs.description':
+      'Minimum delay between scan requests per host.',
     'settings.hiddenTabSettings.disabledHint':
       'Hidden tab options are only available in the new scan mode.',
     'settings.hiddenTabScan.label': 'Use hidden tab for scans by default',
@@ -360,6 +365,11 @@ const translations = {
     'settings.scanLegacyIdleMs.placeholder': '2000',
     'settings.scanLegacyIdleMs.description':
       'Wartezeit zwischen Legacy-Scan-Anfragen.',
+    'settings.scanHostIdleMs.label':
+      'Host-Delay (ms) – Kleinere Werte beschleunigen den Legacy-Scan, verursachen aber mehr Requests pro Host.',
+    'settings.scanHostIdleMs.placeholder': '2000',
+    'settings.scanHostIdleMs.description':
+      'Mindestabstand zwischen Scan-Anfragen pro Host.',
     'settings.hiddenTabSettings.disabledHint':
       'Hidden-Tab-Optionen sind nur im neuen Scan-Modus verfügbar.',
     'settings.hiddenTabScan.label': 'Versteckten Tab für Scans verwenden',

@@ -85,6 +85,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
   und nutzt einen konfigurierbaren Host-Delay.
 * Scans speichern NEW-HTML nur bei echten Änderungen und merken sich zusätzlich
   einen Hash, um unnötige Schreibvorgänge zu vermeiden.
+* Popup-Settings erlauben eine Anpassung des Host-Delays, um Legacy-Scans je nach Bedarf zu beschleunigen.
 
 ## Roadmap
 
