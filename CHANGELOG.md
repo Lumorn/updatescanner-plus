@@ -34,6 +34,7 @@
 * Page-Dialog um Felder für waitForSelector und Timeout ergänzt
 * Hidden-Tab-Scan wartet optional auf Network-Idle/Hydration-Signale, berücksichtigt Fetch/XHR sowie long-lived WebSocket/EventSource-Aktivität und meldet Timeout-Hinweise in der UI
 * Globale Einstellung für Network-Idle-Wartezeit bei neuen Seiten sowie Sammelaktion für alle Seiten
+* Zusätzliche Default-Werte für Hidden-Tab-Wartezeit, DOM-Stabilität sowie Network-Idle-Fenster/Timeout im Settings-Panel ergänzt
 * Hidden-Tab-Snapshot kann über CSS-Selektoren bereinigt werden und optional einen Text-Hash für DOM-Stabilität nutzen
 * Hidden-Tab-Scan kann optional eine Scroll-Simulation (Schritte/Delay/Max-Höhe) durchführen und meldet Fehler/Timeouts als UI-Hinweis
 * Hidden-Tab-Scan wiederholt fehlgeschlagene Scans einmalig mit längerer Wartezeit und nutzt bei Bedarf Fetch mit UI-Hinweis

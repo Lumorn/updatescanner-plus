@@ -161,6 +161,51 @@ export function bindWaitForNetworkIdleAllChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn der Default-Delay geändert wird.
+ */
+export function bindHiddenTabDefaultWaitMsDefaultChange(handler) {
+  $on(qs('#hidden-tab-default-wait-ms-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn das DOM-Fenster geändert wird.
+ */
+export function bindHiddenTabDomStabilityWindowDefaultChange(handler) {
+  $on(qs('#hidden-tab-dom-stability-window-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn das DOM-Timeout geändert wird.
+ */
+export function bindHiddenTabDomStabilityTimeoutDefaultChange(handler) {
+  $on(qs('#hidden-tab-dom-stability-timeout-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn das Network-Idle-Timeout geändert wird.
+ */
+export function bindHiddenTabNetworkIdleTimeoutDefaultChange(handler) {
+  $on(qs('#hidden-tab-network-idle-timeout-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn das Network-Idle-Fenster geändert wird.
+ */
+export function bindHiddenTabNetworkIdleWindowDefaultChange(handler) {
+  $on(qs('#hidden-tab-network-idle-window-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
  * @param {Function} handler - Wird aufgerufen, wenn die Ignore-Selektoren geändert werden.
  */
 export function bindHiddenTabIgnoreSelectorsDefaultChange(handler) {
@@ -285,6 +330,51 @@ export function setHiddenTabScanDefault(enabled) {
  */
 export function setWaitForNetworkIdleDefault(enabled) {
   qs('#wait-for-network-idle-default').checked = enabled;
+}
+
+/**
+ * Setzt den Default-Delay vor dem Snapshot.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabDefaultWaitMsDefault(value) {
+  qs('#hidden-tab-default-wait-ms-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt das DOM-Stabilitätsfenster.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabDomStabilityWindowDefault(value) {
+  qs('#hidden-tab-dom-stability-window-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt das DOM-Stabilitäts-Timeout.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabDomStabilityTimeoutDefault(value) {
+  qs('#hidden-tab-dom-stability-timeout-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt das Network-Idle-Timeout.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabNetworkIdleTimeoutDefault(value) {
+  qs('#hidden-tab-network-idle-timeout-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt das Network-Idle-Fenster.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabNetworkIdleWindowDefault(value) {
+  qs('#hidden-tab-network-idle-window-default').value = formatOptionalNumber(value);
 }
 
 /**
