@@ -152,7 +152,7 @@ p {
 .settings-field {
   display: grid;
   grid-template-columns: minmax(8.5rem, 1fr) minmax(0, 1.6fr);
-  gap: var(--popup-field-gap) var(--popup-space-4);
+  gap: var(--popup-space-1) var(--popup-space-3);
   align-items: center;
   padding: 0;
 }
@@ -169,7 +169,7 @@ p {
   grid-column: 2;
   color: var(--color-text-muted);
   font-size: var(--font-size-100);
-  line-height: var(--popup-line-height);
+  line-height: var(--line-height-tight);
 }
 
 #language-select {
@@ -179,17 +179,17 @@ p {
 .settings-panel-content {
   display: flex;
   flex-direction: column;
-  gap: var(--popup-group-gap);
+  gap: var(--popup-space-4);
 }
 
 .settings-group {
   margin: 0;
-  padding: var(--popup-space-4);
+  padding: var(--popup-space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-m);
   display: flex;
   flex-direction: column;
-  gap: var(--popup-space-3);
+  gap: var(--popup-space-2);
 }
 
 .settings-group-title {
@@ -202,7 +202,7 @@ p {
 .settings-group-body {
   display: flex;
   flex-direction: column;
-  gap: var(--popup-space-4);
+  gap: var(--popup-space-3);
 }
 
 .settings-group-hint {
