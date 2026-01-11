@@ -179,7 +179,14 @@ p {
 .settings-panel-content {
   display: flex;
   flex-direction: column;
+}
+
+.settings-sections {
+  display: flex;
+  flex-direction: column;
   gap: var(--popup-space-4);
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .settings-group {
