@@ -54,7 +54,7 @@ export function init() {
  * @returns {Promise} Promise that resolves with an object containing the
  * updated page settings.
  */
-export function openPageDialog(page) {
+export async function openPageDialog(page) {
   const dialog = qs('#settings-dialog');
   const form = qs('#settings-form');
 
@@ -189,7 +189,7 @@ export function openPageDialog(page) {
  * @returns {Promise} Promise that resolves with an object containing the
  * updated pageFolder settings.
  */
-export function openPageFolderDialog(pageFolder) {
+export async function openPageFolderDialog(pageFolder) {
   const dialog = qs('#settings-dialog');
   const form = qs('#settings-form');
 
