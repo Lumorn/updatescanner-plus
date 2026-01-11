@@ -17,6 +17,7 @@ export class Page {
     return {
       title: 'New Page',
       url: null,
+      faviconUrl: null,
       scanRateMinutes: 24 * 60,
       changeThreshold: 100,
       ignoreNumbers: false,
@@ -123,6 +124,7 @@ export class Page {
    * @property {string} id - ID of the page.
    * @property {string} title - Title of the page.
    * @property {string} url - URL of the page.
+   * @property {?string} faviconUrl - URL des Webseiten-Icons.
    * @property {number} scanRateMinutes - Number of minutes between scans. Zero
    * means manual scan only.
    * @property {number} changeThreshold - Number of characters changed before
@@ -186,6 +188,7 @@ export class Page {
     {
       title = Page.DEFAULTS.title,
       url = Page.DEFAULTS.url,
+      faviconUrl = Page.DEFAULTS.faviconUrl,
       scanRateMinutes = Page.DEFAULTS.scanRateMinutes,
       changeThreshold = Page.DEFAULTS.changeThreshold,
       ignoreNumbers = Page.DEFAULTS.ignoreNumbers,
@@ -231,6 +234,7 @@ export class Page {
     this.id = id;
     this.title = title;
     this.url = url;
+    this.faviconUrl = faviconUrl;
     this.scanRateMinutes = scanRateMinutes;
     this.changeThreshold = changeThreshold;
     this.ignoreNumbers = ignoreNumbers;
@@ -282,6 +286,7 @@ export class Page {
     return {
       title: this.title,
       url: this.url,
+      faviconUrl: this.faviconUrl,
       scanRateMinutes: this.scanRateMinutes,
       changeThreshold: this.changeThreshold,
       ignoreNumbers: this.ignoreNumbers,
@@ -334,6 +339,7 @@ export class Page {
       type: 'Page',
       title: this.title,
       url: this.url,
+      faviconUrl: this.faviconUrl,
       scanRateMinutes: this.scanRateMinutes,
       changeThreshold: this.changeThreshold,
       ignoreNumbers: this.ignoreNumbers,

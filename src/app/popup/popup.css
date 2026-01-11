@@ -101,6 +101,44 @@ html body {
   background-color: var(--color-surface);
 }
 
+.panel-list-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.panel-list-item:last-child {
+  border-bottom: 0;
+}
+
+.panel-list-item > .icon {
+  height: var(--size-icon-s);
+  width: var(--size-icon-s);
+  flex: 0 0 var(--size-icon-s);
+  border-radius: var(--radius-s);
+  background-color: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.panel-list-item > .icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.panel-list-item > .icon--placeholder::after {
+  content: '?';
+  color: var(--color-text-muted);
+  font-size: var(--font-size-100);
+  font-weight: var(--font-weight-semibold);
+}
+
 .panel-list-item > .text {
   display: flex;
   flex-direction: column;

@@ -552,11 +552,7 @@ function createListItem(page) {
   item.className = 'panel-list-item';
   item.dataset.id = page.id;
 
-  const icon = document.createElement('div');
-  icon.className = 'icon';
-  // const image = document.createElement('img');
-  // image.src = '/images/updatescanner_18.png';
-  // icon.appendChild(image);
+  const icon = createIconElement(page);
 
   const text = document.createElement('div');
   text.className = 'text';
@@ -576,6 +572,43 @@ function createListItem(page) {
   item.appendChild(icon);
   item.appendChild(text);
   return item;
+}
+
+/**
+ * Erstellt das Icon-Element für die Update-Liste.
+ *
+ * @param {Page} page - Page object für das Listenelement.
+ * @returns {HTMLDivElement} Icon-Container.
+ */
+function createIconElement(page) {
+  const icon = document.createElement('div');
+  icon.className = 'icon';
+
+  if (page.faviconUrl) {
+    const image = document.createElement('img');
+    image.alt = '';
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    image.src = page.faviconUrl;
+    image.addEventListener('error', () => {
+      applyPlaceholderIcon(icon);
+    });
+    icon.appendChild(image);
+  } else {
+    applyPlaceholderIcon(icon);
+  }
+
+  return icon;
+}
+
+/**
+ * Setzt den Platzhalterzustand für fehlende Icons.
+ *
+ * @param {HTMLDivElement} icon - Icon-Container.
+ */
+function applyPlaceholderIcon(icon) {
+  icon.classList.add('icon--placeholder');
+  icon.replaceChildren();
 }
 
 /**

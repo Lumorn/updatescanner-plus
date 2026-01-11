@@ -9,6 +9,7 @@ import {matchHtmlWithSelector} from './selector_matcher.js';
 import {parseHTML} from '/lib/util/html.js';
 import {getChanges, ContentData, changeEnum} from './scan_content.js';
 import {isMajorChange} from './fuzzy.js';
+import {resolveFaviconUrl} from './scan_favicon.js';
 
 
 // Allow function mocking
@@ -1456,6 +1457,10 @@ async function updatePageState(page, prevHtmlData, scannedHtmlData, scanNoticeKe
   const updatedPage = await Page.load(page.id);
   const scannedHtmlHash = computeHtmlHash(scannedHtmlData.html);
   updatedPage.lastScanNoticeKey = scanNoticeKey;
+  updatedPage.faviconUrl = resolveFaviconUrl(
+    updatedPage.url,
+    scannedHtmlData.html,
+  );
 
   const changeType = getChanges(
     prevHtmlData,
