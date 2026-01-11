@@ -30,6 +30,7 @@ const translations = {
     'settings.group.general': 'General',
     'settings.group.scanning': 'Scanning defaults',
     'settings.group.hiddenTab': 'Hidden tab scans',
+    'settings.group.areaSelector': 'Selected area',
     'settings.language.label': 'Language',
     'settings.language.description': 'Select the language for the interface.',
     'settings.language.option.en': 'English',
@@ -127,6 +128,15 @@ const translations = {
     'settings.hiddenTabScrollMaxHeight.placeholder': '0',
     'settings.hiddenTabScrollMaxHeight.description':
       'Limit the simulated scroll height for new pages (0 disables the limit).',
+    'settings.areaSelector.label': 'Selected area selector',
+    'settings.areaSelector.placeholder': '.main-content',
+    'settings.areaSelector.description':
+      'Use the context menu to select a page area and store it for scans.',
+    'settings.areaSelector.button': 'Select area',
+    'settings.areaSelector.hint.default':
+      'The selector is saved for the current tab if a matching page exists.',
+    'settings.areaSelector.hint.missing':
+      'No matching page found for the current tab.',
     'scan.progress': 'Scan in progress {progress}% ({scanned}/{total})',
     'scan.cancel': 'Cancel',
     'backup.filename': 'Update Scanner Backup.json',
@@ -158,6 +168,10 @@ const translations = {
     'main.dialog.scanMode.anywhere': 'Anywhere in the page',
     'main.dialog.scanMode.insideElements': 'Inside the selected HTML elements',
     'main.dialog.scanMode.countOnly': 'Only count HTML elements',
+    'main.dialog.areaSelector': 'Selected area:',
+    'main.dialog.areaSelector.placeholder': '.main-content',
+    'main.dialog.areaSelector.description':
+      'Use the context menu entry “Bereich auswählen” to fill this automatically.',
     'main.dialog.hiddenTabScan': 'Use hidden tab for scan',
     'main.dialog.hiddenTabScan.description':
       'Open a hidden background tab and capture the DOM snapshot instead of fetch.',
@@ -403,6 +417,7 @@ const translations = {
     'settings.group.general': 'Allgemein',
     'settings.group.scanning': 'Scan-Standards',
     'settings.group.hiddenTab': 'Hidden-Tab-Scans',
+    'settings.group.areaSelector': 'Bereichsauswahl',
     'settings.language.label': 'Sprache',
     'settings.language.description': 'Wähle die Sprache der Oberfläche aus.',
     'settings.language.option.en': 'Englisch',
@@ -501,6 +516,15 @@ const translations = {
     'settings.hiddenTabScrollMaxHeight.placeholder': '0',
     'settings.hiddenTabScrollMaxHeight.description':
       'Begrenzt die simulierte Scroll-Höhe für neue Seiten (0 deaktiviert die Grenze).',
+    'settings.areaSelector.label': 'Bereichs-Selektor',
+    'settings.areaSelector.placeholder': '.main-content',
+    'settings.areaSelector.description':
+      'Per Kontextmenü kann ein Seitenbereich gewählt und für Scans gespeichert werden.',
+    'settings.areaSelector.button': 'Bereich auswählen',
+    'settings.areaSelector.hint.default':
+      'Der Selektor wird für die aktuelle Tab-Seite gespeichert, sofern sie existiert.',
+    'settings.areaSelector.hint.missing':
+      'Für den aktuellen Tab wurde keine passende Seite gefunden.',
     'scan.progress': 'Scan läuft {progress}% ({scanned}/{total})',
     'scan.cancel': 'Abbrechen',
     'backup.filename': 'Update Scanner Sicherung.json',
@@ -532,6 +556,10 @@ const translations = {
     'main.dialog.scanMode.anywhere': 'Überall auf der Seite',
     'main.dialog.scanMode.insideElements': 'Innerhalb der ausgewählten HTML-Elemente',
     'main.dialog.scanMode.countOnly': 'Nur HTML-Elemente zählen',
+    'main.dialog.areaSelector': 'Ausgewählter Bereich:',
+    'main.dialog.areaSelector.placeholder': '.main-content',
+    'main.dialog.areaSelector.description':
+      'Nutze das Kontextmenü „Bereich auswählen“, um den Selektor automatisch zu übernehmen.',
     'main.dialog.hiddenTabScan': 'Versteckten Tab zum Scannen verwenden',
     'main.dialog.hiddenTabScan.description':
       'Einen versteckten Hintergrund-Tab öffnen und den DOM-Snapshot statt fetch verwenden.',

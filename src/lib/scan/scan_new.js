@@ -34,6 +34,16 @@ export const __ = {
   getHtmlFromResponse: getHtmlFromResponse,
 };
 
+/**
+ * Ermittelt den aktiven Selektor für Bereichsscans.
+ *
+ * @param {Page} page - Page object.
+ * @returns {?string} Selektor-String.
+ */
+function resolveAreaSelectors(page) {
+  return page?.areaSelector || page?.selectors || null;
+}
+
 // Wait between scanning pages
 const SCAN_IDLE_MS = 2000;
 const TAB_LOAD_TIMEOUT_MS = 20000;
@@ -1492,9 +1502,10 @@ async function processHtmlWithConditions(
   scanNoticeKey,
   diffMeta = null,
 ) {
-  if (page.selectors && prevHtml != null) {
-    const scanParts = await __.matchHtmlWithSelector(scanHtml, page.selectors);
-    const prevParts = await __.matchHtmlWithSelector(prevHtml, page.selectors);
+  const selectors = resolveAreaSelectors(page);
+  if (selectors && prevHtml != null) {
+    const scanParts = await __.matchHtmlWithSelector(scanHtml, selectors);
+    const prevParts = await __.matchHtmlWithSelector(prevHtml, selectors);
     return updatePageState(
       page,
       new ContentData(prevHtml, prevParts),
@@ -1523,9 +1534,10 @@ async function processHtmlWithConditions(
  * @returns {boolean} True, wenn eine neue größere Änderung erkannt wurde.
  */
 async function processTextDiff(page, scanHtml, prevHtml, scanNoticeKey) {
-  if (page.selectors && prevHtml != null) {
-    const scanData = buildTextContentData(scanHtml, page.selectors);
-    const prevData = buildTextContentData(prevHtml, page.selectors);
+  const selectors = resolveAreaSelectors(page);
+  if (selectors && prevHtml != null) {
+    const scanData = buildTextContentData(scanHtml, selectors);
+    const prevData = buildTextContentData(prevHtml, selectors);
     return updatePageState(page, prevData, scanData, scanNoticeKey);
   }
 
@@ -1547,9 +1559,10 @@ async function processDomDiff(page, scanHtml, prevHtml, scanNoticeKey) {
   let scanParts = null;
   let prevParts = null;
 
-  if (page.selectors && prevHtml != null) {
-    scanParts = await __.matchHtmlWithSelector(scanHtml, page.selectors);
-    prevParts = await __.matchHtmlWithSelector(prevHtml, page.selectors);
+  const selectors = resolveAreaSelectors(page);
+  if (selectors && prevHtml != null) {
+    scanParts = await __.matchHtmlWithSelector(scanHtml, selectors);
+    prevParts = await __.matchHtmlWithSelector(prevHtml, selectors);
   }
 
   const prevData = new ContentData(prevHtml, prevParts);

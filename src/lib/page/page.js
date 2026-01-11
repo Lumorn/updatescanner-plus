@@ -32,6 +32,7 @@ export class Page {
       oldScanTime: null,
       newScanTime: null,
       selectors: null,
+      areaSelector: null,
       contentMode: Page.contentModeEnum.TEXT,
       requireExactMatchCount: false,
       partialScan: false,
@@ -150,6 +151,7 @@ export class Page {
    * @property {number} newScanTime - Time when the NEW HTML was last updated
    * (ms since Unix epoch).
    * @property {string} selectors - Selectors separated by comma.
+   * @property {?string} areaSelector - Ausgewählter Bereichs-Selektor.
    * @property {contentModeEnum|string} contentMode - Mode used for content
    *   comparison.
    * @property {boolean} requireExactMatchCount - True if part count should
@@ -213,6 +215,7 @@ export class Page {
       oldScanTime = Page.DEFAULTS.oldScanTime,
       newScanTime = Page.DEFAULTS.newScanTime,
       selectors = Page.DEFAULTS.selectors,
+      areaSelector = Page.DEFAULTS.areaSelector,
       contentMode = Page.DEFAULTS.contentMode,
       requireExactMatchCount = Page.DEFAULTS.requireExactMatchCount,
       partialScan = Page.DEFAULTS.partialScan,
@@ -265,6 +268,7 @@ export class Page {
     this.oldScanTime = oldScanTime;
     this.newScanTime = newScanTime;
     this.selectors = selectors;
+    this.areaSelector = areaSelector?.trim() || null;
     this.contentMode = contentMode;
     this.requireExactMatchCount = requireExactMatchCount;
     this.partialScan = partialScan;
@@ -321,6 +325,7 @@ export class Page {
       oldScanTime: this.oldScanTime,
       newScanTime: this.newScanTime,
       selectors: this.selectors,
+      areaSelector: this.areaSelector,
       contentMode: this.contentMode,
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
@@ -374,6 +379,7 @@ export class Page {
       doPost: this.doPost,
       postParams: this.postParams,
       selectors: this.selectors,
+      areaSelector: this.areaSelector,
       contentMode: this.contentMode,
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,

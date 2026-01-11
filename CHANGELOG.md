@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Bereichsauswahl-Overlay ergänzt, Kontextmenü „Bereich auswählen“ speichert den Selektor und Scans nutzen ihn
+* Anzeige/Bearbeitung des ausgewählten Bereichs in Hauptansicht und Popup ergänzt
 * Einstellungsdialoge laden den globalen Scan-Engine-Modus asynchron ohne Syntaxfehler
 * Update-Liste im Popup zeigt Webseiten-Icons nach dem Scan, mit Platzhalter bei fehlendem Icon
 * Sidebar zeigt Webseiten-Icons in der Baumansicht, mit Platzhalter bei fehlendem Icon

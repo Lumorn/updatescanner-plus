@@ -33,6 +33,24 @@ export class PageStore {
   }
 
   /**
+   * Normalisiert eine URL für Vergleiche.
+   *
+   * @param {string} url - Eingangs-URL.
+   * @returns {string} Normalisierte URL.
+   */
+  static normalizeUrl(url) {
+    if (!url) {
+      return '';
+    }
+    try {
+      return new URL(url).toString();
+    } catch (error) {
+      // Ungültige URLs werden als Rohstring behandelt.
+      return url;
+    }
+  }
+
+  /**
    * @param {Map} pageMap - Map of Page and PageFolder objects, keyed by ID.
    * @param {StorageInfo} storageInfo - StorageInfo object loaded from storage.
    */
@@ -102,6 +120,19 @@ export class PageStore {
   getPageList() {
     return Array.from(this.pageMap.values()).filter(
       (item) => item instanceof Page);
+  }
+
+  /**
+   * Findet die erste Seite mit passender URL.
+   *
+   * @param {string} url - Ziel-URL.
+   * @returns {?Page} Gefundene Seite oder null.
+   */
+  findPageByUrl(url) {
+    const normalizedUrl = PageStore.normalizeUrl(url);
+    return this.getPageList().find((page) => {
+      return PageStore.normalizeUrl(page.url) === normalizedUrl;
+    }) ?? null;
   }
 
   /**

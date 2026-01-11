@@ -30,6 +30,8 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Update-Liste im Popup zeigt Webseiten-Icons nach dem Scan, mit Platzhalter wenn kein Icon verfügbar ist.
 * Sidebar zeigt Webseiten-Icons in der Baumansicht, mit Platzhalter wenn kein Icon verfügbar ist.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
+* Bereichsauswahl per Overlay im Content-Script; Kontextmenü „Bereich auswählen“ liefert einen CSS-Selektor für gezielte Scans.
+* Ausgewählter Bereich wird gespeichert und ist in Hauptansicht und Popup editierbar.
 * Globaler Scan-Modus-Umschalter im Settings-Panel und in den Seiteneinstellungen, um zwischen altem und neuem Scan-Modus zu wechseln.
 * Konfigurierbare Pause zwischen Legacy-Scans über das Settings-Panel.
 * Einstellungsdialoge laden den globalen Scan-Engine-Modus asynchron und stabil ohne Syntaxfehler.

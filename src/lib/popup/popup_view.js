@@ -269,6 +269,22 @@ export function bindHiddenTabScrollMaxHeightDefaultChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn der Bereichs-Selektor geändert wird.
+ */
+export function bindAreaSelectorChange(handler) {
+  $on(qs('#area-selector-input'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn die Bereichsauswahl startet.
+ */
+export function bindAreaSelectorClick(handler) {
+  $on(qs('#area-selector-button'), 'click', handler);
+}
+
+/**
  * Setzt die aktuelle Sprache und aktualisiert die UI-Texte.
  *
  * @param {string} language - Sprachcode.
@@ -312,6 +328,31 @@ export function setScanHostIdleMs(value) {
  */
 export function setScanConcurrency(value) {
   qs('#scan-concurrency').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt den aktuellen Bereichs-Selektor im Popup.
+ *
+ * @param {string} value - Selektor-String.
+ */
+export function setAreaSelectorValue(value) {
+  qs('#area-selector-input').value = value ?? '';
+}
+
+/**
+ * Steuert die Verfügbarkeit der Bereichsauswahl.
+ *
+ * @param {{disabled: boolean, hint: string}} state - UI-Status.
+ */
+export function setAreaSelectorState(state) {
+  const input = qs('#area-selector-input');
+  const button = qs('#area-selector-button');
+  const hint = qs('#area-selector-hint');
+  input.disabled = state.disabled;
+  button.disabled = state.disabled;
+  if (state.hint) {
+    hint.textContent = state.hint;
+  }
 }
 
 /**

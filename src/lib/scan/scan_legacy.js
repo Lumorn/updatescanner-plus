@@ -28,6 +28,16 @@ export const __ = {
   getHtmlFromResponse: getHtmlFromResponse,
 };
 
+/**
+ * Ermittelt den aktiven Selektor für Bereichsscans.
+ *
+ * @param {Page} page - Page object.
+ * @returns {?string} Selektor-String.
+ */
+function resolveAreaSelectors(page) {
+  return page?.areaSelector || page?.selectors || null;
+}
+
 const SCAN_LEGACY_IDLE_DEFAULT_MS = 2000;
 const TAB_LOAD_TIMEOUT_MS = 20000;
 const HIDDEN_TAB_DEFAULT_WAIT_MS = 3000;
@@ -1092,9 +1102,10 @@ async function processHtml(page, scannedHtml, scanNoticeKey = null) {
  * @returns {boolean} True if a new major change is detected.
  */
 async function processHtmlWithConditions(page, scanHtml, prevHtml, scanNoticeKey) {
-  if (page.selectors && prevHtml != null) {
-    const scanParts = await __.matchHtmlWithSelector(scanHtml, page.selectors);
-    const prevParts = await __.matchHtmlWithSelector(prevHtml, page.selectors);
+  const selectors = resolveAreaSelectors(page);
+  if (selectors && prevHtml != null) {
+    const scanParts = await __.matchHtmlWithSelector(scanHtml, selectors);
+    const prevParts = await __.matchHtmlWithSelector(prevHtml, selectors);
     return updatePageState(
       page,
       new ContentData(prevHtml, prevParts),
@@ -1121,9 +1132,10 @@ async function processHtmlWithConditions(page, scanHtml, prevHtml, scanNoticeKey
  * @returns {boolean} True, wenn eine neue größere Änderung erkannt wurde.
  */
 async function processTextDiff(page, scanHtml, prevHtml, scanNoticeKey) {
-  if (page.selectors && prevHtml != null) {
-    const scanData = buildTextContentData(scanHtml, page.selectors);
-    const prevData = buildTextContentData(prevHtml, page.selectors);
+  const selectors = resolveAreaSelectors(page);
+  if (selectors && prevHtml != null) {
+    const scanData = buildTextContentData(scanHtml, selectors);
+    const prevData = buildTextContentData(prevHtml, selectors);
     return updatePageState(page, prevData, scanData, scanNoticeKey);
   }
 
