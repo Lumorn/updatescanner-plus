@@ -1,4 +1,4 @@
-import {backgroundActionEnum, uiActionsEnum} from './actions.js';
+import {backgroundActionEnum, uiActionsEnum, contentActionEnum} from './actions.js';
 import {Autoscan} from '/lib/scan/autoscan.js';
 import {ScanQueue, scanQueueStateEnum} from '/lib/scan/scan_queue.js';
 import {showNotification} from '/lib/scan/notification.js';
@@ -42,6 +42,8 @@ export class Background {
     this._boundHandleAlarm = this._handleAlarm.bind(this);
     this._boundHandleInstalled = this._handleInstalled.bind(this);
     this._boundHandleStartup = this._handleStartup.bind(this);
+    this._boundHandleContextMenuClick =
+      this._handleContextMenuClick.bind(this);
   }
 
   /**
@@ -64,6 +66,8 @@ export class Background {
     browser.alarms.onAlarm.addListener(this._boundHandleAlarm);
     browser.runtime.onInstalled.addListener(this._boundHandleInstalled);
     browser.runtime.onStartup.addListener(this._boundHandleStartup);
+    browser.contextMenus.onClicked
+      .addListener(this._boundHandleContextMenuClick);
   }
 
   /**
@@ -85,6 +89,7 @@ export class Background {
 
         this._refreshToolbar();
         this.pageStore.refreshFolderState();
+        this._ensureContextMenus();
         await this._checkFirstRun();
         await this._checkIfUpdateRequired();
 
@@ -115,12 +120,24 @@ export class Background {
   }
 
   /**
+   * Registriert den Kontextmenü-Eintrag für die Bereichsauswahl.
+   */
+  _ensureContextMenus() {
+    browser.contextMenus.create({
+      id: 'updatescanner-select-area',
+      title: 'Bereich auswählen',
+      contexts: ['all'],
+    });
+  }
+
+  /**
    * Verarbeitet Nachrichten aus der UI oder anderen Scripten.
    *
    * @param {object} message - Nachrichtendaten.
+   * @param {runtime.MessageSender} sender - Absenderdaten.
    * @returns {Promise<object|undefined>} Antwort für sendMessage, falls nötig.
    */
-  _handleMessage(message) {
+  _handleMessage(message, sender) {
     return this.ensureInitialized().then(() => {
       if (message.action === backgroundActionEnum.SCAN_ALL) {
         this._scanAll();
@@ -128,6 +145,8 @@ export class Background {
         this._scanItem(message.itemId);
       } else if (message.action === backgroundActionEnum.CANCEL_SCAN) {
         this._cancelScan();
+      } else if (message.action === backgroundActionEnum.SET_AREA_SELECTOR) {
+        return this._handleAreaSelector(message, sender);
       } else if (message.action === uiActionsEnum.QUEUE_STATE_REQUEST) {
         return {
           action: uiActionsEnum.QUEUE_STATE_CHANGED,
@@ -172,6 +191,21 @@ export class Background {
    */
   _refreshBadge(text) {
     browser.action.setBadgeText({text: text});
+  }
+
+  /**
+   * Leitet die Bereichsauswahl an den Inhalt weiter.
+   *
+   * @param {object} info - Kontextmenü-Info.
+   * @param {tabs.Tab} tab - Aktiver Tab.
+   */
+  _handleContextMenuClick(info, tab) {
+    if (info.menuItemId !== 'updatescanner-select-area' || !tab?.id) {
+      return;
+    }
+    browser.tabs.sendMessage(tab.id, {
+      action: contentActionEnum.START_AREA_SELECTION,
+    });
   }
 
   /**
@@ -227,6 +261,31 @@ export class Background {
    */
   _cancelScan() {
     this.scanQueue.cancel();
+  }
+
+  /**
+   * Speichert den ausgewählten Bereich im Page-Modell.
+   *
+   * @param {{selector: string, url: string}} message - Selektor-Nachricht.
+   * @param {runtime.MessageSender} sender - Absenderdaten.
+   * @returns {Promise<void>} Abschluss-Promise.
+   */
+  async _handleAreaSelector(message, sender) {
+    const selector = message?.selector?.trim() ?? '';
+    const url = message?.url || sender?.tab?.url;
+    if (!selector || !url) {
+      return undefined;
+    }
+
+    const page = this.pageStore.findPageByUrl(url);
+    if (!page) {
+      return undefined;
+    }
+
+    page.areaSelector = selector;
+    page.partialScan = true;
+    await page.save();
+    return undefined;
   }
 
   /**

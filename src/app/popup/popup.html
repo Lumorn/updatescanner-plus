@@ -253,6 +253,42 @@
         </fieldset>
 
         <fieldset class="settings-group">
+          <legend class="settings-group-title" data-i18n="settings.group.areaSelector">
+            Selected area
+          </legend>
+          <div class="settings-group-body">
+            <div class="settings-field">
+              <label for="area-selector-input" class="settings-label"
+                data-i18n="settings.areaSelector.label">
+                Selected area selector
+              </label>
+              <div class="settings-control">
+                <input id="area-selector-input" type="text"
+                  placeholder=".main-content"
+                  data-i18n-attr="placeholder:settings.areaSelector.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.areaSelector.description">
+                Use the context menu to select a page area and store it for scans.
+              </p>
+            </div>
+            <div class="settings-field">
+              <div class="settings-control">
+                <button id="area-selector-button"
+                  class="panel-section-footer-button button-secondary"
+                  data-i18n="settings.areaSelector.button">
+                  Select area
+                </button>
+              </div>
+              <p class="settings-description" id="area-selector-hint"
+                data-i18n="settings.areaSelector.hint">
+                Select a page in the current tab to store the selector.
+              </p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="settings-group">
           <legend class="settings-group-title" data-i18n="settings.group.hiddenTab">
             Hidden Tab Scans
           </legend>

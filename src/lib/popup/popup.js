@@ -1,7 +1,8 @@
 import * as view from './popup_view.js';
 import {openMain, showAllChanges, paramEnum, actionEnum}
   from '/lib/main/main_url.js';
-import {backgroundActionEnum} from '/lib/background/actions.js';
+import {backgroundActionEnum, contentActionEnum}
+  from '/lib/background/actions.js';
 import {PageStore, hasPageStateChanged, isItemChanged}
   from '/lib/page/page_store.js';
 import {createBackupJson} from '/lib/backup/backup.js';
@@ -110,6 +111,8 @@ export class Popup {
     view.bindHiddenTabScrollMaxHeightDefaultChange(
       this._handleHiddenTabScrollMaxHeightDefaultChange.bind(this),
     );
+    view.bindAreaSelectorChange(this._handleAreaSelectorChange.bind(this));
+    view.bindAreaSelectorClick(this._handleAreaSelectorClick.bind(this));
     view.setLanguage(this.config.get('language'));
     view.setScanEngineDefault(this.config.get('scanEngineMode'));
     view.setScanLegacyIdleMs(this.config.get('scanLegacyIdleMs'));
@@ -160,6 +163,7 @@ export class Popup {
     );
     this._syncHiddenTabScanAllState();
     this._syncWaitForNetworkIdleAllState();
+    await this._refreshAreaSelector();
     view.setVersion(this.version);
 
     browser.runtime.onMessage.addListener(this._handleMessage.bind(this));
@@ -309,6 +313,27 @@ export class Popup {
   }
 
   /**
+   * Aktualisiert den angezeigten Bereichs-Selektor für den aktiven Tab.
+   */
+  async _refreshAreaSelector() {
+    const page = await this._resolveActivePage();
+    if (!page) {
+      view.setAreaSelectorValue('');
+      view.setAreaSelectorState({
+        disabled: true,
+        hint: translate('settings.areaSelector.hint.missing'),
+      });
+      return;
+    }
+
+    view.setAreaSelectorValue(page.areaSelector ?? '');
+    view.setAreaSelectorState({
+      disabled: false,
+      hint: translate('settings.areaSelector.hint.default'),
+    });
+  }
+
+  /**
    * Öffnet die Einstellungen im Popup.
    */
   _handleSettingsClick() {
@@ -324,6 +349,7 @@ export class Popup {
     this.config.set('language', language);
     await this.config.save();
     view.setLanguage(language);
+    await this._refreshAreaSelector();
     view.setVersion(this.version);
   }
 
@@ -556,6 +582,41 @@ export class Popup {
   }
 
   /**
+   * Speichert den Bereichs-Selektor für die aktive Seite.
+   *
+   * @param {string} value - Selektor-String.
+   */
+  async _handleAreaSelectorChange(value) {
+    const page = await this._resolveActivePage();
+    if (!page) {
+      await this._refreshAreaSelector();
+      return;
+    }
+
+    const selector = value?.trim() || null;
+    page.areaSelector = selector;
+    if (selector) {
+      page.partialScan = true;
+    }
+    await page.save();
+    view.setAreaSelectorValue(selector ?? '');
+  }
+
+  /**
+   * Startet die Bereichsauswahl im aktiven Tab.
+   */
+  async _handleAreaSelectorClick() {
+    const tabs = await browser.tabs.query({currentWindow: true, active: true});
+    if (!tabs.length || !tabs[0].id) {
+      return;
+    }
+    await browser.tabs.sendMessage(tabs[0].id, {
+      action: contentActionEnum.START_AREA_SELECTION,
+    });
+    window.close();
+  }
+
+  /**
    * Überträgt die Einstellung für den versteckten Tab auf alle vorhandenen Seiten.
    *
    * @param {boolean} enabled - Neuer Wert für alle Seiten.
@@ -605,6 +666,19 @@ export class Popup {
     const checked = total > 0 && enabledCount === total;
     const indeterminate = enabledCount > 0 && enabledCount < total;
     view.setWaitForNetworkIdleAllState({checked, indeterminate});
+  }
+
+  /**
+   * Ermittelt die Seite für den aktiven Tab.
+   *
+   * @returns {Promise<?Page>} Gefundene Seite oder null.
+   */
+  async _resolveActivePage() {
+    const tabs = await browser.tabs.query({currentWindow: true, active: true});
+    if (!tabs.length || !tabs[0].url) {
+      return null;
+    }
+    return this.pageStore.findPageByUrl(tabs[0].url);
   }
 }
 

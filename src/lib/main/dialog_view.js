@@ -68,6 +68,7 @@ export async function openPageDialog(page) {
   form.elements['url'].value = page.url;
 
   form.elements['selectors'].value = page.selectors;
+  form.elements['area-selector'].value = page.areaSelector ?? '';
   form.elements['ignored-selectors'].value = page.ignoredSelectors ?? '';
 
   const scanModeName = getScanModeName(page);
@@ -113,6 +114,7 @@ export async function openPageDialog(page) {
   showElement(qs('#autoscanFieldset'));
   showElement(qs('#thresholdFieldset'));
   showElement(qs('#selectorsFieldset'));
+  showElement(qs('#areaSelectorFieldset'));
   showElement(qs('#ignoredSelectorsFieldset'));
   showElement(qs('#scanModeFieldset'));
   showElement(qs('#scanSourceFieldset'));
@@ -137,6 +139,9 @@ export async function openPageDialog(page) {
             ThresholdSliderToChars[form.elements['threshold'].value],
           ignoreNumbers: form.elements['ignore-numbers'].checked,
           selectors: form.elements['selectors'].value,
+          areaSelector: normalizeTextValue(
+            form.elements['area-selector'].value,
+          ),
           ignoredSelectors: form.elements['ignored-selectors'].value,
           contentMode: modeData.contentMode,
           requireExactMatchCount: modeData.requireExactMatchCount,
@@ -207,6 +212,7 @@ export async function openPageFolderDialog(pageFolder) {
   hideElement(qs('#autoscanFieldset'));
   hideElement(qs('#thresholdFieldset'));
   hideElement(qs('#selectorsFieldset'));
+  hideElement(qs('#areaSelectorFieldset'));
   hideElement(qs('#ignoredSelectorsFieldset'));
   hideElement(qs('#scanModeFieldset'));
   hideElement(qs('#scanSourceFieldset'));
