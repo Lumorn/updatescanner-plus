@@ -150,246 +150,248 @@
     </div>
 
     <div class="panel-section panel-section-content settings-panel-content">
-      <fieldset class="settings-group">
-        <legend class="settings-group-title" data-i18n="settings.group.general">
-          General
-        </legend>
-        <div class="settings-group-body">
-          <div class="settings-field">
-            <label for="language-select" class="settings-label"
-              data-i18n="settings.language.label">
-              Language
-            </label>
-            <div class="settings-control">
-              <select id="language-select">
-                <option value="en" data-i18n="settings.language.option.en">
-                  English
-                </option>
-                <option value="de" data-i18n="settings.language.option.de">
-                  German
-                </option>
-              </select>
+      <div class="settings-sections">
+        <fieldset class="settings-group">
+          <legend class="settings-group-title" data-i18n="settings.group.general">
+            General
+          </legend>
+          <div class="settings-group-body">
+            <div class="settings-field">
+              <label for="language-select" class="settings-label"
+                data-i18n="settings.language.label">
+                Language
+              </label>
+              <div class="settings-control">
+                <select id="language-select">
+                  <option value="en" data-i18n="settings.language.option.en">
+                    English
+                  </option>
+                  <option value="de" data-i18n="settings.language.option.de">
+                    German
+                  </option>
+                </select>
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.language.description">
+                Select the language for the interface.
+              </p>
             </div>
-            <p class="settings-description"
-              data-i18n="settings.language.description">
-              Select the language for the interface.
-            </p>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="settings-group">
-        <legend class="settings-group-title" data-i18n="settings.group.scanning">
-          Scanning Defaults
-        </legend>
-        <div class="settings-group-body">
-          <div class="settings-field">
-            <label for="scan-engine-default" class="settings-label"
-              data-i18n="settings.scanEngine.label">
-              Scan mode for all scans
-            </label>
-            <div class="settings-control">
-              <select id="scan-engine-default">
-                <option value="legacy" data-i18n="settings.scanEngine.option.legacy">
-                  Legacy scan mode
-                </option>
-                <option value="new" data-i18n="settings.scanEngine.option.new">
-                  New scan mode
-                </option>
-              </select>
+        <fieldset class="settings-group">
+          <legend class="settings-group-title" data-i18n="settings.group.scanning">
+            Scanning Defaults
+          </legend>
+          <div class="settings-group-body">
+            <div class="settings-field">
+              <label for="scan-engine-default" class="settings-label"
+                data-i18n="settings.scanEngine.label">
+                Scan mode for all scans
+              </label>
+              <div class="settings-control">
+                <select id="scan-engine-default">
+                  <option value="legacy" data-i18n="settings.scanEngine.option.legacy">
+                    Legacy scan mode
+                  </option>
+                  <option value="new" data-i18n="settings.scanEngine.option.new">
+                    New scan mode
+                  </option>
+                </select>
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.scanEngine.description">
+                Set the default scan engine for new and existing pages.
+              </p>
             </div>
-            <p class="settings-description"
-              data-i18n="settings.scanEngine.description">
-              Set the default scan engine for new and existing pages.
-            </p>
-          </div>
-          <div class="settings-field">
-            <label for="scan-legacy-idle-ms" class="settings-label"
-              data-i18n="settings.scanLegacyIdleMs.label">
-              Legacy scan pause (ms)
-            </label>
-            <div class="settings-control">
-              <input id="scan-legacy-idle-ms" type="number" min="0" step="100"
-                placeholder="2000"
-                data-i18n-attr="placeholder:settings.scanLegacyIdleMs.placeholder">
+            <div class="settings-field">
+              <label for="scan-legacy-idle-ms" class="settings-label"
+                data-i18n="settings.scanLegacyIdleMs.label">
+                Legacy scan pause (ms)
+              </label>
+              <div class="settings-control">
+                <input id="scan-legacy-idle-ms" type="number" min="0" step="100"
+                  placeholder="2000"
+                  data-i18n-attr="placeholder:settings.scanLegacyIdleMs.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.scanLegacyIdleMs.description">
+                Wait time between legacy scan requests.
+              </p>
             </div>
-            <p class="settings-description"
-              data-i18n="settings.scanLegacyIdleMs.description">
-              Wait time between legacy scan requests.
-            </p>
-          </div>
-          <div class="settings-field">
-            <label for="scan-host-idle-ms" class="settings-label"
-              data-i18n="settings.scanHostIdleMs.label">
-              Host delay (ms)
-            </label>
-            <div class="settings-control">
-              <input id="scan-host-idle-ms" type="number" min="0" step="100"
-                placeholder="2000"
-                data-i18n-attr="placeholder:settings.scanHostIdleMs.placeholder">
+            <div class="settings-field">
+              <label for="scan-host-idle-ms" class="settings-label"
+                data-i18n="settings.scanHostIdleMs.label">
+                Host delay (ms)
+              </label>
+              <div class="settings-control">
+                <input id="scan-host-idle-ms" type="number" min="0" step="100"
+                  placeholder="2000"
+                  data-i18n-attr="placeholder:settings.scanHostIdleMs.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.scanHostIdleMs.description">
+                Minimum delay between scan requests per host.
+              </p>
             </div>
-            <p class="settings-description"
-              data-i18n="settings.scanHostIdleMs.description">
-              Minimum delay between scan requests per host.
-            </p>
-          </div>
-          <div class="settings-field">
-            <label for="scan-concurrency" class="settings-label"
-              data-i18n="settings.scanConcurrency.label">
-              Scan concurrency
-            </label>
-            <div class="settings-control">
-              <input id="scan-concurrency" type="number" min="1" step="1"
-                placeholder="2"
-                data-i18n-attr="placeholder:settings.scanConcurrency.placeholder">
+            <div class="settings-field">
+              <label for="scan-concurrency" class="settings-label"
+                data-i18n="settings.scanConcurrency.label">
+                Scan concurrency
+              </label>
+              <div class="settings-control">
+                <input id="scan-concurrency" type="number" min="1" step="1"
+                  placeholder="2"
+                  data-i18n-attr="placeholder:settings.scanConcurrency.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.scanConcurrency.description">
+                Number of parallel scans running from the queue.
+              </p>
             </div>
-            <p class="settings-description"
-              data-i18n="settings.scanConcurrency.description">
-              Number of parallel scans running from the queue.
-            </p>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="settings-group">
-        <legend class="settings-group-title" data-i18n="settings.group.hiddenTab">
-          Hidden Tab Scans
-        </legend>
-        <div class="settings-group-body">
-          <p id="hidden-tab-settings-disabled-hint"
-            class="settings-description settings-group-hint hidden"
-            data-i18n="settings.hiddenTabSettings.disabledHint">
-            Hidden tab options are only available in the new scan mode.
-          </p>
-          <div id="hidden-tab-settings" class="settings-group-body">
-            <div class="settings-field">
-              <label for="hidden-tab-scan-default" class="settings-label"
-                data-i18n="settings.hiddenTabScan.label">
-                Use hidden tab for scans by default
-              </label>
-              <div class="settings-control">
-                <input id="hidden-tab-scan-default" type="checkbox">
+        <fieldset class="settings-group">
+          <legend class="settings-group-title" data-i18n="settings.group.hiddenTab">
+            Hidden Tab Scans
+          </legend>
+          <div class="settings-group-body">
+            <p id="hidden-tab-settings-disabled-hint"
+              class="settings-description settings-group-hint hidden"
+              data-i18n="settings.hiddenTabSettings.disabledHint">
+              Hidden tab options are only available in the new scan mode.
+            </p>
+            <div id="hidden-tab-settings" class="settings-group-body">
+              <div class="settings-field">
+                <label for="hidden-tab-scan-default" class="settings-label"
+                  data-i18n="settings.hiddenTabScan.label">
+                  Use hidden tab for scans by default
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-scan-default" type="checkbox">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabScan.description">
+                  Use a hidden tab as the default scan source for new pages.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.hiddenTabScan.description">
-                Use a hidden tab as the default scan source for new pages.
-              </p>
-            </div>
-            <div class="settings-field">
-              <label for="hidden-tab-scan-all" class="settings-label"
-                data-i18n="settings.hiddenTabScanAll.label">
-                Use hidden tab for all pages
-              </label>
-              <div class="settings-control">
-                <input id="hidden-tab-scan-all" type="checkbox">
+              <div class="settings-field">
+                <label for="hidden-tab-scan-all" class="settings-label"
+                  data-i18n="settings.hiddenTabScanAll.label">
+                  Use hidden tab for all pages
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-scan-all" type="checkbox">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabScanAll.description">
+                  Apply the hidden tab scan setting to all existing pages.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.hiddenTabScanAll.description">
-                Apply the hidden tab scan setting to all existing pages.
-              </p>
-            </div>
-            <div class="settings-field">
-              <label for="wait-for-network-idle-default" class="settings-label"
-                data-i18n="settings.waitForNetworkIdle.label">
-                Wait for network idle by default
-              </label>
-              <div class="settings-control">
-                <input id="wait-for-network-idle-default" type="checkbox">
+              <div class="settings-field">
+                <label for="wait-for-network-idle-default" class="settings-label"
+                  data-i18n="settings.waitForNetworkIdle.label">
+                  Wait for network idle by default
+                </label>
+                <div class="settings-control">
+                  <input id="wait-for-network-idle-default" type="checkbox">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.waitForNetworkIdle.description">
+                  Wait for network idle or hydration signals when hidden tab scans run.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.waitForNetworkIdle.description">
-                Wait for network idle or hydration signals when hidden tab scans run.
-              </p>
-            </div>
-            <div class="settings-field">
-              <label for="wait-for-network-idle-all" class="settings-label"
-                data-i18n="settings.waitForNetworkIdleAll.label">
-                Apply network idle wait to all pages
-              </label>
-              <div class="settings-control">
-                <input id="wait-for-network-idle-all" type="checkbox">
+              <div class="settings-field">
+                <label for="wait-for-network-idle-all" class="settings-label"
+                  data-i18n="settings.waitForNetworkIdleAll.label">
+                  Apply network idle wait to all pages
+                </label>
+                <div class="settings-control">
+                  <input id="wait-for-network-idle-all" type="checkbox">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.waitForNetworkIdleAll.description">
+                  Update the network idle wait setting for all existing pages.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.waitForNetworkIdleAll.description">
-                Update the network idle wait setting for all existing pages.
-              </p>
-            </div>
-            <div class="settings-field">
-              <label for="hidden-tab-ignore-selectors-default" class="settings-label"
-                data-i18n="settings.hiddenTabIgnoreSelectors.label">
-                Ignore selectors for snapshots by default
-              </label>
-              <div class="settings-control">
-                <input id="hidden-tab-ignore-selectors-default" type="text"
-                  placeholder=".ads, .cookie-banner"
-                  data-i18n-attr="placeholder:settings.hiddenTabIgnoreSelectors.placeholder">
+              <div class="settings-field">
+                <label for="hidden-tab-ignore-selectors-default" class="settings-label"
+                  data-i18n="settings.hiddenTabIgnoreSelectors.label">
+                  Ignore selectors for snapshots by default
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-ignore-selectors-default" type="text"
+                    placeholder=".ads, .cookie-banner"
+                    data-i18n-attr="placeholder:settings.hiddenTabIgnoreSelectors.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabIgnoreSelectors.description">
+                  CSS selectors removed from hidden tab snapshots for new pages.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.hiddenTabIgnoreSelectors.description">
-                CSS selectors removed from hidden tab snapshots for new pages.
-              </p>
-            </div>
-            <div class="settings-field">
-              <label for="hidden-tab-text-hash-default" class="settings-label"
-                data-i18n="settings.hiddenTabTextHash.label">
-                Use text-only snapshot hash by default
-              </label>
-              <div class="settings-control">
-                <input id="hidden-tab-text-hash-default" type="checkbox">
+              <div class="settings-field">
+                <label for="hidden-tab-text-hash-default" class="settings-label"
+                  data-i18n="settings.hiddenTabTextHash.label">
+                  Use text-only snapshot hash by default
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-text-hash-default" type="checkbox">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabTextHash.description">
+                  Use only innerText for DOM stability checks on new pages.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.hiddenTabTextHash.description">
-                Use only innerText for DOM stability checks on new pages.
-              </p>
-            </div>
-            <div class="settings-field">
-              <label for="hidden-tab-scroll-steps-default" class="settings-label"
-                data-i18n="settings.hiddenTabScrollSteps.label">
-                Scroll simulation steps by default
-              </label>
-              <div class="settings-control">
-                <input id="hidden-tab-scroll-steps-default" type="number" min="0" step="1"
-                  placeholder="0"
-                  data-i18n-attr="placeholder:settings.hiddenTabScrollSteps.placeholder">
+              <div class="settings-field">
+                <label for="hidden-tab-scroll-steps-default" class="settings-label"
+                  data-i18n="settings.hiddenTabScrollSteps.label">
+                  Scroll simulation steps by default
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-scroll-steps-default" type="number" min="0" step="1"
+                    placeholder="0"
+                    data-i18n-attr="placeholder:settings.hiddenTabScrollSteps.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabScrollSteps.description">
+                  Number of steps for hidden tab scroll simulation on new pages.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.hiddenTabScrollSteps.description">
-                Number of steps for hidden tab scroll simulation on new pages.
-              </p>
-            </div>
-            <div class="settings-field">
-              <label for="hidden-tab-scroll-delay-default" class="settings-label"
-                data-i18n="settings.hiddenTabScrollDelay.label">
-                Scroll step delay by default (ms)
-              </label>
-              <div class="settings-control">
-                <input id="hidden-tab-scroll-delay-default" type="number" min="0" step="50"
-                  placeholder="250"
-                  data-i18n-attr="placeholder:settings.hiddenTabScrollDelay.placeholder">
+              <div class="settings-field">
+                <label for="hidden-tab-scroll-delay-default" class="settings-label"
+                  data-i18n="settings.hiddenTabScrollDelay.label">
+                  Scroll step delay by default (ms)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-scroll-delay-default" type="number" min="0" step="50"
+                    placeholder="250"
+                    data-i18n-attr="placeholder:settings.hiddenTabScrollDelay.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabScrollDelay.description">
+                  Wait time after each scroll step for new pages.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.hiddenTabScrollDelay.description">
-                Wait time after each scroll step for new pages.
-              </p>
-            </div>
-            <div class="settings-field">
-              <label for="hidden-tab-scroll-max-height-default" class="settings-label"
-                data-i18n="settings.hiddenTabScrollMaxHeight.label">
-                Max scroll height by default (px)
-              </label>
-              <div class="settings-control">
-                <input id="hidden-tab-scroll-max-height-default" type="number" min="0" step="100"
-                  placeholder="0"
-                  data-i18n-attr="placeholder:settings.hiddenTabScrollMaxHeight.placeholder">
+              <div class="settings-field">
+                <label for="hidden-tab-scroll-max-height-default" class="settings-label"
+                  data-i18n="settings.hiddenTabScrollMaxHeight.label">
+                  Max scroll height by default (px)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-scroll-max-height-default" type="number" min="0" step="100"
+                    placeholder="0"
+                    data-i18n-attr="placeholder:settings.hiddenTabScrollMaxHeight.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabScrollMaxHeight.description">
+                  Limit the simulated scroll height for new pages.
+                </p>
               </div>
-              <p class="settings-description"
-                data-i18n="settings.hiddenTabScrollMaxHeight.description">
-                Limit the simulated scroll height for new pages.
-              </p>
             </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
+      </div>
     </div>
   </div>
 
