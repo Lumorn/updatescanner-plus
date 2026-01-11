@@ -81,6 +81,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Popup-Scan-Status und Abbrechen-Button passen sich dynamisch an die verfügbare Breite an.
 * Popup-Footer mit Buttons und Versionsanzeige bleibt stabil, auch wenn die Liste sehr lang ist.
 * Popup-Settings sind in klaren Gruppen mit konsistenter Label-Ausrichtung, Abständen und Button-Hierarchie strukturiert.
+* Popup-Settings nutzen kompaktere Abstände und engere Beschreibungen, damit mehr Optionen sichtbar bleiben.
 * Scan-Queue nutzt ein Deque/Index-Modell und verhindert Duplikate per Seiten-ID.
 * Scan-Queue verarbeitet mehrere Scans parallel, serialisiert Requests pro Host
   und nutzt einen konfigurierbaren Host-Delay.
