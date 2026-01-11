@@ -35,12 +35,17 @@ export const actionEnum = {
  * @param {object} params - Object containing paramEnum key/values.
  * @param {boolean} newTab - Open the page in a new tab.
  */
-export function openMain(params, newTab) {
+export async function openMain(params, newTab) {
   const url = getMainUrl(params);
   if (newTab) {
-    browser.tabs.create({url: url});
-  } else {
-    browser.tabs.update({url: url});
+    return browser.tabs.create({url: url});
+  }
+  try {
+    return await browser.tabs.update({url: url});
+  } catch (error) {
+    // Fallback: Wenn der aktive Tab nicht aktualisiert werden kann,
+    // öffnen wir die Ansicht in einem neuen Tab.
+    return browser.tabs.create({url: url});
   }
 }
 
