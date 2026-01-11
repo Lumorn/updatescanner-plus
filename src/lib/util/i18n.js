@@ -36,6 +36,10 @@ const translations = {
     'settings.scanEngine.option.new': 'New scan mode',
     'settings.scanEngine.description':
       'Choose which scan engine is used across the extension.',
+    'settings.scanLegacyIdleMs.label': 'Legacy scan pause (ms)',
+    'settings.scanLegacyIdleMs.placeholder': '2000',
+    'settings.scanLegacyIdleMs.description':
+      'Delay between legacy scan requests.',
     'settings.hiddenTabSettings.disabledHint':
       'Hidden tab options are only available in the new scan mode.',
     'settings.hiddenTabScan.label': 'Use hidden tab for scans by default',
@@ -352,6 +356,10 @@ const translations = {
     'settings.scanEngine.option.new': 'Neuer Scan-Modus',
     'settings.scanEngine.description':
       'Wähle, welcher Scan-Modus in der gesamten Erweiterung verwendet wird.',
+    'settings.scanLegacyIdleMs.label': 'Pause für Legacy-Scans (ms)',
+    'settings.scanLegacyIdleMs.placeholder': '2000',
+    'settings.scanLegacyIdleMs.description':
+      'Wartezeit zwischen Legacy-Scan-Anfragen.',
     'settings.hiddenTabSettings.disabledHint':
       'Hidden-Tab-Optionen sind nur im neuen Scan-Modus verfügbar.',
     'settings.hiddenTabScan.label': 'Versteckten Tab für Scans verwenden',
