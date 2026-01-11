@@ -199,6 +199,19 @@
           Wait time between legacy scan requests.
         </p>
       </div>
+      <div class="settings-field">
+        <label for="scan-host-idle-ms" class="settings-label"
+          data-i18n="settings.scanHostIdleMs.label">
+          Host delay (ms)
+        </label>
+        <input id="scan-host-idle-ms" type="number" min="0" step="100"
+          placeholder="2000"
+          data-i18n-attr="placeholder:settings.scanHostIdleMs.placeholder">
+        <p class="settings-description"
+          data-i18n="settings.scanHostIdleMs.description">
+          Minimum delay between scan requests per host.
+        </p>
+      </div>
       <p id="hidden-tab-settings-disabled-hint"
         class="settings-description hidden"
         data-i18n="settings.hiddenTabSettings.disabledHint">

@@ -107,6 +107,15 @@ export function bindScanLegacyIdleMsChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn der Host-Delay geändert wird.
+ */
+export function bindScanHostIdleMsChange(handler) {
+  $on(qs('#scan-host-idle-ms'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
  * @param {Function} handler - Wird aufgerufen, wenn der Default geändert wird.
  */
 export function bindHiddenTabScanDefaultChange(handler) {
@@ -213,6 +222,15 @@ export function setScanEngineDefault(mode) {
  */
 export function setScanLegacyIdleMs(value) {
   qs('#scan-legacy-idle-ms').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt den Mindestabstand zwischen Scan-Requests pro Host.
+ *
+ * @param {number} value - Wartezeit in Millisekunden.
+ */
+export function setScanHostIdleMs(value) {
+  qs('#scan-host-idle-ms').value = formatOptionalNumber(value);
 }
 
 /**

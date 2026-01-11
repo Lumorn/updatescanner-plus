@@ -56,6 +56,9 @@ export class Popup {
     view.bindScanLegacyIdleMsChange(
       this._handleScanLegacyIdleMsChange.bind(this),
     );
+    view.bindScanHostIdleMsChange(
+      this._handleScanHostIdleMsChange.bind(this),
+    );
     view.bindHiddenTabScanDefaultChange(
       this._handleHiddenTabScanDefaultChange.bind(this),
     );
@@ -86,6 +89,7 @@ export class Popup {
     view.setLanguage(this.config.get('language'));
     view.setScanEngineDefault(this.config.get('scanEngineMode'));
     view.setScanLegacyIdleMs(this.config.get('scanLegacyIdleMs'));
+    view.setScanHostIdleMs(this.config.get('scanHostIdleMs'));
     view.setHiddenTabSettingsEnabled(
       this.config.get('scanEngineMode') === 'new',
     );
@@ -300,6 +304,19 @@ export class Popup {
     this.config.set('scanLegacyIdleMs', resolved);
     await this.config.save();
     view.setScanLegacyIdleMs(resolved);
+  }
+
+  /**
+   * Speichert den Mindestabstand zwischen Scan-Requests pro Host.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleScanHostIdleMsChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved = parsed ?? this.config.get('scanHostIdleMs');
+    this.config.set('scanHostIdleMs', resolved);
+    await this.config.save();
+    view.setScanHostIdleMs(resolved);
   }
 
   /**
