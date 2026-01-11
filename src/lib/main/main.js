@@ -395,8 +395,43 @@ async function loadHtml(page, htmlType) {
  * @returns {string} Updated HTML page content.
  */
 function _updateHeader(page, html) {
-  // @TODO: Only add if there's no existing <base href> tag
-  return `<base href="${page.url}" target="_top">` + html;
+  // Ergänzt ein <base>-Tag im <head>, damit relative Ressourcen korrekt laden.
+  const baseTag = `<base href="${page.url}" target="_top">`;
+  const trimmedHtml = String(html ?? '').trim();
+
+  if (!trimmedHtml) {
+    return buildHtmlDocument(baseTag, '');
+  }
+
+  if (/<base\b/i.test(trimmedHtml)) {
+    return trimmedHtml;
+  }
+
+  const headMatch = trimmedHtml.match(/<head[^>]*>/i);
+  if (headMatch) {
+    return trimmedHtml.replace(headMatch[0], `${headMatch[0]}${baseTag}`);
+  }
+
+  const htmlMatch = trimmedHtml.match(/<html[^>]*>/i);
+  if (htmlMatch) {
+    return trimmedHtml.replace(
+      htmlMatch[0],
+      `${htmlMatch[0]}<head>${baseTag}</head>`,
+    );
+  }
+
+  return buildHtmlDocument(baseTag, trimmedHtml);
+}
+
+/**
+ * Baut ein vollständiges HTML-Dokument mit <head> und <body> auf.
+ *
+ * @param {string} baseTag - Vorbereiteter <base>-Tag.
+ * @param {string} bodyContent - Inhalt für den <body>.
+ * @returns {string} Vollständiges HTML-Dokument.
+ */
+function buildHtmlDocument(baseTag, bodyContent) {
+  return `<!DOCTYPE html><html><head>${baseTag}</head><body>${bodyContent}</body></html>`;
 }
 
 /**
