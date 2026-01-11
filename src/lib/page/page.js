@@ -54,6 +54,8 @@ export class Page {
       hiddenTabNetworkIdleWindowMs: null,
       hiddenTabDomStabilityWindowMs: null,
       hiddenTabDomStabilityTimeoutMs: null,
+      hiddenTabMutationStabilityWindowMs: null,
+      hiddenTabMutationStabilityTimeoutMs: null,
       hiddenTabIgnoreSelectors: '',
       ignoredSelectors: '',
       hiddenTabUseTextSnapshotHash: false,
@@ -177,6 +179,10 @@ export class Page {
    *   DOM stabil bleiben muss.
    * @property {?number} hiddenTabDomStabilityTimeoutMs - Timeout für die
    *   DOM-Stabilitätsprüfung.
+   * @property {?number} hiddenTabMutationStabilityWindowMs - Zeitfenster für
+   *   DOM-Mutation-Stabilität vor dem Snapshot.
+   * @property {?number} hiddenTabMutationStabilityTimeoutMs - Timeout für die
+   *   Mutation-Stabilitätsprüfung.
    * @property {string} hiddenTabIgnoreSelectors - CSS-Selektoren, die beim
    *   Hidden-Tab-Snapshot ignoriert werden.
    * @property {string} ignoredSelectors - CSS-Selektoren, die beim Scan-HTML
@@ -229,6 +235,10 @@ export class Page {
       hiddenTabNetworkIdleWindowMs = Page.DEFAULTS.hiddenTabNetworkIdleWindowMs,
       hiddenTabDomStabilityWindowMs = Page.DEFAULTS.hiddenTabDomStabilityWindowMs,
       hiddenTabDomStabilityTimeoutMs = Page.DEFAULTS.hiddenTabDomStabilityTimeoutMs,
+      hiddenTabMutationStabilityWindowMs =
+        Page.DEFAULTS.hiddenTabMutationStabilityWindowMs,
+      hiddenTabMutationStabilityTimeoutMs =
+        Page.DEFAULTS.hiddenTabMutationStabilityTimeoutMs,
       hiddenTabIgnoreSelectors = Page.DEFAULTS.hiddenTabIgnoreSelectors,
       ignoredSelectors = Page.DEFAULTS.ignoredSelectors,
       hiddenTabUseTextSnapshotHash = Page.DEFAULTS.hiddenTabUseTextSnapshotHash,
@@ -277,6 +287,8 @@ export class Page {
     this.hiddenTabNetworkIdleWindowMs = hiddenTabNetworkIdleWindowMs;
     this.hiddenTabDomStabilityWindowMs = hiddenTabDomStabilityWindowMs;
     this.hiddenTabDomStabilityTimeoutMs = hiddenTabDomStabilityTimeoutMs;
+    this.hiddenTabMutationStabilityWindowMs = hiddenTabMutationStabilityWindowMs;
+    this.hiddenTabMutationStabilityTimeoutMs = hiddenTabMutationStabilityTimeoutMs;
     this.hiddenTabIgnoreSelectors = hiddenTabIgnoreSelectors;
     this.ignoredSelectors = ignoredSelectors;
     this.hiddenTabUseTextSnapshotHash = hiddenTabUseTextSnapshotHash;
@@ -331,6 +343,8 @@ export class Page {
       hiddenTabNetworkIdleWindowMs: this.hiddenTabNetworkIdleWindowMs,
       hiddenTabDomStabilityWindowMs: this.hiddenTabDomStabilityWindowMs,
       hiddenTabDomStabilityTimeoutMs: this.hiddenTabDomStabilityTimeoutMs,
+      hiddenTabMutationStabilityWindowMs: this.hiddenTabMutationStabilityWindowMs,
+      hiddenTabMutationStabilityTimeoutMs: this.hiddenTabMutationStabilityTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       ignoredSelectors: this.ignoredSelectors,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
@@ -377,6 +391,8 @@ export class Page {
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
       hiddenTabDefaultWaitMs: this.hiddenTabDefaultWaitMs,
       hiddenTabNetworkIdleWindowMs: this.hiddenTabNetworkIdleWindowMs,
+      hiddenTabMutationStabilityWindowMs: this.hiddenTabMutationStabilityWindowMs,
+      hiddenTabMutationStabilityTimeoutMs: this.hiddenTabMutationStabilityTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       ignoredSelectors: this.ignoredSelectors,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,

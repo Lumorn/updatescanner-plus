@@ -361,6 +361,36 @@
                 </p>
               </div>
               <div class="settings-field">
+                <label for="hidden-tab-mutation-stability-window-default" class="settings-label"
+                  data-i18n="settings.hiddenTabMutationStabilityWindow.label">
+                  Mutation stability window by default (ms)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-mutation-stability-window-default" type="number" min="0" step="50"
+                    placeholder="250"
+                    data-i18n-attr="placeholder:settings.hiddenTabMutationStabilityWindow.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabMutationStabilityWindow.description">
+                  Time window without DOM mutations before snapshot on new pages.
+                </p>
+              </div>
+              <div class="settings-field">
+                <label for="hidden-tab-mutation-stability-timeout-default" class="settings-label"
+                  data-i18n="settings.hiddenTabMutationStabilityTimeout.label">
+                  Mutation stability timeout by default (ms)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-mutation-stability-timeout-default" type="number" min="0" step="50"
+                    placeholder="2000"
+                    data-i18n-attr="placeholder:settings.hiddenTabMutationStabilityTimeout.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabMutationStabilityTimeout.description">
+                  Timeout for mutation stability waits on new pages.
+                </p>
+              </div>
+              <div class="settings-field">
                 <label for="hidden-tab-network-idle-timeout-default" class="settings-label"
                   data-i18n="settings.hiddenTabNetworkIdleTimeout.label">
                   Network idle timeout by default (ms)
