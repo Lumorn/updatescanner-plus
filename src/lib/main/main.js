@@ -83,9 +83,14 @@ export class Main {
         break;
       }
       case actionEnum.SHOW_DIFF: {
-        this._showDiff(
-          this.pageStore.getItem(this._getUrlParam(params, paramEnum.ID)),
+        const item = this.pageStore.getItem(
+          this._getUrlParam(params, paramEnum.ID),
         );
+        if (item instanceof Page) {
+          this._showDiff(item);
+        } else {
+          this._showMissingPage();
+        }
         break;
       }
       case actionEnum.SHOW_SETTINGS: {
@@ -94,8 +99,10 @@ export class Main {
         );
         if (item instanceof Page) {
           this._showPageSettings(item);
-        } else {
+        } else if (item instanceof PageFolder) {
           this._showPageFolderSettings(item);
+        } else {
+          this._showMissingPage();
         }
         break;
       }
@@ -280,6 +287,10 @@ export class Main {
    * @returns {Promise} A Promise that fulfils once the view has been updated.
    */
   _showDiff(page) {
+    if (!page) {
+      // Frühzeitig abbrechen, wenn keine gültige Seite vorliegt.
+      return;
+    }
     if (page.isChanged()) {
       page.state = Page.stateEnum.NO_CHANGE;
       page.save();
@@ -323,6 +334,10 @@ export class Main {
    */
   async _refreshView() {
     const page = this.currentPage;
+    if (!page) {
+      // Frühzeitig abbrechen, wenn keine gültige Seite vorliegt.
+      return;
+    }
 
     switch (this.viewType) {
       case view.ViewTypes.OLD: {
@@ -349,6 +364,15 @@ export class Main {
         __.viewDiff(page, html);
       }
     }
+  }
+
+  /**
+   * Zeigt eine sichere Fallback-Ansicht, wenn keine Seite gefunden wurde.
+   */
+  _showMissingPage() {
+    this.currentPage = null;
+    this.viewType = view.ViewTypes.DIFF;
+    view.viewMissingPage();
   }
 }
 
