@@ -85,6 +85,8 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
   und nutzt einen konfigurierbaren Host-Delay.
 * Scans speichern NEW-HTML nur bei echten Änderungen und merken sich zusätzlich
   einen Hash, um unnötige Schreibvorgänge zu vermeiden.
+* Legacy-Scan nutzt einen Quick-Hash der Roh-HTML-Daten, um teure Normalisierung
+  und Diff-Schritte bei unveränderten Seiten zu überspringen.
 * Popup-Settings erlauben eine Anpassung des Host-Delays, um Legacy-Scans je nach Bedarf zu beschleunigen.
 * Popup-Settings erlauben die Konfiguration der Scan-Parallelität für die Queue.
 

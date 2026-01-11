@@ -42,6 +42,7 @@
 * Versionsanzeige im Popup unter der Buttonreihe ergänzt und Versionierungsregel dokumentiert
 * Scan-Queue auf Deque/Index-Logik umgestellt und Duplikate per Seiten-ID verhindert
 * NEW-HTML wird nur gespeichert, wenn sich der Inhalt ändert; zusätzlich wird ein Hash abgelegt, um redundante Schreibvorgänge zu vermeiden
+* Legacy-Scan nutzt einen Quick-Hash der Roh-HTML-Daten, um bei unveränderten Seiten Normalisierung und Diff zu überspringen
 * Typografie-Tokens um zusätzliche Schriftgrößen und Font-Weights erweitert und die Hierarchie in Hauptansicht/Popup geschärft
 * Gemeinsame Button- und Menü-Variablen eingeführt, damit Popup und Hauptansicht identische Hover-/Active-/Focus-Zustände nutzen
 * Dark-Mode-Overrides in ein gemeinsames Theme-Token-Set ausgelagert

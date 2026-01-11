@@ -1062,6 +1062,12 @@ async function processHtml(page, scannedHtml, scanNoticeKey = null) {
   }
 
   const prevHtml = await PageStore.loadHtml(page.id, PageStore.htmlTypes.NEW);
+  const quickHash = computeQuickHtmlHash(scannedHtml);
+  const prevQuickHash = computeQuickHtmlHash(prevHtml);
+
+  if (prevHtml != null && quickHash === prevQuickHash) {
+    return applyQuickNoChange(page, scanNoticeKey);
+  }
 
   const normalizedScanHtml = normalizeHtml(scannedHtml, page);
   const normalizedPrevHtml = normalizeHtml(prevHtml, page);
@@ -1246,6 +1252,25 @@ async function updatePageState(page, prevHtmlData, scannedHtmlData, scanNoticeKe
 }
 
 /**
+ * Schneller "keine Änderung"-Pfad, wenn der Quick-Hash übereinstimmt.
+ *
+ * @param {Page} page - Page object to update.
+ * @param {?string} scanNoticeKey - Optionaler Hinweis-Key.
+ * @returns {boolean} True, wenn eine neue größere Änderung erkannt wurde.
+ */
+async function applyQuickNoChange(page, scanNoticeKey = null) {
+  const updatedPage = await Page.load(page.id);
+  updatedPage.lastScanNoticeKey = scanNoticeKey;
+  if (!updatedPage.isChanged()) {
+    updatedPage.state = Page.stateEnum.NO_CHANGE;
+  }
+  updatedPage.newScanTime = Date.now();
+  await updatedPage.save();
+  __.log(`Scan-Ergebnis gespeichert (Quick-Hash) für URL: ${updatedPage.url}`);
+  return false;
+}
+
+/**
  * Berechnet einen einfachen Hash über HTML für schnelle Vergleiche.
  *
  * @param {string} html - HTML-String.
@@ -1259,6 +1284,27 @@ function computeHtmlHash(html) {
     hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
   }
   return (hash >>> 0).toString(16);
+}
+
+/**
+ * Berechnet einen sehr schnellen Kurz-Hash für frühe Gleichheitsprüfungen.
+ *
+ * @param {?string} html - HTML-String.
+ * @returns {string} Quick-Hash als String.
+ */
+function computeQuickHtmlHash(html) {
+  const safeHtml = html || '';
+  const length = safeHtml.length;
+  const prefix = safeHtml.slice(0, 256);
+  const suffix = safeHtml.slice(-256);
+  let hash = length;
+  for (let i = 0; i < prefix.length; i++) {
+    hash = (hash * 31 + prefix.charCodeAt(i)) >>> 0;
+  }
+  for (let i = 0; i < suffix.length; i++) {
+    hash = (hash * 31 + suffix.charCodeAt(i)) >>> 0;
+  }
+  return `${length}:${hash.toString(16)}`;
 }
 
 /**
