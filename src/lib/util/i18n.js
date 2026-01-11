@@ -68,6 +68,31 @@ const translations = {
       'Apply network idle wait to all pages',
     'settings.waitForNetworkIdleAll.description':
       'Update the network idle wait setting for all existing pages.',
+    'settings.hiddenTabDefaultWaitMs.label':
+      'Default wait before snapshot (ms)',
+    'settings.hiddenTabDefaultWaitMs.placeholder': '3000',
+    'settings.hiddenTabDefaultWaitMs.description':
+      'Extra delay before capturing hidden tab snapshots on new pages.',
+    'settings.hiddenTabDomStabilityWindow.label':
+      'DOM stability window by default (ms)',
+    'settings.hiddenTabDomStabilityWindow.placeholder': '1000',
+    'settings.hiddenTabDomStabilityWindow.description':
+      'Time window the DOM must remain stable before capturing a snapshot.',
+    'settings.hiddenTabDomStabilityTimeout.label':
+      'DOM stability timeout by default (ms)',
+    'settings.hiddenTabDomStabilityTimeout.placeholder': '8000',
+    'settings.hiddenTabDomStabilityTimeout.description':
+      'Timeout for DOM stability waits on new pages.',
+    'settings.hiddenTabNetworkIdleTimeout.label':
+      'Network idle timeout by default (ms)',
+    'settings.hiddenTabNetworkIdleTimeout.placeholder': '8000',
+    'settings.hiddenTabNetworkIdleTimeout.description':
+      'Timeout for network idle waits in hidden tab scans for new pages.',
+    'settings.hiddenTabNetworkIdleWindow.label':
+      'Network idle window by default (ms)',
+    'settings.hiddenTabNetworkIdleWindow.placeholder': '1500',
+    'settings.hiddenTabNetworkIdleWindow.description':
+      'Minimum quiet window before snapshot on new pages.',
     'settings.hiddenTabIgnoreSelectors.label':
       'Ignore selectors for snapshots by default',
     'settings.hiddenTabIgnoreSelectors.placeholder': '.ads, .cookie-banner',
@@ -401,6 +426,31 @@ const translations = {
       'Network-Idle-Wartezeit für alle Seiten übernehmen',
     'settings.waitForNetworkIdleAll.description':
       'Überträgt die Network-Idle-Einstellung auf alle vorhandenen Seiten.',
+    'settings.hiddenTabDefaultWaitMs.label':
+      'Standard-Wartezeit vor Snapshot (ms)',
+    'settings.hiddenTabDefaultWaitMs.placeholder': '3000',
+    'settings.hiddenTabDefaultWaitMs.description':
+      'Zusätzliche Wartezeit vor dem Snapshot für neue Seiten.',
+    'settings.hiddenTabDomStabilityWindow.label':
+      'DOM-Stabilitätsfenster standardmäßig (ms)',
+    'settings.hiddenTabDomStabilityWindow.placeholder': '1000',
+    'settings.hiddenTabDomStabilityWindow.description':
+      'Zeitfenster, in dem das DOM stabil bleiben muss, bevor ein Snapshot erstellt wird.',
+    'settings.hiddenTabDomStabilityTimeout.label':
+      'DOM-Stabilitäts-Timeout standardmäßig (ms)',
+    'settings.hiddenTabDomStabilityTimeout.placeholder': '8000',
+    'settings.hiddenTabDomStabilityTimeout.description':
+      'Timeout für DOM-Stabilitätsprüfungen bei neuen Seiten.',
+    'settings.hiddenTabNetworkIdleTimeout.label':
+      'Network-Idle-Timeout standardmäßig (ms)',
+    'settings.hiddenTabNetworkIdleTimeout.placeholder': '8000',
+    'settings.hiddenTabNetworkIdleTimeout.description':
+      'Timeout für Network-Idle-Warten in Hidden-Tab-Scans bei neuen Seiten.',
+    'settings.hiddenTabNetworkIdleWindow.label':
+      'Network-Idle-Fenster standardmäßig (ms)',
+    'settings.hiddenTabNetworkIdleWindow.placeholder': '1500',
+    'settings.hiddenTabNetworkIdleWindow.description':
+      'Mindestfenster ohne Aktivität vor dem Snapshot für neue Seiten.',
     'settings.hiddenTabIgnoreSelectors.label':
       'Selektoren für Snapshots standardmäßig ignorieren',
     'settings.hiddenTabIgnoreSelectors.placeholder': '.werbung, .cookie-banner',

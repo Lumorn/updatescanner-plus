@@ -47,6 +47,8 @@ export class Page {
       waitForSelectorTimeoutMs: null,
       waitForNetworkIdle: true,
       waitForNetworkIdleTimeoutMs: null,
+      hiddenTabDefaultWaitMs: null,
+      hiddenTabNetworkIdleWindowMs: null,
       hiddenTabDomStabilityWindowMs: null,
       hiddenTabDomStabilityTimeoutMs: null,
       hiddenTabIgnoreSelectors: '',
@@ -163,6 +165,8 @@ export class Page {
    * @property {?number} waitForSelectorTimeoutMs - Timeout für den Selektor.
    * @property {boolean} waitForNetworkIdle - Wartet auf Network-Idle vor dem Snapshot.
    * @property {?number} waitForNetworkIdleTimeoutMs - Timeout für Network-Idle.
+   * @property {?number} hiddenTabDefaultWaitMs - Standard-Wartezeit vor Snapshot.
+   * @property {?number} hiddenTabNetworkIdleWindowMs - Fenster für Network-Idle.
    * @property {?number} hiddenTabDomStabilityWindowMs - Zeitfenster, in dem das
    *   DOM stabil bleiben muss.
    * @property {?number} hiddenTabDomStabilityTimeoutMs - Timeout für die
@@ -212,6 +216,8 @@ export class Page {
       waitForSelectorTimeoutMs = Page.DEFAULTS.waitForSelectorTimeoutMs,
       waitForNetworkIdle = Page.DEFAULTS.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs = Page.DEFAULTS.waitForNetworkIdleTimeoutMs,
+      hiddenTabDefaultWaitMs = Page.DEFAULTS.hiddenTabDefaultWaitMs,
+      hiddenTabNetworkIdleWindowMs = Page.DEFAULTS.hiddenTabNetworkIdleWindowMs,
       hiddenTabDomStabilityWindowMs = Page.DEFAULTS.hiddenTabDomStabilityWindowMs,
       hiddenTabDomStabilityTimeoutMs = Page.DEFAULTS.hiddenTabDomStabilityTimeoutMs,
       hiddenTabIgnoreSelectors = Page.DEFAULTS.hiddenTabIgnoreSelectors,
@@ -255,6 +261,8 @@ export class Page {
     this.waitForSelectorTimeoutMs = waitForSelectorTimeoutMs;
     this.waitForNetworkIdle = waitForNetworkIdle;
     this.waitForNetworkIdleTimeoutMs = waitForNetworkIdleTimeoutMs;
+    this.hiddenTabDefaultWaitMs = hiddenTabDefaultWaitMs;
+    this.hiddenTabNetworkIdleWindowMs = hiddenTabNetworkIdleWindowMs;
     this.hiddenTabDomStabilityWindowMs = hiddenTabDomStabilityWindowMs;
     this.hiddenTabDomStabilityTimeoutMs = hiddenTabDomStabilityTimeoutMs;
     this.hiddenTabIgnoreSelectors = hiddenTabIgnoreSelectors;
@@ -304,6 +312,8 @@ export class Page {
       waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
       waitForNetworkIdle: this.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
+      hiddenTabDefaultWaitMs: this.hiddenTabDefaultWaitMs,
+      hiddenTabNetworkIdleWindowMs: this.hiddenTabNetworkIdleWindowMs,
       hiddenTabDomStabilityWindowMs: this.hiddenTabDomStabilityWindowMs,
       hiddenTabDomStabilityTimeoutMs: this.hiddenTabDomStabilityTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
@@ -348,6 +358,8 @@ export class Page {
       waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
       waitForNetworkIdle: this.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
+      hiddenTabDefaultWaitMs: this.hiddenTabDefaultWaitMs,
+      hiddenTabNetworkIdleWindowMs: this.hiddenTabNetworkIdleWindowMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       ignoredSelectors: this.ignoredSelectors,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,

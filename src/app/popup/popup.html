@@ -316,6 +316,81 @@
                 </p>
               </div>
               <div class="settings-field">
+                <label for="hidden-tab-default-wait-ms-default" class="settings-label"
+                  data-i18n="settings.hiddenTabDefaultWaitMs.label">
+                  Default wait before snapshot (ms)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-default-wait-ms-default" type="number" min="0" step="100"
+                    placeholder="3000"
+                    data-i18n-attr="placeholder:settings.hiddenTabDefaultWaitMs.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabDefaultWaitMs.description">
+                  Extra delay before capturing hidden tab snapshots on new pages.
+                </p>
+              </div>
+              <div class="settings-field">
+                <label for="hidden-tab-dom-stability-window-default" class="settings-label"
+                  data-i18n="settings.hiddenTabDomStabilityWindow.label">
+                  DOM stability window by default (ms)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-dom-stability-window-default" type="number" min="0" step="100"
+                    placeholder="1000"
+                    data-i18n-attr="placeholder:settings.hiddenTabDomStabilityWindow.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabDomStabilityWindow.description">
+                  Time window the DOM must remain stable before capturing a snapshot.
+                </p>
+              </div>
+              <div class="settings-field">
+                <label for="hidden-tab-dom-stability-timeout-default" class="settings-label"
+                  data-i18n="settings.hiddenTabDomStabilityTimeout.label">
+                  DOM stability timeout by default (ms)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-dom-stability-timeout-default" type="number" min="0" step="100"
+                    placeholder="8000"
+                    data-i18n-attr="placeholder:settings.hiddenTabDomStabilityTimeout.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabDomStabilityTimeout.description">
+                  Timeout for DOM stability waits on new pages.
+                </p>
+              </div>
+              <div class="settings-field">
+                <label for="hidden-tab-network-idle-timeout-default" class="settings-label"
+                  data-i18n="settings.hiddenTabNetworkIdleTimeout.label">
+                  Network idle timeout by default (ms)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-network-idle-timeout-default" type="number" min="0" step="100"
+                    placeholder="8000"
+                    data-i18n-attr="placeholder:settings.hiddenTabNetworkIdleTimeout.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabNetworkIdleTimeout.description">
+                  Timeout for network idle waits in hidden tab scans for new pages.
+                </p>
+              </div>
+              <div class="settings-field">
+                <label for="hidden-tab-network-idle-window-default" class="settings-label"
+                  data-i18n="settings.hiddenTabNetworkIdleWindow.label">
+                  Network idle window by default (ms)
+                </label>
+                <div class="settings-control">
+                  <input id="hidden-tab-network-idle-window-default" type="number" min="0" step="100"
+                    placeholder="1500"
+                    data-i18n-attr="placeholder:settings.hiddenTabNetworkIdleWindow.placeholder">
+                </div>
+                <p class="settings-description"
+                  data-i18n="settings.hiddenTabNetworkIdleWindow.description">
+                  Minimum quiet window before snapshot on new pages.
+                </p>
+              </div>
+              <div class="settings-field">
                 <label for="hidden-tab-ignore-selectors-default" class="settings-label"
                   data-i18n="settings.hiddenTabIgnoreSelectors.label">
                   Ignore selectors for snapshots by default

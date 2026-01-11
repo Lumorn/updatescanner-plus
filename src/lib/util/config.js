@@ -22,6 +22,11 @@ export class Config {
       'hiddenTabScrollStepsByDefault': null, // Standard-Schritte für Scroll-Simulation
       'hiddenTabScrollDelayMsByDefault': null, // Standard-Delay für Scroll-Schritte
       'hiddenTabScrollMaxHeightByDefault': null, // Standard-Max-Höhe für Scroll-Simulation
+      'hiddenTabDefaultWaitMsByDefault': 3000, // Standard-Wartezeit vor Snapshot (ms)
+      'hiddenTabDomStabilityWindowMsByDefault': 1000, // Standard-Fenster für DOM-Stabilität (ms)
+      'hiddenTabDomStabilityTimeoutMsByDefault': 8000, // Standard-Timeout für DOM-Stabilität (ms)
+      'hiddenTabNetworkIdleTimeoutMsByDefault': 8000, // Standard-Timeout für Network-Idle (ms)
+      'hiddenTabNetworkIdleWindowMsByDefault': 1500, // Standard-Fenster für Network-Idle (ms)
       'scanLegacyIdleMs': 2000, // Wartezeit zwischen Legacy-Scans (ms)
       'scanHostIdleMs': 2000, // Mindestabstand zwischen Scan-Requests pro Host
       'scanConcurrency': 2, // Anzahl paralleler Scans in der Queue

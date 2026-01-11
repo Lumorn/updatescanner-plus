@@ -74,6 +74,21 @@ export class Popup {
     view.bindWaitForNetworkIdleAllChange(
       this._handleWaitForNetworkIdleAllChange.bind(this),
     );
+    view.bindHiddenTabDefaultWaitMsDefaultChange(
+      this._handleHiddenTabDefaultWaitMsDefaultChange.bind(this),
+    );
+    view.bindHiddenTabDomStabilityWindowDefaultChange(
+      this._handleHiddenTabDomStabilityWindowDefaultChange.bind(this),
+    );
+    view.bindHiddenTabDomStabilityTimeoutDefaultChange(
+      this._handleHiddenTabDomStabilityTimeoutDefaultChange.bind(this),
+    );
+    view.bindHiddenTabNetworkIdleTimeoutDefaultChange(
+      this._handleHiddenTabNetworkIdleTimeoutDefaultChange.bind(this),
+    );
+    view.bindHiddenTabNetworkIdleWindowDefaultChange(
+      this._handleHiddenTabNetworkIdleWindowDefaultChange.bind(this),
+    );
     view.bindHiddenTabIgnoreSelectorsDefaultChange(
       this._handleHiddenTabIgnoreSelectorsDefaultChange.bind(this),
     );
@@ -100,6 +115,21 @@ export class Popup {
     view.setHiddenTabScanDefault(this.config.get('useHiddenTabScanByDefault'));
     view.setWaitForNetworkIdleDefault(
       this.config.get('waitForNetworkIdleByDefault'),
+    );
+    view.setHiddenTabDefaultWaitMsDefault(
+      this.config.get('hiddenTabDefaultWaitMsByDefault'),
+    );
+    view.setHiddenTabDomStabilityWindowDefault(
+      this.config.get('hiddenTabDomStabilityWindowMsByDefault'),
+    );
+    view.setHiddenTabDomStabilityTimeoutDefault(
+      this.config.get('hiddenTabDomStabilityTimeoutMsByDefault'),
+    );
+    view.setHiddenTabNetworkIdleTimeoutDefault(
+      this.config.get('hiddenTabNetworkIdleTimeoutMsByDefault'),
+    );
+    view.setHiddenTabNetworkIdleWindowDefault(
+      this.config.get('hiddenTabNetworkIdleWindowMsByDefault'),
     );
     view.setHiddenTabIgnoreSelectorsDefault(
       this.config.get('hiddenTabIgnoreSelectorsByDefault'),
@@ -356,6 +386,75 @@ export class Popup {
     this.config.set('waitForNetworkIdleByDefault', enabled);
     await this.config.save();
     view.setWaitForNetworkIdleDefault(enabled);
+  }
+
+  /**
+   * Speichert den Default-Delay vor dem Snapshot.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabDefaultWaitMsDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved = parsed ?? this.config.get('hiddenTabDefaultWaitMsByDefault');
+    this.config.set('hiddenTabDefaultWaitMsByDefault', resolved);
+    await this.config.save();
+    view.setHiddenTabDefaultWaitMsDefault(resolved);
+  }
+
+  /**
+   * Speichert das DOM-Stabilitätsfenster.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabDomStabilityWindowDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved =
+      parsed ?? this.config.get('hiddenTabDomStabilityWindowMsByDefault');
+    this.config.set('hiddenTabDomStabilityWindowMsByDefault', resolved);
+    await this.config.save();
+    view.setHiddenTabDomStabilityWindowDefault(resolved);
+  }
+
+  /**
+   * Speichert das DOM-Stabilitäts-Timeout.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabDomStabilityTimeoutDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved =
+      parsed ?? this.config.get('hiddenTabDomStabilityTimeoutMsByDefault');
+    this.config.set('hiddenTabDomStabilityTimeoutMsByDefault', resolved);
+    await this.config.save();
+    view.setHiddenTabDomStabilityTimeoutDefault(resolved);
+  }
+
+  /**
+   * Speichert das Network-Idle-Timeout.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabNetworkIdleTimeoutDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved =
+      parsed ?? this.config.get('hiddenTabNetworkIdleTimeoutMsByDefault');
+    this.config.set('hiddenTabNetworkIdleTimeoutMsByDefault', resolved);
+    await this.config.save();
+    view.setHiddenTabNetworkIdleTimeoutDefault(resolved);
+  }
+
+  /**
+   * Speichert das Network-Idle-Fenster.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabNetworkIdleWindowDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved =
+      parsed ?? this.config.get('hiddenTabNetworkIdleWindowMsByDefault');
+    this.config.set('hiddenTabNetworkIdleWindowMsByDefault', resolved);
+    await this.config.save();
+    view.setHiddenTabNetworkIdleWindowDefault(resolved);
   }
 
   /**

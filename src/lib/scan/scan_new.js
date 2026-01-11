@@ -4,6 +4,7 @@ import {isUpToDate} from '/lib/update/update.js';
 import {log} from '/lib/util/log.js';
 import {waitForMs} from '/lib/util/promise.js';
 import {applyEncoding, detectEncoding} from '/lib/util/encoding.js';
+import {Config} from '/lib/util/config.js';
 import {matchHtmlWithSelector} from './selector_matcher.js';
 import {parseHTML} from '/lib/util/html.js';
 import {getChanges, ContentData, changeEnum} from './scan_content.js';
@@ -42,6 +43,8 @@ const HIDDEN_TAB_SCROLL_DEFAULT_DELAY_MS = 250;
 const HIDDEN_TAB_SCROLL_TIMEOUT_BUFFER_MS = 2000;
 const FETCH_FALLBACK_MIN_LENGTH = 200;
 
+let hiddenTabDefaultsPromise = null;
+
 class ScanTimeoutError extends Error {
   constructor(message) {
     super(message);
@@ -59,6 +62,7 @@ class ScanTimeoutError extends Error {
  */
 export async function scan(pageList) {
   let newMajorChangeCount = 0;
+  await loadHiddenTabDefaults();
   for (const page of pageList) {
     if (await scanPage(page)) {
       newMajorChangeCount++;
@@ -67,6 +71,50 @@ export async function scan(pageList) {
     await __.waitForMs(SCAN_IDLE_MS);
   }
   return newMajorChangeCount;
+}
+
+/**
+ * Lädt die Hidden-Tab-Defaults einmalig aus der Konfiguration.
+ *
+ * @returns {Promise<object>} Default-Werte aus der Config.
+ */
+async function loadHiddenTabDefaults() {
+  if (!hiddenTabDefaultsPromise) {
+    hiddenTabDefaultsPromise = (async () => {
+      const config = await (new Config()).load();
+      return {
+        hiddenTabDefaultWaitMsByDefault:
+          config.get('hiddenTabDefaultWaitMsByDefault'),
+        hiddenTabDomStabilityWindowMsByDefault:
+          config.get('hiddenTabDomStabilityWindowMsByDefault'),
+        hiddenTabDomStabilityTimeoutMsByDefault:
+          config.get('hiddenTabDomStabilityTimeoutMsByDefault'),
+        hiddenTabNetworkIdleTimeoutMsByDefault:
+          config.get('hiddenTabNetworkIdleTimeoutMsByDefault'),
+        hiddenTabNetworkIdleWindowMsByDefault:
+          config.get('hiddenTabNetworkIdleWindowMsByDefault'),
+      };
+    })();
+  }
+  return hiddenTabDefaultsPromise;
+}
+
+/**
+ * Nutzt Seitenwert, Config-Default oder Fallback.
+ *
+ * @param {?number} pageValue - Wert aus der Page.
+ * @param {?number} configValue - Wert aus der Config.
+ * @param {number} fallbackValue - Fallback-Konstante.
+ * @returns {number} Aufgelöster Zahlenwert.
+ */
+function resolveHiddenTabNumber(pageValue, configValue, fallbackValue) {
+  if (pageValue !== null && pageValue !== undefined) {
+    return pageValue;
+  }
+  if (configValue !== null && configValue !== undefined) {
+    return configValue;
+  }
+  return fallbackValue;
 }
 
 /**
@@ -389,13 +437,27 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
   }
 
   try {
+    const defaults = await loadHiddenTabDefaults();
     await waitForTabReady(tab.id, page);
     const shouldWaitForNetworkIdle = page?.waitForNetworkIdle ?? true;
     if (shouldWaitForNetworkIdle) {
       const networkIdleTimeoutMs =
-        page?.waitForNetworkIdleTimeoutMs ?? HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS;
+        resolveHiddenTabNumber(
+          page?.waitForNetworkIdleTimeoutMs,
+          defaults.hiddenTabNetworkIdleTimeoutMsByDefault,
+          HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS,
+        );
+      const networkIdleWindowMs =
+        resolveHiddenTabNumber(
+          page?.hiddenTabNetworkIdleWindowMs,
+          defaults.hiddenTabNetworkIdleWindowMsByDefault,
+          HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS,
+        );
       try {
-        await waitForNetworkIdle(tab.id, networkIdleTimeoutMs);
+        await waitForNetworkIdle(tab.id, {
+          timeoutMs: networkIdleTimeoutMs,
+          idleWindowMs: networkIdleWindowMs,
+        });
       } catch (error) {
         if (error?.noticeKey === 'scan.notice.networkIdleTimeout') {
           scanNoticeKey = error.noticeKey;
@@ -404,7 +466,13 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
         }
       }
     }
-    const waitMs = HIDDEN_TAB_DEFAULT_WAIT_MS + Math.max(0, extraWaitMs);
+    const defaultWaitMs =
+      resolveHiddenTabNumber(
+        page?.hiddenTabDefaultWaitMs,
+        defaults.hiddenTabDefaultWaitMsByDefault,
+        HIDDEN_TAB_DEFAULT_WAIT_MS,
+      );
+    const waitMs = defaultWaitMs + Math.max(0, extraWaitMs);
     if (waitMs > 0) {
       await __.waitForMs(waitMs);
     }
@@ -421,7 +489,7 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
         __.log(`Scroll-Simulation fehlgeschlagen bei "${page.title}": ${error}`);
       }
     }
-    await waitForDomStability(tab.id, page);
+    await waitForDomStability(tab.id, page, defaults);
     const html = await getHtmlFromTab(tab.id);
     return {html, scanNoticeKey};
   } finally {
@@ -521,13 +589,16 @@ async function waitForTabReady(tabId, page) {
  * Wartet, bis im Tab keine Netzwerkaktivität mehr stattfindet oder Hydration-Signale erkannt werden.
  *
  * @param {number} tabId - Tab-ID.
- * @param {number} timeoutMs - Timeout für Network-Idle.
+ * @param {{timeoutMs: number, idleWindowMs: number}} options - Optionen für Network-Idle.
  */
-async function waitForNetworkIdle(tabId, timeoutMs) {
-  if (timeoutMs <= 0) {
+async function waitForNetworkIdle(tabId, {timeoutMs, idleWindowMs} = {}) {
+  const timeoutMsValue = Math.max(0, timeoutMs ?? HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS);
+  if (timeoutMsValue <= 0) {
     return;
   }
 
+  const idleWindowMsValue =
+    Math.max(0, idleWindowMs ?? HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS);
   const result = await executeInTab(
     tabId,
     async (idleWindowMs, timeoutMsValue, checkIntervalMs) => {
@@ -749,8 +820,8 @@ async function waitForNetworkIdle(tabId, timeoutMs) {
       });
     },
     [
-      HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS,
-      timeoutMs,
+      idleWindowMsValue,
+      timeoutMsValue,
       HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS,
     ],
   );
@@ -1039,14 +1110,25 @@ async function waitForOptionalSelector(tabId, page) {
  *
  * @param {number} tabId - Tab-ID.
  * @param {Page} page - Page object associated with the scan.
+ * @param {object} defaults - Default-Werte aus der Config.
  */
-async function waitForDomStability(tabId, page) {
-  const stabilityWindowMs = page?.hiddenTabDomStabilityWindowMs ?? HIDDEN_TAB_DOM_STABILITY_WINDOW_MS;
+async function waitForDomStability(tabId, page, defaults) {
+  const stabilityWindowMs =
+    resolveHiddenTabNumber(
+      page?.hiddenTabDomStabilityWindowMs,
+      defaults?.hiddenTabDomStabilityWindowMsByDefault,
+      HIDDEN_TAB_DOM_STABILITY_WINDOW_MS,
+    );
   if (stabilityWindowMs <= 0) {
     return;
   }
 
-  const timeoutMs = page?.hiddenTabDomStabilityTimeoutMs ?? HIDDEN_TAB_DOM_STABILITY_TIMEOUT_MS;
+  const timeoutMs =
+    resolveHiddenTabNumber(
+      page?.hiddenTabDomStabilityTimeoutMs,
+      defaults?.hiddenTabDomStabilityTimeoutMsByDefault,
+      HIDDEN_TAB_DOM_STABILITY_TIMEOUT_MS,
+    );
   const startTime = Date.now();
   let lastChangeTime = startTime;
   const ignoreSelectorList = parseIgnoreSelectorList(page?.hiddenTabIgnoreSelectors);

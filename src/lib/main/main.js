@@ -184,11 +184,26 @@ export class Main {
       await Config.loadSingleSetting('hiddenTabScrollDelayMsByDefault');
     const hiddenTabScrollMaxHeightByDefault =
       await Config.loadSingleSetting('hiddenTabScrollMaxHeightByDefault');
+    const hiddenTabDefaultWaitMsByDefault =
+      await Config.loadSingleSetting('hiddenTabDefaultWaitMsByDefault');
+    const hiddenTabDomStabilityWindowMsByDefault =
+      await Config.loadSingleSetting('hiddenTabDomStabilityWindowMsByDefault');
+    const hiddenTabDomStabilityTimeoutMsByDefault =
+      await Config.loadSingleSetting('hiddenTabDomStabilityTimeoutMsByDefault');
+    const hiddenTabNetworkIdleTimeoutMsByDefault =
+      await Config.loadSingleSetting('hiddenTabNetworkIdleTimeoutMsByDefault');
+    const hiddenTabNetworkIdleWindowMsByDefault =
+      await Config.loadSingleSetting('hiddenTabNetworkIdleWindowMsByDefault');
     const temporaryPage = new Page(-1, {
       title: title,
       url: url,
       useHiddenTabScan: useHiddenTabScanByDefault,
       waitForNetworkIdle: waitForNetworkIdleByDefault,
+      waitForNetworkIdleTimeoutMs: hiddenTabNetworkIdleTimeoutMsByDefault,
+      hiddenTabDefaultWaitMs: hiddenTabDefaultWaitMsByDefault,
+      hiddenTabNetworkIdleWindowMs: hiddenTabNetworkIdleWindowMsByDefault,
+      hiddenTabDomStabilityWindowMs: hiddenTabDomStabilityWindowMsByDefault,
+      hiddenTabDomStabilityTimeoutMs: hiddenTabDomStabilityTimeoutMsByDefault,
       hiddenTabIgnoreSelectors: hiddenTabIgnoreSelectorsByDefault,
       hiddenTabUseTextSnapshotHash: hiddenTabUseTextSnapshotHashByDefault,
       hiddenTabScrollSteps: hiddenTabScrollStepsByDefault,
