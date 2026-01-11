@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Einstellungsdialoge laden den globalen Scan-Engine-Modus asynchron ohne Syntaxfehler
 * Hauptansicht rendert gespeicherte Seiten wieder korrekt, indem der `<base>`-Tag sauber im `<head>` ergänzt und fehlendes HTML-Grundgerüst aufgebaut wird
 * Hauptansicht zeigt bei fehlenden Seiten eine sichere Fallback-Ansicht mit Empty-State
 * Hauptansicht initialisiert zuverlässiger, damit Menü und Ansicht auch nach spätem Script-Load reagieren
