@@ -42,8 +42,10 @@ export class Page {
       fetchRedirect: null,
       fetchHeaders: '',
       textDiffMode: false,
+      domDiffMode: false,
       newHtmlHash: null,
       lastScanNoticeKey: null,
+      lastDiffResult: null,
       waitForSelector: null,
       waitForSelectorTimeoutMs: null,
       waitForNetworkIdle: true,
@@ -160,8 +162,10 @@ export class Page {
    * @property {?string} fetchRedirect - Redirect-Policy für fetch.
    * @property {string} fetchHeaders - Zusätzliche Fetch-Header als Text.
    * @property {boolean} textDiffMode - Vergleicht Text statt HTML.
+   * @property {boolean} domDiffMode - Vergleicht den DOM statt HTML/Text.
    * @property {?string} newHtmlHash - Hash der zuletzt gespeicherten NEW-HTML.
    * @property {?string} lastScanNoticeKey - Optionaler Hinweis-Key für die UI.
+   * @property {?object} lastDiffResult - Strukturierte Diff-Ergebnisse für die UI.
    * @property {?string} waitForSelector - Optionaler Selektor, auf den beim
    *   Hidden-Tab-Scan gewartet wird.
    * @property {?number} waitForSelectorTimeoutMs - Timeout für den Selektor.
@@ -213,8 +217,10 @@ export class Page {
       fetchRedirect = Page.DEFAULTS.fetchRedirect,
       fetchHeaders = Page.DEFAULTS.fetchHeaders,
       textDiffMode = Page.DEFAULTS.textDiffMode,
+      domDiffMode = Page.DEFAULTS.domDiffMode,
       newHtmlHash = Page.DEFAULTS.newHtmlHash,
       lastScanNoticeKey = Page.DEFAULTS.lastScanNoticeKey,
+      lastDiffResult = Page.DEFAULTS.lastDiffResult,
       waitForSelector = Page.DEFAULTS.waitForSelector,
       waitForSelectorTimeoutMs = Page.DEFAULTS.waitForSelectorTimeoutMs,
       waitForNetworkIdle = Page.DEFAULTS.waitForNetworkIdle,
@@ -259,8 +265,10 @@ export class Page {
     this.fetchRedirect = fetchRedirect;
     this.fetchHeaders = fetchHeaders;
     this.textDiffMode = textDiffMode;
+    this.domDiffMode = domDiffMode;
     this.newHtmlHash = newHtmlHash;
     this.lastScanNoticeKey = lastScanNoticeKey;
+    this.lastDiffResult = lastDiffResult;
     this.waitForSelector = waitForSelector?.trim() || null;
     this.waitForSelectorTimeoutMs = waitForSelectorTimeoutMs;
     this.waitForNetworkIdle = waitForNetworkIdle;
@@ -311,8 +319,10 @@ export class Page {
       fetchRedirect: this.fetchRedirect,
       fetchHeaders: this.fetchHeaders,
       textDiffMode: this.textDiffMode,
+      domDiffMode: this.domDiffMode,
       newHtmlHash: this.newHtmlHash,
       lastScanNoticeKey: this.lastScanNoticeKey,
+      lastDiffResult: this.lastDiffResult,
       waitForSelector: this.waitForSelector,
       waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
       waitForNetworkIdle: this.waitForNetworkIdle,
@@ -360,6 +370,7 @@ export class Page {
       fetchRedirect: this.fetchRedirect,
       fetchHeaders: this.fetchHeaders,
       textDiffMode: this.textDiffMode,
+      domDiffMode: this.domDiffMode,
       waitForSelector: this.waitForSelector,
       waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
       waitForNetworkIdle: this.waitForNetworkIdle,

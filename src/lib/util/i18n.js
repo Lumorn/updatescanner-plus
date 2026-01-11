@@ -249,6 +249,10 @@ const translations = {
       'Fetch response was too short; hidden tab was used instead.',
     'scan.notice.fetchFailed':
       'Fetch failed; scan aborted.',
+    'scan.notice.domDiffUnavailable':
+      'DOM diff unavailable; HTML diff was used instead.',
+    'scan.notice.domDiffFailed':
+      'DOM diff failed; HTML diff was used instead.',
     'scan.notice.postParamsUnsupported':
       'POST parameters could not be serialized; scan aborted.',
     'scan.notice.networkIdleTimeout':
@@ -608,6 +612,10 @@ const translations = {
       'Fetch-Antwort war zu kurz; stattdessen wurde der versteckte Tab genutzt.',
     'scan.notice.fetchFailed':
       'Fetch fehlgeschlagen; Scan abgebrochen.',
+    'scan.notice.domDiffUnavailable':
+      'DOM-Diff nicht verfügbar; HTML-Diff wurde verwendet.',
+    'scan.notice.domDiffFailed':
+      'DOM-Diff fehlgeschlagen; HTML-Diff wurde verwendet.',
     'scan.notice.postParamsUnsupported':
       'POST-Parameter konnten nicht serialisiert werden; Scan abgebrochen.',
     'scan.notice.networkIdleTimeout':
