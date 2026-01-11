@@ -45,6 +45,10 @@ const translations = {
     'settings.scanHostIdleMs.placeholder': '2000',
     'settings.scanHostIdleMs.description':
       'Minimum delay between scan requests per host.',
+    'settings.scanConcurrency.label': 'Scan concurrency',
+    'settings.scanConcurrency.placeholder': '2',
+    'settings.scanConcurrency.description':
+      'Number of parallel scans running from the queue.',
     'settings.hiddenTabSettings.disabledHint':
       'Hidden tab options are only available in the new scan mode.',
     'settings.hiddenTabScan.label': 'Use hidden tab for scans by default',
@@ -370,6 +374,10 @@ const translations = {
     'settings.scanHostIdleMs.placeholder': '2000',
     'settings.scanHostIdleMs.description':
       'Mindestabstand zwischen Scan-Anfragen pro Host.',
+    'settings.scanConcurrency.label': 'Scan-Parallelität',
+    'settings.scanConcurrency.placeholder': '2',
+    'settings.scanConcurrency.description':
+      'Anzahl paralleler Scans, die aus der Queue abgearbeitet werden.',
     'settings.hiddenTabSettings.disabledHint':
       'Hidden-Tab-Optionen sind nur im neuen Scan-Modus verfügbar.',
     'settings.hiddenTabScan.label': 'Versteckten Tab für Scans verwenden',

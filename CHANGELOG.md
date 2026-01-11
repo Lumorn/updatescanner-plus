@@ -11,6 +11,7 @@
 * Globalen Scan-Modus-Umschalter im Settings-Panel ergänzt, um den Alt-Modus global zu setzen
 * Konfigurierbare Wartezeit zwischen Legacy-Scans inkl. Einstellungsfeld im Popup ergänzt
 * Konfigurierbarer Host-Delay pro Host im Popup ergänzt, inkl. Hinweis auf schnellere Legacy-Scans bei kleineren Werten
+* Konfigurierbare Scan-Parallelität ergänzt, inkl. Popup-Einstellung für die Queue
 * Hidden-Tab-Einstellungen im Popup werden im alten Scan-Modus ausgeblendet, damit nur verfügbare Optionen sichtbar sind
 * Alter Scan-Modus arbeitet nur HTML-basiert und blendet nicht benötigte Zusatzoptionen aus
 * Standard für neue Seiten auf Hidden-Tab-Scan umgestellt und Beschreibungstexte aktualisiert

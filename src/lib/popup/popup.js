@@ -59,6 +59,9 @@ export class Popup {
     view.bindScanHostIdleMsChange(
       this._handleScanHostIdleMsChange.bind(this),
     );
+    view.bindScanConcurrencyChange(
+      this._handleScanConcurrencyChange.bind(this),
+    );
     view.bindHiddenTabScanDefaultChange(
       this._handleHiddenTabScanDefaultChange.bind(this),
     );
@@ -90,6 +93,7 @@ export class Popup {
     view.setScanEngineDefault(this.config.get('scanEngineMode'));
     view.setScanLegacyIdleMs(this.config.get('scanLegacyIdleMs'));
     view.setScanHostIdleMs(this.config.get('scanHostIdleMs'));
+    view.setScanConcurrency(this.config.get('scanConcurrency'));
     view.setHiddenTabSettingsEnabled(
       this.config.get('scanEngineMode') === 'new',
     );
@@ -320,6 +324,19 @@ export class Popup {
   }
 
   /**
+   * Speichert die Scan-Parallelität.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleScanConcurrencyChange(value) {
+    const parsed = parsePositiveNumber(value);
+    const resolved = parsed ?? this.config.get('scanConcurrency');
+    this.config.set('scanConcurrency', resolved);
+    await this.config.save();
+    view.setScanConcurrency(resolved);
+  }
+
+  /**
    * Speichert den Default für versteckte Tabs bei neuen Scans.
    *
    * @param {boolean} enabled - Neuer Standardwert.
@@ -474,4 +491,16 @@ function parseNonNegativeNumber(value) {
   }
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+}
+
+/**
+ * @param {string} value - Eingabewert.
+ * @returns {?number} Zahl oder null.
+ */
+function parsePositiveNumber(value) {
+  if (!value || value.trim() === '') {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 1 ? parsed : null;
 }

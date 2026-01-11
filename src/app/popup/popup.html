@@ -212,6 +212,19 @@
           Minimum delay between scan requests per host.
         </p>
       </div>
+      <div class="settings-field">
+        <label for="scan-concurrency" class="settings-label"
+          data-i18n="settings.scanConcurrency.label">
+          Scan concurrency
+        </label>
+        <input id="scan-concurrency" type="number" min="1" step="1"
+          placeholder="2"
+          data-i18n-attr="placeholder:settings.scanConcurrency.placeholder">
+        <p class="settings-description"
+          data-i18n="settings.scanConcurrency.description">
+          Number of parallel scans running from the queue.
+        </p>
+      </div>
       <p id="hidden-tab-settings-disabled-hint"
         class="settings-description hidden"
         data-i18n="settings.hiddenTabSettings.disabledHint">

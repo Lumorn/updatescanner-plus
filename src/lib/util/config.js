@@ -24,6 +24,7 @@ export class Config {
       'hiddenTabScrollMaxHeightByDefault': null, // Standard-Max-Höhe für Scroll-Simulation
       'scanLegacyIdleMs': 2000, // Wartezeit zwischen Legacy-Scans (ms)
       'scanHostIdleMs': 2000, // Mindestabstand zwischen Scan-Requests pro Host
+      'scanConcurrency': 2, // Anzahl paralleler Scans in der Queue
       'scanEngineMode': 'legacy', // Standard-Scanmodus (legacy oder new)
     };
   }
