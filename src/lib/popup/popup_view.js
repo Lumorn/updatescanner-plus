@@ -188,6 +188,24 @@ export function bindHiddenTabDomStabilityTimeoutDefaultChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn das Mutation-Fenster geändert wird.
+ */
+export function bindHiddenTabMutationStabilityWindowDefaultChange(handler) {
+  $on(qs('#hidden-tab-mutation-stability-window-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn das Mutation-Timeout geändert wird.
+ */
+export function bindHiddenTabMutationStabilityTimeoutDefaultChange(handler) {
+  $on(qs('#hidden-tab-mutation-stability-timeout-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
  * @param {Function} handler - Wird aufgerufen, wenn das Network-Idle-Timeout geändert wird.
  */
 export function bindHiddenTabNetworkIdleTimeoutDefaultChange(handler) {
@@ -357,6 +375,24 @@ export function setHiddenTabDomStabilityWindowDefault(value) {
  */
 export function setHiddenTabDomStabilityTimeoutDefault(value) {
   qs('#hidden-tab-dom-stability-timeout-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt das Mutation-Stabilitätsfenster.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabMutationStabilityWindowDefault(value) {
+  qs('#hidden-tab-mutation-stability-window-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt das Mutation-Stabilitäts-Timeout.
+ *
+ * @param {?number} value - Optionaler Zahlenwert.
+ */
+export function setHiddenTabMutationStabilityTimeoutDefault(value) {
+  qs('#hidden-tab-mutation-stability-timeout-default').value = formatOptionalNumber(value);
 }
 
 /**

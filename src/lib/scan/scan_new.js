@@ -37,12 +37,15 @@ export const __ = {
 // Wait between scanning pages
 const SCAN_IDLE_MS = 2000;
 const TAB_LOAD_TIMEOUT_MS = 20000;
+const HIDDEN_TAB_READY_STATE_EXTRA_WAIT_MS = 200;
 const HIDDEN_TAB_DEFAULT_WAIT_MS = 3000;
 const HIDDEN_TAB_RETRY_EXTRA_WAIT_MS = 4000;
 const HIDDEN_TAB_WAIT_FOR_SELECTOR_TIMEOUT_MS = 10000;
 const HIDDEN_TAB_DOM_STABILITY_WINDOW_MS = 1000;
 const HIDDEN_TAB_DOM_STABILITY_TIMEOUT_MS = 8000;
 const HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS = 250;
+const HIDDEN_TAB_MUTATION_STABILITY_WINDOW_MS = 250;
+const HIDDEN_TAB_MUTATION_STABILITY_TIMEOUT_MS = 2000;
 const HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS = 1500;
 const HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS = 8000;
 const HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS = 100;
@@ -96,6 +99,10 @@ async function loadHiddenTabDefaults() {
           config.get('hiddenTabDomStabilityWindowMsByDefault'),
         hiddenTabDomStabilityTimeoutMsByDefault:
           config.get('hiddenTabDomStabilityTimeoutMsByDefault'),
+        hiddenTabMutationStabilityWindowMsByDefault:
+          config.get('hiddenTabMutationStabilityWindowMsByDefault'),
+        hiddenTabMutationStabilityTimeoutMsByDefault:
+          config.get('hiddenTabMutationStabilityTimeoutMsByDefault'),
         hiddenTabNetworkIdleTimeoutMsByDefault:
           config.get('hiddenTabNetworkIdleTimeoutMsByDefault'),
         hiddenTabNetworkIdleWindowMsByDefault:
@@ -497,6 +504,15 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
       }
     }
     await waitForDomStability(tab.id, page, defaults);
+    try {
+      await waitForMutationStability(tab.id, page, defaults);
+    } catch (error) {
+      if (error?.noticeKey === 'scan.notice.hiddenTabMutationTimeout') {
+        scanNoticeKey = error.noticeKey;
+      } else {
+        throw error;
+      }
+    }
     const html = await getHtmlFromTab(tab.id);
     return {html, scanNoticeKey};
   } finally {
@@ -561,6 +577,7 @@ function getHiddenTabFailureNoticeKey(error) {
 async function waitForTabReady(tabId, page) {
   const tab = await browser.tabs.get(tabId);
   if (tab.status === 'complete') {
+    await waitForDocumentReadyState(tabId);
     await waitForOptionalSelector(tabId, page);
     return;
   }
@@ -589,7 +606,40 @@ async function waitForTabReady(tabId, page) {
     browser.tabs.onUpdated.addListener(handleUpdated);
   });
 
+  await waitForDocumentReadyState(tabId);
   await waitForOptionalSelector(tabId, page);
+}
+
+/**
+ * Wartet zusätzlich, bis der document.readyState komplett ist.
+ *
+ * @param {number} tabId - Tab-ID.
+ */
+async function waitForDocumentReadyState(tabId) {
+  await executeInTab(
+    tabId,
+    (extraWaitMs) => new Promise((resolve) => {
+      const waitAfterReady = () => {
+        if (extraWaitMs > 0) {
+          setTimeout(resolve, extraWaitMs);
+        } else {
+          resolve();
+        }
+      };
+      if (document.readyState === 'complete') {
+        waitAfterReady();
+        return;
+      }
+      const onStateChange = () => {
+        if (document.readyState === 'complete') {
+          document.removeEventListener('readystatechange', onStateChange);
+          waitAfterReady();
+        }
+      };
+      document.addEventListener('readystatechange', onStateChange);
+    }),
+    [HIDDEN_TAB_READY_STATE_EXTRA_WAIT_MS],
+  );
 }
 
 /**
@@ -1165,6 +1215,92 @@ async function waitForDomStability(tabId, page, defaults) {
   }
 
   throw new ScanTimeoutError('Timeout beim Warten auf DOM-Stabilität.');
+}
+
+/**
+ * Wartet auf ein kurzes Mutations-Stabilitätsfenster im Tab.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @param {Page} page - Page object associated with the scan.
+ * @param {object} defaults - Default-Werte aus der Config.
+ */
+async function waitForMutationStability(tabId, page, defaults) {
+  const stabilityWindowMs =
+    resolveHiddenTabNumber(
+      page?.hiddenTabMutationStabilityWindowMs,
+      defaults?.hiddenTabMutationStabilityWindowMsByDefault,
+      HIDDEN_TAB_MUTATION_STABILITY_WINDOW_MS,
+    );
+  if (stabilityWindowMs <= 0) {
+    return;
+  }
+
+  const timeoutMs =
+    resolveHiddenTabNumber(
+      page?.hiddenTabMutationStabilityTimeoutMs,
+      defaults?.hiddenTabMutationStabilityTimeoutMsByDefault,
+      HIDDEN_TAB_MUTATION_STABILITY_TIMEOUT_MS,
+    );
+  const result = await executeInTab(
+    tabId,
+    (windowMsValue, timeoutMsValue, checkIntervalMs) => new Promise((resolve) => {
+      let lastMutation = performance.now();
+      let intervalId = null;
+      let timeoutId = null;
+      let observer = null;
+
+      const cleanup = () => {
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        if (observer) {
+          observer.disconnect();
+        }
+      };
+
+      const checkStability = () => {
+        const now = performance.now();
+        if (now - lastMutation >= windowMsValue) {
+          cleanup();
+          resolve({stable: true});
+        }
+      };
+
+      observer = new MutationObserver(() => {
+        lastMutation = performance.now();
+      });
+      if (document.documentElement) {
+        observer.observe(document.documentElement, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          characterData: true,
+        });
+      }
+
+      intervalId = setInterval(checkStability, checkIntervalMs);
+      timeoutId = setTimeout(() => {
+        cleanup();
+        resolve({stable: false});
+      }, timeoutMsValue);
+
+      checkStability();
+    }),
+    [
+      stabilityWindowMs,
+      Math.max(0, timeoutMs ?? 0),
+      HIDDEN_TAB_DOM_STABILITY_CHECK_INTERVAL_MS,
+    ],
+  );
+
+  if (!result?.stable) {
+    const timeoutError = new ScanTimeoutError('Timeout beim Warten auf Mutation-Stabilität.');
+    timeoutError.noticeKey = 'scan.notice.hiddenTabMutationTimeout';
+    throw timeoutError;
+  }
 }
 
 /**

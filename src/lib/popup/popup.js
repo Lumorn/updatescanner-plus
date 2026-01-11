@@ -83,6 +83,12 @@ export class Popup {
     view.bindHiddenTabDomStabilityTimeoutDefaultChange(
       this._handleHiddenTabDomStabilityTimeoutDefaultChange.bind(this),
     );
+    view.bindHiddenTabMutationStabilityWindowDefaultChange(
+      this._handleHiddenTabMutationStabilityWindowDefaultChange.bind(this),
+    );
+    view.bindHiddenTabMutationStabilityTimeoutDefaultChange(
+      this._handleHiddenTabMutationStabilityTimeoutDefaultChange.bind(this),
+    );
     view.bindHiddenTabNetworkIdleTimeoutDefaultChange(
       this._handleHiddenTabNetworkIdleTimeoutDefaultChange.bind(this),
     );
@@ -124,6 +130,12 @@ export class Popup {
     );
     view.setHiddenTabDomStabilityTimeoutDefault(
       this.config.get('hiddenTabDomStabilityTimeoutMsByDefault'),
+    );
+    view.setHiddenTabMutationStabilityWindowDefault(
+      this.config.get('hiddenTabMutationStabilityWindowMsByDefault'),
+    );
+    view.setHiddenTabMutationStabilityTimeoutDefault(
+      this.config.get('hiddenTabMutationStabilityTimeoutMsByDefault'),
     );
     view.setHiddenTabNetworkIdleTimeoutDefault(
       this.config.get('hiddenTabNetworkIdleTimeoutMsByDefault'),
@@ -427,6 +439,34 @@ export class Popup {
     this.config.set('hiddenTabDomStabilityTimeoutMsByDefault', resolved);
     await this.config.save();
     view.setHiddenTabDomStabilityTimeoutDefault(resolved);
+  }
+
+  /**
+   * Speichert das Mutation-Stabilitätsfenster.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabMutationStabilityWindowDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved =
+      parsed ?? this.config.get('hiddenTabMutationStabilityWindowMsByDefault');
+    this.config.set('hiddenTabMutationStabilityWindowMsByDefault', resolved);
+    await this.config.save();
+    view.setHiddenTabMutationStabilityWindowDefault(resolved);
+  }
+
+  /**
+   * Speichert das Mutation-Stabilitäts-Timeout.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleHiddenTabMutationStabilityTimeoutDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved =
+      parsed ?? this.config.get('hiddenTabMutationStabilityTimeoutMsByDefault');
+    this.config.set('hiddenTabMutationStabilityTimeoutMsByDefault', resolved);
+    await this.config.save();
+    view.setHiddenTabMutationStabilityTimeoutDefault(resolved);
   }
 
   /**

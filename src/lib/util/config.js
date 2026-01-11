@@ -25,6 +25,8 @@ export class Config {
       'hiddenTabDefaultWaitMsByDefault': 3000, // Standard-Wartezeit vor Snapshot (ms)
       'hiddenTabDomStabilityWindowMsByDefault': 1000, // Standard-Fenster für DOM-Stabilität (ms)
       'hiddenTabDomStabilityTimeoutMsByDefault': 8000, // Standard-Timeout für DOM-Stabilität (ms)
+      'hiddenTabMutationStabilityWindowMsByDefault': 250, // Standard-Fenster für Mutation-Stabilität (ms)
+      'hiddenTabMutationStabilityTimeoutMsByDefault': 2000, // Standard-Timeout für Mutation-Stabilität (ms)
       'hiddenTabNetworkIdleTimeoutMsByDefault': 8000, // Standard-Timeout für Network-Idle (ms)
       'hiddenTabNetworkIdleWindowMsByDefault': 1500, // Standard-Fenster für Network-Idle (ms)
       'scanLegacyIdleMs': 2000, // Wartezeit zwischen Legacy-Scans (ms)

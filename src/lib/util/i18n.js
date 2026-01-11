@@ -83,6 +83,16 @@ const translations = {
     'settings.hiddenTabDomStabilityTimeout.placeholder': '8000',
     'settings.hiddenTabDomStabilityTimeout.description':
       'Timeout for DOM stability waits on new pages.',
+    'settings.hiddenTabMutationStabilityWindow.label':
+      'Mutation stability window by default (ms)',
+    'settings.hiddenTabMutationStabilityWindow.placeholder': '250',
+    'settings.hiddenTabMutationStabilityWindow.description':
+      'Time window without DOM mutations before capturing a snapshot.',
+    'settings.hiddenTabMutationStabilityTimeout.label':
+      'Mutation stability timeout by default (ms)',
+    'settings.hiddenTabMutationStabilityTimeout.placeholder': '2000',
+    'settings.hiddenTabMutationStabilityTimeout.description':
+      'Timeout for mutation stability waits on new pages.',
     'settings.hiddenTabNetworkIdleTimeout.label':
       'Network idle timeout by default (ms)',
     'settings.hiddenTabNetworkIdleTimeout.placeholder': '8000',
@@ -261,6 +271,8 @@ const translations = {
       'Scroll simulation timed out; snapshot captured anyway.',
     'scan.notice.hiddenTabScrollError':
       'Scroll simulation failed; snapshot captured anyway.',
+    'scan.notice.hiddenTabMutationTimeout':
+      'Mutation stability timed out; snapshot captured anyway.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Scan every 5 minutes',
     'main.autoscan.every15': 'Scan every 15 minutes',
@@ -445,6 +457,16 @@ const translations = {
     'settings.hiddenTabDomStabilityTimeout.placeholder': '8000',
     'settings.hiddenTabDomStabilityTimeout.description':
       'Timeout für DOM-Stabilitätsprüfungen bei neuen Seiten.',
+    'settings.hiddenTabMutationStabilityWindow.label':
+      'Mutation-Stabilitätsfenster standardmäßig (ms)',
+    'settings.hiddenTabMutationStabilityWindow.placeholder': '250',
+    'settings.hiddenTabMutationStabilityWindow.description':
+      'Zeitfenster ohne DOM-Mutationen vor dem Snapshot.',
+    'settings.hiddenTabMutationStabilityTimeout.label':
+      'Mutation-Stabilitäts-Timeout standardmäßig (ms)',
+    'settings.hiddenTabMutationStabilityTimeout.placeholder': '2000',
+    'settings.hiddenTabMutationStabilityTimeout.description':
+      'Timeout für Mutation-Stabilitätsprüfungen bei neuen Seiten.',
     'settings.hiddenTabNetworkIdleTimeout.label':
       'Network-Idle-Timeout standardmäßig (ms)',
     'settings.hiddenTabNetworkIdleTimeout.placeholder': '8000',
@@ -624,6 +646,8 @@ const translations = {
       'Scroll-Simulation lief in ein Timeout; Snapshot trotzdem erstellt.',
     'scan.notice.hiddenTabScrollError':
       'Scroll-Simulation fehlgeschlagen; Snapshot trotzdem erstellt.',
+    'scan.notice.hiddenTabMutationTimeout':
+      'Mutation-Stabilität lief in ein Timeout; Snapshot trotzdem erstellt.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Alle 5 Minuten scannen',
     'main.autoscan.every15': 'Alle 15 Minuten scannen',
