@@ -53,6 +53,9 @@ export class Popup {
     view.bindScanEngineDefaultChange(
       this._handleScanEngineDefaultChange.bind(this),
     );
+    view.bindScanLegacyIdleMsChange(
+      this._handleScanLegacyIdleMsChange.bind(this),
+    );
     view.bindHiddenTabScanDefaultChange(
       this._handleHiddenTabScanDefaultChange.bind(this),
     );
@@ -82,6 +85,7 @@ export class Popup {
     );
     view.setLanguage(this.config.get('language'));
     view.setScanEngineDefault(this.config.get('scanEngineMode'));
+    view.setScanLegacyIdleMs(this.config.get('scanLegacyIdleMs'));
     view.setHiddenTabSettingsEnabled(
       this.config.get('scanEngineMode') === 'new',
     );
@@ -286,6 +290,19 @@ export class Popup {
   }
 
   /**
+   * Speichert die Wartezeit zwischen Legacy-Scans.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleScanLegacyIdleMsChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved = parsed ?? this.config.get('scanLegacyIdleMs');
+    this.config.set('scanLegacyIdleMs', resolved);
+    await this.config.save();
+    view.setScanLegacyIdleMs(resolved);
+  }
+
+  /**
    * Speichert den Default für versteckte Tabs bei neuen Scans.
    *
    * @param {boolean} enabled - Neuer Standardwert.
@@ -428,4 +445,16 @@ function parseOptionalNumber(value) {
   }
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+/**
+ * @param {string} value - Eingabewert.
+ * @returns {?number} Zahl oder null.
+ */
+function parseNonNegativeNumber(value) {
+  if (!value || value.trim() === '') {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 }

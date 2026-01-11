@@ -4,6 +4,7 @@ import {isUpToDate} from '/lib/update/update.js';
 import {log} from '/lib/util/log.js';
 import {waitForMs} from '/lib/util/promise.js';
 import {applyEncoding, detectEncoding} from '/lib/util/encoding.js';
+import {Config} from '/lib/util/config.js';
 import {matchHtmlWithSelector} from './selector_matcher.js';
 import {parseHTML} from '/lib/util/html.js';
 import {getChanges, ContentData, changeEnum} from './scan_content.js';
@@ -26,8 +27,7 @@ export const __ = {
   getHtmlFromResponse: getHtmlFromResponse,
 };
 
-// Wait between scanning pages
-const SCAN_IDLE_MS = 2000;
+const SCAN_LEGACY_IDLE_DEFAULT_MS = 2000;
 const TAB_LOAD_TIMEOUT_MS = 20000;
 const HIDDEN_TAB_DEFAULT_WAIT_MS = 3000;
 const HIDDEN_TAB_RETRY_EXTRA_WAIT_MS = 4000;
@@ -58,12 +58,13 @@ class ScanTimeoutError extends Error {
  */
 export async function scan(pageList) {
   let newMajorChangeCount = 0;
+  const scanIdleMs = await getScanLegacyIdleMs();
   for (const page of pageList) {
     if (await scanPage(page)) {
       newMajorChangeCount++;
     }
 
-    await __.waitForMs(SCAN_IDLE_MS);
+    await __.waitForMs(scanIdleMs);
   }
   return newMajorChangeCount;
 }
@@ -131,6 +132,22 @@ async function getHtmlFromFetch(page) {
   }
 
   return await getHtmlFromResponse(response, page);
+}
+
+/**
+ * Liest die konfigurierte Wartezeit zwischen Legacy-Scans.
+ *
+ * @returns {Promise<number>} Wartezeit in Millisekunden.
+ */
+async function getScanLegacyIdleMs() {
+  const configValue = await Config.loadSingleSetting('scanLegacyIdleMs');
+  if (configValue === null || configValue === '') {
+    return SCAN_LEGACY_IDLE_DEFAULT_MS;
+  }
+  const parsed = Number(configValue);
+  return Number.isFinite(parsed) && parsed >= 0 ?
+    parsed :
+    SCAN_LEGACY_IDLE_DEFAULT_MS;
 }
 
 /**

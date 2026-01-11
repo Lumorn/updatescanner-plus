@@ -98,6 +98,15 @@ export function bindScanEngineDefaultChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn der Legacy-Scan-Delay geändert wird.
+ */
+export function bindScanLegacyIdleMsChange(handler) {
+  $on(qs('#scan-legacy-idle-ms'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
  * @param {Function} handler - Wird aufgerufen, wenn der Default geändert wird.
  */
 export function bindHiddenTabScanDefaultChange(handler) {
@@ -195,6 +204,15 @@ export function setLanguage(language) {
  */
 export function setScanEngineDefault(mode) {
   qs('#scan-engine-default').value = mode;
+}
+
+/**
+ * Setzt die Wartezeit zwischen Legacy-Scans.
+ *
+ * @param {number} value - Wartezeit in Millisekunden.
+ */
+export function setScanLegacyIdleMs(value) {
+  qs('#scan-legacy-idle-ms').value = formatOptionalNumber(value);
 }
 
 /**

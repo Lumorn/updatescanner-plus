@@ -29,6 +29,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Popup- und Sidebar-Ansicht für die Verwaltung der Einträge.
 * Scan-Modi für ganze Seiten oder gezielte Bereiche per CSS-Selektoren.
 * Globaler Scan-Modus-Umschalter im Settings-Panel und in den Seiteneinstellungen, um zwischen altem und neuem Scan-Modus zu wechseln.
+* Konfigurierbare Pause zwischen Legacy-Scans über das Settings-Panel.
 * Einstellungsdialoge laden den globalen Scan-Engine-Modus asynchron und stabil ohne Syntaxfehler.
 * Alter Scan-Modus arbeitet rein HTML-basiert und blendet Hidden-Tab-Optionen in den Einstellungen aus.
 * Zentrale HTML-Normalisierung entfernt optional dynamische Bereiche über „Ignorierte Selektoren“ pro Seite.
