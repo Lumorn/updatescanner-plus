@@ -44,6 +44,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Standard-Scan über einen versteckten Tab ist für neue Seiten aktiviert (kann in den Einstellungen angepasst werden).
 * Aktion im Settings-Panel, um den versteckten Tab-Scan für alle bestehenden Seiten zu aktivieren/deaktivieren.
 * Fetch-Scans erkennen sehr kurze/leere Antworten und wechseln automatisch auf einen Hidden-Tab-Snapshot.
+* Hauptansicht rendert gespeicherte Seiten konsistent, indem der `<base>`-Tag im `<head>` ergänzt und fehlendes HTML-Grundgerüst automatisch erzeugt wird.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
 * Fetch-Scan unterstützt optionale Cache-/Mode-/Redirect-Policies sowie benutzerdefinierte Header pro Seite.
 * Fetch-Scan kann optional per POST senden und serialisiert POST-Parameter als URL-Form oder JSON inklusive Content-Type.
