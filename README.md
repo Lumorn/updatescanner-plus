@@ -86,6 +86,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Scans speichern NEW-HTML nur bei echten Änderungen und merken sich zusätzlich
   einen Hash, um unnötige Schreibvorgänge zu vermeiden.
 * Popup-Settings erlauben eine Anpassung des Host-Delays, um Legacy-Scans je nach Bedarf zu beschleunigen.
+* Popup-Settings erlauben die Konfiguration der Scan-Parallelität für die Queue.
 
 ## Roadmap
 

@@ -8,8 +8,8 @@ export const __ = {
   waitForMs: (...args) => waitForMs(...args),
 };
 
-// Maximale Anzahl paralleler Scans in der Queue
-const MAX_PARALLEL_SCANS = 4;
+// Standardwert für parallele Scans in der Queue
+const SCAN_CONCURRENCY_DEFAULT = 2;
 // Mindestabstand zwischen Requests pro Host
 const HOST_IDLE_MS_DEFAULT = 2000;
 const COMPACT_QUEUE_MIN_HEAD = 50;
@@ -62,6 +62,8 @@ export class ScanQueue {
     this._hostWaitQueue = new Map();
     this._hostDelayMs = null;
     this._hostDelayMsPromise = null;
+    this._scanConcurrency = null;
+    this._scanConcurrencyPromise = null;
     this._cancelRequested = false;
   }
 
@@ -186,9 +188,11 @@ export class ScanQueue {
     let majorChanges = 0;
     let scanCount = 0;
 
+    const scanConcurrency = await this._getScanConcurrency();
+    const remainingItems = this.queue.length - this._headIndex;
     const workerCount = Math.max(
       1,
-      Math.min(MAX_PARALLEL_SCANS, this.queue.length - this._headIndex),
+      Math.min(scanConcurrency, remainingItems),
     );
     const workers = [];
     for (let index = 0; index < workerCount; index++) {
@@ -329,6 +333,32 @@ export class ScanQueue {
     }
 
     return this._hostDelayMsPromise;
+  }
+
+  /**
+   * Liest die konfigurierte Scan-Parallelität aus der Config.
+   *
+   * @returns {Promise<number>} Konfigurierte Scan-Parallelität.
+   * @private
+   */
+  async _getScanConcurrency() {
+    if (this._scanConcurrency != null) {
+      return this._scanConcurrency;
+    }
+
+    if (!this._scanConcurrencyPromise) {
+      this._scanConcurrencyPromise = (async () => {
+        const configValue = await Config.loadSingleSetting('scanConcurrency');
+        const parsed = Number(configValue);
+        const resolved = Number.isFinite(parsed) && parsed >= 1 ?
+          Math.floor(parsed) :
+          SCAN_CONCURRENCY_DEFAULT;
+        this._scanConcurrency = resolved;
+        return resolved;
+      })();
+    }
+
+    return this._scanConcurrencyPromise;
   }
 
   /**

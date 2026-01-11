@@ -116,6 +116,15 @@ export function bindScanHostIdleMsChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn die Scan-Parallelität geändert wird.
+ */
+export function bindScanConcurrencyChange(handler) {
+  $on(qs('#scan-concurrency'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
  * @param {Function} handler - Wird aufgerufen, wenn der Default geändert wird.
  */
 export function bindHiddenTabScanDefaultChange(handler) {
@@ -231,6 +240,15 @@ export function setScanLegacyIdleMs(value) {
  */
 export function setScanHostIdleMs(value) {
   qs('#scan-host-idle-ms').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt die Scan-Parallelität.
+ *
+ * @param {number} value - Anzahl paralleler Scans.
+ */
+export function setScanConcurrency(value) {
+  qs('#scan-concurrency').value = formatOptionalNumber(value);
 }
 
 /**
