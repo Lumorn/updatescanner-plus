@@ -85,6 +85,7 @@ export function viewDiff(page, html) {
   }
   setScanNotice(page);
   setViewDropdown(ViewTypes.DIFF);
+  setViewDropdownDisabled(false);
   loadSandboxedIframe(html);
 }
 
@@ -104,6 +105,7 @@ export function viewOld(page, html) {
   }
   setScanNotice(page);
   setViewDropdown(ViewTypes.OLD);
+  setViewDropdownDisabled(false);
   loadSandboxedIframe(html);
 }
 
@@ -123,7 +125,21 @@ export function viewNew(page, html) {
   }
   setScanNotice(page);
   setViewDropdown(ViewTypes.NEW);
+  setViewDropdownDisabled(false);
   loadSandboxedIframe(html);
+}
+
+/**
+ * Zeigt eine sichere Fallback-Ansicht, wenn die Seite nicht gefunden wurde.
+ */
+export function viewMissingPage() {
+  const title = 'Seite nicht gefunden';
+  setTitle(title, '');
+  setSubtitle(title);
+  setScanNotice(null);
+  setViewDropdown('');
+  setViewDropdownDisabled(true);
+  showEmptyState('Die angeforderte Seite ist nicht mehr vorhanden.');
 }
 
 /**
@@ -172,6 +188,14 @@ function setViewDropdown(viewType) {
 }
 
 /**
+ * @param {boolean} isDisabled - true, wenn die View-Auswahl deaktiviert werden soll.
+ */
+function setViewDropdownDisabled(isDisabled) {
+  const viewDropdown = qs('#view-dropdown');
+  viewDropdown.disabled = isDisabled;
+}
+
+/**
  * Create a sandboxed iframe with the supplied unsafe HTML and insert it into
  * the main content area.
  *
@@ -179,6 +203,7 @@ function setViewDropdown(viewType) {
  */
 function loadSandboxedIframe(html) {
   removeIframe();
+  removeEmptyState();
   const iframe = document.createElement('iframe');
   iframe.id = 'frame';
   iframe.classList.add('frame');
@@ -194,5 +219,32 @@ function removeIframe() {
   const iframe = qs('#frame');
   if (iframe) {
     iframe.parentNode.removeChild(iframe);
+  }
+}
+
+/**
+ * Zeigt eine kleine Empty-State-Nachricht in der Hauptansicht.
+ *
+ * @param {string} message - Text für den Empty-State.
+ */
+function showEmptyState(message) {
+  removeIframe();
+  removeEmptyState();
+  const emptyState = document.createElement('div');
+  emptyState.id = 'frame-empty-state';
+  emptyState.style.padding = '24px';
+  emptyState.style.fontFamily = 'sans-serif';
+  emptyState.style.color = 'var(--text-muted, #666)';
+  emptyState.textContent = message;
+  qs('#frameContainer').appendChild(emptyState);
+}
+
+/**
+ * Entfernt den Empty-State aus der Ansicht, falls vorhanden.
+ */
+function removeEmptyState() {
+  const emptyState = qs('#frame-empty-state');
+  if (emptyState) {
+    emptyState.parentNode.removeChild(emptyState);
   }
 }
