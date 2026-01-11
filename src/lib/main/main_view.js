@@ -75,6 +75,8 @@ export function bindViewDropdownChange(handler) {
  */
 export function viewDiff(page, html) {
   setTitle(page.title, page.url);
+  setErrorBanner('');
+  setMenuDisabled(false);
   if (page.isError()) {
     setSubtitle(translate('main.subtitle.error'));
   } else if (page.newScanTime == null) {
@@ -97,6 +99,8 @@ export function viewDiff(page, html) {
  */
 export function viewOld(page, html) {
   setTitle(page.title, page.url);
+  setErrorBanner('');
+  setMenuDisabled(false);
   if (page.oldScanTime == null) {
     setSubtitle(translate('main.subtitle.oldNotAvailable'));
   } else {
@@ -117,6 +121,8 @@ export function viewOld(page, html) {
  */
 export function viewNew(page, html) {
   setTitle(page.title, page.url);
+  setErrorBanner('');
+  setMenuDisabled(false);
   if (page.newScanTime == null) {
     setSubtitle(translate('main.subtitle.newNotScanned'));
   } else {
@@ -135,11 +141,30 @@ export function viewNew(page, html) {
 export function viewMissingPage() {
   const title = 'Seite nicht gefunden';
   setTitle(title, '');
+  setErrorBanner('');
+  setMenuDisabled(false);
   setSubtitle(title);
   setScanNotice(null);
   setViewDropdown('');
   setViewDropdownDisabled(true);
   showEmptyState('Die angeforderte Seite ist nicht mehr vorhanden.');
+}
+
+/**
+ * Zeigt einen Initialisierungsfehler in der UI an und deaktiviert Interaktionen.
+ *
+ * @param {string} message - Fehlermeldung für die Anzeige.
+ */
+export function viewInitError(message) {
+  const title = 'Fehler beim Laden';
+  setTitle(title, '');
+  setSubtitle('Die Ansicht konnte nicht initialisiert werden.');
+  setScanNotice(null);
+  setViewDropdown('');
+  setViewDropdownDisabled(true);
+  setMenuDisabled(true);
+  setErrorBanner(message);
+  showEmptyState(message);
 }
 
 /**
@@ -161,6 +186,22 @@ function setTitle(title, url) {
 function setSubtitle(subtitle) {
   const subtitleElement = qs('#subtitle');
   subtitleElement.textContent = subtitle;
+}
+
+/**
+ * Setzt den Hinweisbanner für Fehler und blendet ihn bei Bedarf aus.
+ *
+ * @param {string} message - Fehlertext, leer um auszublenden.
+ */
+function setErrorBanner(message) {
+  const banner = qs('#error-banner');
+  if (!message) {
+    banner.textContent = '';
+    hideElement(banner);
+    return;
+  }
+  banner.textContent = message;
+  showElement(banner);
 }
 
 /**
@@ -193,6 +234,22 @@ function setViewDropdown(viewType) {
 function setViewDropdownDisabled(isDisabled) {
   const viewDropdown = qs('#view-dropdown');
   viewDropdown.disabled = isDisabled;
+}
+
+/**
+ * Aktiviert oder deaktiviert das Menü.
+ *
+ * @param {boolean} isDisabled - true, wenn das Menü deaktiviert werden soll.
+ */
+function setMenuDisabled(isDisabled) {
+  const menuButton = qs('#menuButton');
+  const menu = qs('#menu');
+  menuButton.disabled = isDisabled;
+  menu.classList.toggle('is-disabled', isDisabled);
+  menu.setAttribute('aria-disabled', isDisabled ? 'true' : 'false');
+  if (isDisabled) {
+    hideElement(menu);
+  }
 }
 
 /**

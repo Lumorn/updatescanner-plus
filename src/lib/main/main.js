@@ -38,22 +38,26 @@ export class Main {
    * Initialise the main page's content iframe.
    */
   async init() {
-    this.pageStore = await PageStore.load();
+    try {
+      this.pageStore = await PageStore.load();
 
-    await loadLanguageFromConfig();
-    applyTranslations();
-    document.title = translate('app.title');
+      await loadLanguageFromConfig();
+      applyTranslations();
+      document.title = translate('app.title');
 
-    view.init();
-    view.bindMenu({
-      settingsHandler: this._handleMenuSettings.bind(this),
-      debugHandler: this._handleMenuDebug.bind(this),
-    });
-    view.bindViewDropdownChange(this._handleViewDropdownChange.bind(this));
+      view.init();
+      view.bindMenu({
+        settingsHandler: this._handleMenuSettings.bind(this),
+        debugHandler: this._handleMenuDebug.bind(this),
+      });
+      view.bindViewDropdownChange(this._handleViewDropdownChange.bind(this));
 
-    dialog.init();
+      dialog.init();
 
-    this._handleUrlParams(window.location.search);
+      this._handleUrlParams(window.location.search);
+    } catch (error) {
+      this._handleInitError(error);
+    }
   }
 
   /**
@@ -63,50 +67,68 @@ export class Main {
    * '?' character.
    */
   _handleUrlParams(searchString) {
-    const params = new URLSearchParams(searchString);
-    switch (this._getUrlParam(params, paramEnum.ACTION)) {
-      case actionEnum.NEW_PAGE: {
-        this._createNewPage(
-          this._getUrlParam(params, paramEnum.TITLE),
-          this._getUrlParam(params, paramEnum.URL),
-          this._getUrlParam(params, paramEnum.PARENT_ID),
-          parseInt(this._getUrlParam(params, paramEnum.INSERT_AFTER_INDEX)),
-        );
-        break;
-      }
-      case actionEnum.NEW_PAGE_FOLDER: {
-        this._createNewPageFolder(
-          this._getUrlParam(params, paramEnum.TITLE),
-          this._getUrlParam(params, paramEnum.PARENT_ID),
-          parseInt(this._getUrlParam(params, paramEnum.INSERT_AFTER_INDEX)),
-        );
-        break;
-      }
-      case actionEnum.SHOW_DIFF: {
-        const item = this.pageStore.getItem(
-          this._getUrlParam(params, paramEnum.ID),
-        );
-        if (item instanceof Page) {
-          this._showDiff(item);
-        } else {
-          this._showMissingPage();
+    try {
+      const params = new URLSearchParams(searchString);
+      switch (this._getUrlParam(params, paramEnum.ACTION)) {
+        case actionEnum.NEW_PAGE: {
+          this._createNewPage(
+            this._getUrlParam(params, paramEnum.TITLE),
+            this._getUrlParam(params, paramEnum.URL),
+            this._getUrlParam(params, paramEnum.PARENT_ID),
+            parseInt(this._getUrlParam(params, paramEnum.INSERT_AFTER_INDEX)),
+          );
+          break;
         }
-        break;
-      }
-      case actionEnum.SHOW_SETTINGS: {
-        const item = this.pageStore.getItem(
-          this._getUrlParam(params, paramEnum.ID),
-        );
-        if (item instanceof Page) {
-          this._showPageSettings(item);
-        } else if (item instanceof PageFolder) {
-          this._showPageFolderSettings(item);
-        } else {
-          this._showMissingPage();
+        case actionEnum.NEW_PAGE_FOLDER: {
+          this._createNewPageFolder(
+            this._getUrlParam(params, paramEnum.TITLE),
+            this._getUrlParam(params, paramEnum.PARENT_ID),
+            parseInt(this._getUrlParam(params, paramEnum.INSERT_AFTER_INDEX)),
+          );
+          break;
         }
-        break;
+        case actionEnum.SHOW_DIFF: {
+          const item = this.pageStore.getItem(
+            this._getUrlParam(params, paramEnum.ID),
+          );
+          if (item instanceof Page) {
+            this._showDiff(item);
+          } else {
+            this._showMissingPage();
+          }
+          break;
+        }
+        case actionEnum.SHOW_SETTINGS: {
+          const item = this.pageStore.getItem(
+            this._getUrlParam(params, paramEnum.ID),
+          );
+          if (item instanceof Page) {
+            this._showPageSettings(item);
+          } else if (item instanceof PageFolder) {
+            this._showPageFolderSettings(item);
+          } else {
+            this._showMissingPage();
+          }
+          break;
+        }
       }
+    } catch (error) {
+      this._handleInitError(error);
     }
+  }
+
+  /**
+   * Zeigt einen Initialisierungsfehler an und deaktiviert Interaktionen.
+   *
+   * @param {Error} error - Ursprünglicher Fehler.
+   */
+  _handleInitError(error) {
+    const message =
+      'Beim Laden der Ansicht ist ein Fehler aufgetreten. Bitte die Seite neu laden.';
+    __.log(`Initialisierungsfehler in der Hauptansicht: ${error}`);
+    this.currentPage = null;
+    this.viewType = view.ViewTypes.DIFF;
+    view.viewInitError(message);
   }
 
   /**
