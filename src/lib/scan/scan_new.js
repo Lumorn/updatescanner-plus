@@ -7,7 +7,13 @@ import {applyEncoding, detectEncoding} from '/lib/util/encoding.js';
 import {Config} from '/lib/util/config.js';
 import {matchHtmlWithSelector} from './selector_matcher.js';
 import {parseHTML} from '/lib/util/html.js';
-import {getChanges, ContentData, changeEnum} from './scan_content.js';
+import {
+  getDiffResult,
+  resolveDiffMode,
+  diffModeEnum,
+  ContentData,
+  changeEnum,
+} from './scan_content.js';
 import {isMajorChange} from './fuzzy.js';
 import {resolveFaviconUrl} from './scan_favicon.js';
 
@@ -1317,7 +1323,11 @@ async function processHtml(page, scannedHtml, scanNoticeKey = null) {
   const normalizedScanHtml = normalizeHtml(scannedHtml, page);
   const normalizedPrevHtml = normalizeHtml(prevHtml, page);
 
-  if (page.textDiffMode) {
+  const diffMode = resolveDiffMode(page);
+  if (diffMode === diffModeEnum.DOM) {
+    return processDomDiff(page, normalizedScanHtml, normalizedPrevHtml, scanNoticeKey);
+  }
+  if (diffMode === diffModeEnum.TEXT) {
     return processTextDiff(page, normalizedScanHtml, normalizedPrevHtml, scanNoticeKey);
   }
 
@@ -1339,7 +1349,13 @@ async function processHtml(page, scannedHtml, scanNoticeKey = null) {
  *
  * @returns {boolean} True if a new major change is detected.
  */
-async function processHtmlWithConditions(page, scanHtml, prevHtml, scanNoticeKey) {
+async function processHtmlWithConditions(
+  page,
+  scanHtml,
+  prevHtml,
+  scanNoticeKey,
+  diffMeta = null,
+) {
   if (page.selectors && prevHtml != null) {
     const scanParts = await __.matchHtmlWithSelector(scanHtml, page.selectors);
     const prevParts = await __.matchHtmlWithSelector(prevHtml, page.selectors);
@@ -1348,6 +1364,7 @@ async function processHtmlWithConditions(page, scanHtml, prevHtml, scanNoticeKey
       new ContentData(prevHtml, prevParts),
       new ContentData(scanHtml, scanParts),
       scanNoticeKey,
+      diffMeta,
     );
   } else {
     return updatePageState(
@@ -1355,6 +1372,7 @@ async function processHtmlWithConditions(page, scanHtml, prevHtml, scanNoticeKey
       new ContentData(prevHtml, null),
       new ContentData(scanHtml, null),
       scanNoticeKey,
+      diffMeta,
     );
   }
 }
@@ -1378,6 +1396,289 @@ async function processTextDiff(page, scanHtml, prevHtml, scanNoticeKey) {
   const scanData = buildTextContentData(scanHtml, null);
   const prevData = buildTextContentData(prevHtml, null);
   return updatePageState(page, prevData, scanData, scanNoticeKey);
+}
+
+/**
+ * Verarbeitet einen DOM-Diff-Scan basierend auf HTML-Snapshots.
+ *
+ * @param {Page} page - Page object to update.
+ * @param {?string} scanHtml - Gescanntes HTML.
+ * @param {?string} prevHtml - Vorheriges HTML.
+ * @param {?string} scanNoticeKey - Optionaler Hinweis-Key.
+ * @returns {boolean} True, wenn eine neue größere Änderung erkannt wurde.
+ */
+async function processDomDiff(page, scanHtml, prevHtml, scanNoticeKey) {
+  let scanParts = null;
+  let prevParts = null;
+
+  if (page.selectors && prevHtml != null) {
+    scanParts = await __.matchHtmlWithSelector(scanHtml, page.selectors);
+    prevParts = await __.matchHtmlWithSelector(prevHtml, page.selectors);
+  }
+
+  const prevData = new ContentData(prevHtml, prevParts);
+  const scanData = new ContentData(scanHtml, scanParts);
+  const domDiffPayload = buildDomDiffPayload(prevParts, scanParts, prevHtml, scanHtml);
+
+  if (domDiffPayload.fallback) {
+    const noticeKey = scanNoticeKey ?? domDiffPayload.noticeKey;
+    return processHtmlWithConditions(
+      page,
+      scanHtml,
+      prevHtml,
+      noticeKey,
+      {mode: diffModeEnum.HTML},
+    );
+  }
+
+  const updatedNoticeKey = scanNoticeKey ?? domDiffPayload.noticeKey;
+  return updatePageState(page, prevData, scanData, updatedNoticeKey, {
+    mode: diffModeEnum.DOM,
+    changes: domDiffPayload.changes,
+  });
+}
+
+/**
+ * Erstellt eine Change-Liste für DOM-Diffs.
+ *
+ * @param {?Array<string>} prevParts - Vorherige HTML-Teile.
+ * @param {?Array<string>} scanParts - Gescannte HTML-Teile.
+ * @param {?string} prevHtml - Vorheriges HTML.
+ * @param {?string} scanHtml - Gescanntes HTML.
+ * @returns {{changes: Array, fallback: boolean, noticeKey: ?string}} Ergebnis.
+ */
+function buildDomDiffPayload(prevParts, scanParts, prevHtml, scanHtml) {
+  const fallbackResult = {
+    changes: [],
+    fallback: true,
+    noticeKey: 'scan.notice.domDiffUnavailable',
+  };
+
+  const hasDomParser = typeof DOMParser !== 'undefined';
+  if (!hasDomParser) {
+    __.log('DOMParser nicht verfügbar, DOM-Diff wird übersprungen.');
+    return fallbackResult;
+  }
+
+  const resolvedPrevParts = prevParts || [prevHtml || ''];
+  const resolvedScanParts = scanParts || [scanHtml || ''];
+  const maxLength = Math.max(resolvedPrevParts.length, resolvedScanParts.length);
+  const changes = [];
+
+  try {
+    for (let i = 0; i < maxLength; i++) {
+      const prevPart = resolvedPrevParts[i];
+      const scanPart = resolvedScanParts[i];
+      if (prevPart == null && scanPart != null) {
+        changes.push({
+          type: 'added',
+          partIndex: i,
+          path: 'root',
+        });
+        continue;
+      }
+      if (prevPart != null && scanPart == null) {
+        changes.push({
+          type: 'removed',
+          partIndex: i,
+          path: 'root',
+        });
+        continue;
+      }
+
+      const prevDom = parseHTML(prevPart || '');
+      const scanDom = parseHTML(scanPart || '');
+      if (!prevDom || !scanDom) {
+        __.log('DOMParser konnte HTML nicht parsen, DOM-Diff fällt zurück.');
+        return fallbackResult;
+      }
+
+      const prevRoot = prevDom.body ?? prevDom.documentElement;
+      const scanRoot = scanDom.body ?? scanDom.documentElement;
+      compareDomNodes(prevRoot, scanRoot, 'root', changes, i);
+    }
+  } catch (error) {
+    __.log(`DOM-Diff fehlgeschlagen: ${error}`);
+    return {
+      changes: [],
+      fallback: true,
+      noticeKey: 'scan.notice.domDiffFailed',
+    };
+  }
+
+  return {
+    changes: changes,
+    fallback: false,
+    noticeKey: null,
+  };
+}
+
+/**
+ * Vergleicht zwei DOM-Knoten rekursiv und sammelt Änderungen.
+ *
+ * @param {?Node} prevNode - Vorheriger Knoten.
+ * @param {?Node} scanNode - Neuer Knoten.
+ * @param {string} path - Pfad für UI-Hervorhebung.
+ * @param {Array} changes - Change-Liste.
+ * @param {number} partIndex - Index des gescannten Teilbereichs.
+ */
+function compareDomNodes(prevNode, scanNode, path, changes, partIndex) {
+  if (!prevNode && !scanNode) {
+    return;
+  }
+  if (!prevNode && scanNode) {
+    changes.push({
+      type: 'added',
+      partIndex: partIndex,
+      path: path,
+      nodeName: getNodeLabel(scanNode),
+    });
+    return;
+  }
+  if (prevNode && !scanNode) {
+    changes.push({
+      type: 'removed',
+      partIndex: partIndex,
+      path: path,
+      nodeName: getNodeLabel(prevNode),
+    });
+    return;
+  }
+
+  if (prevNode.nodeType !== scanNode.nodeType) {
+    changes.push({
+      type: 'replaced',
+      partIndex: partIndex,
+      path: path,
+      from: getNodeLabel(prevNode),
+      to: getNodeLabel(scanNode),
+    });
+    return;
+  }
+
+  if (prevNode.nodeType === 3) {
+    const prevText = normalizeDomText(prevNode.textContent);
+    const scanText = normalizeDomText(scanNode.textContent);
+    if (prevText !== scanText) {
+      changes.push({
+        type: 'text_changed',
+        partIndex: partIndex,
+        path: path,
+        from: prevText,
+        to: scanText,
+      });
+    }
+    return;
+  }
+
+  if (prevNode.nodeType !== 1) {
+    return;
+  }
+
+  const prevName = prevNode.nodeName.toLowerCase();
+  const scanName = scanNode.nodeName.toLowerCase();
+  if (prevName !== scanName) {
+    changes.push({
+      type: 'replaced',
+      partIndex: partIndex,
+      path: path,
+      from: prevName,
+      to: scanName,
+    });
+    return;
+  }
+
+  const prevAttributes = buildAttributeMap(prevNode);
+  const scanAttributes = buildAttributeMap(scanNode);
+  const attributeKeys = new Set([
+    ...Object.keys(prevAttributes),
+    ...Object.keys(scanAttributes),
+  ]);
+  attributeKeys.forEach((key) => {
+    if (!(key in scanAttributes)) {
+      changes.push({
+        type: 'attr_removed',
+        partIndex: partIndex,
+        path: path,
+        attribute: key,
+      });
+      return;
+    }
+    if (!(key in prevAttributes)) {
+      changes.push({
+        type: 'attr_added',
+        partIndex: partIndex,
+        path: path,
+        attribute: key,
+        value: scanAttributes[key],
+      });
+      return;
+    }
+    if (prevAttributes[key] !== scanAttributes[key]) {
+      changes.push({
+        type: 'attr_changed',
+        partIndex: partIndex,
+        path: path,
+        attribute: key,
+        from: prevAttributes[key],
+        to: scanAttributes[key],
+      });
+    }
+  });
+
+  const prevChildren = Array.from(prevNode.childNodes || []);
+  const scanChildren = Array.from(scanNode.childNodes || []);
+  const length = Math.max(prevChildren.length, scanChildren.length);
+  for (let i = 0; i < length; i++) {
+    const nextPath = `${path}/${scanName}[${i}]`;
+    compareDomNodes(prevChildren[i], scanChildren[i], nextPath, changes, partIndex);
+  }
+}
+
+/**
+ * Erstellt eine Attribut-Map für einen DOM-Knoten.
+ *
+ * @param {Node} node - DOM-Knoten.
+ * @returns {Object<string, string>} Attribute als Map.
+ */
+function buildAttributeMap(node) {
+  const attributes = {};
+  if (!node?.attributes) {
+    return attributes;
+  }
+  Array.from(node.attributes).forEach((attribute) => {
+    attributes[attribute.name] = attribute.value;
+  });
+  return attributes;
+}
+
+/**
+ * Normalisiert Text-Inhalte für DOM-Diffs.
+ *
+ * @param {?string} text - Text-Inhalt.
+ * @returns {string} Normalisierter Text.
+ */
+function normalizeDomText(text) {
+  return (text ?? '').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Liefert eine verständliche Node-Bezeichnung.
+ *
+ * @param {Node} node - DOM-Knoten.
+ * @returns {string} Bezeichnung.
+ */
+function getNodeLabel(node) {
+  if (!node) {
+    return 'unknown';
+  }
+  if (node.nodeType === 3) {
+    return '#text';
+  }
+  if (node.nodeType === 8) {
+    return '#comment';
+  }
+  return node.nodeName?.toLowerCase() || 'node';
 }
 
 /**
@@ -1453,7 +1754,13 @@ function normalizeTextContent(text) {
  *
  * @returns {boolean} True if a new major change is detected.
  */
-async function updatePageState(page, prevHtmlData, scannedHtmlData, scanNoticeKey = null) {
+async function updatePageState(
+  page,
+  prevHtmlData,
+  scannedHtmlData,
+  scanNoticeKey = null,
+  diffMeta = null,
+) {
   const updatedPage = await Page.load(page.id);
   const scannedHtmlHash = computeHtmlHash(scannedHtmlData.html);
   updatedPage.lastScanNoticeKey = scanNoticeKey;
@@ -1462,11 +1769,13 @@ async function updatePageState(page, prevHtmlData, scannedHtmlData, scanNoticeKe
     scannedHtmlData.html,
   );
 
-  const changeType = getChanges(
+  const diffResult = getDiffResult(
     prevHtmlData,
     scannedHtmlData,
     updatedPage,
+    diffMeta || {},
   );
+  const changeType = diffResult.changeType;
 
   const isSameHtml = prevHtmlData.html === scannedHtmlData.html;
   const isSameHash = updatedPage.newHtmlHash != null &&
@@ -1498,6 +1807,7 @@ async function updatePageState(page, prevHtmlData, scannedHtmlData, scanNoticeKe
 
   updatedPage.newHtmlHash = scannedHtmlHash;
   updatedPage.newScanTime = Date.now();
+  updatedPage.lastDiffResult = diffResult.diffResult;
 
   await updatedPage.save();
   __.log(`Scan-Ergebnis gespeichert für URL: ${updatedPage.url}`);

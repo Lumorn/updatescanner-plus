@@ -29,6 +29,7 @@
 * Fetch-Scan unterstützt POST-Requests mit Body-Serialisierung und UI-Hinweisen bei Fehlern
 * Text-Diff-Modus ergänzt, um statt HTML nur extrahierten Text (optional per Selektoren) zu vergleichen
 * Text-Diff-Ansicht rendert Textänderungen als escapten Vor/Nachher-Text statt HTML-Diff
+* DOM-Diff-Modus ergänzt, der strukturierte Change-Listen speichert, um Änderungen gezielt hervorzuheben
 * Optionaler Scan-Modus ergänzt, der die Seite in einem versteckten Tab lädt und einen DOM-Snapshot erfasst
 * Hidden-Tab-Scan versteckt Tabs per `tabs.hide`, mit Fallback in minimierte Popup-Fenster
 * Manifest um die Permission `tabHide` ergänzt, damit versteckte Tabs genutzt werden können

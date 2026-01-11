@@ -15,12 +15,26 @@ export const changeEnum = {
   MINOR_CHANGE: 'minor_change',
 };
 
+/**
+ * Enumeration für den gewählten Diff-Modus.
+ *
+ * @readonly
+ * @enum {string}
+ */
+export const diffModeEnum = {
+  HTML: 'html',
+  TEXT: 'text',
+  DOM: 'dom',
+};
+
 export const __ = {
   log: (...args) => log(...args),
   isMajorChange: (...args) => isMajorChange(...args),
   changeEnum: changeEnum,
   stripHtml: stripHtml,
   getChanges: getChanges,
+  getDiffResult: getDiffResult,
+  resolveDiffMode: resolveDiffMode,
   getIteratorFunction: getIteratorFunction,
 };
 
@@ -40,6 +54,22 @@ export class ContentData {
     this.parts = parts || null;
   }
 
+}
+
+/**
+ * Liefert den bevorzugten Diff-Modus für eine Seite.
+ *
+ * @param {Page} page - Page.
+ * @returns {diffModeEnum} Aufgelöster Diff-Modus.
+ */
+export function resolveDiffMode(page) {
+  if (page?.domDiffMode) {
+    return diffModeEnum.DOM;
+  }
+  if (page?.textDiffMode) {
+    return diffModeEnum.TEXT;
+  }
+  return diffModeEnum.HTML;
 }
 
 /**
@@ -88,6 +118,162 @@ export function getChanges(prevData, scannedData, page) {
   } else {
     return htmlChange;
   }
+}
+
+/**
+ * Liefert das Diff-Ergebnis inklusive strukturierter Change-Liste.
+ *
+ * @param {ContentData} prevData - Data for previous HTML.
+ * @param {ContentData} scannedData - Data for scanned HTML.
+ * @param {Page} page - Page.
+ * @param {{mode?: string, changes?: Array}} diffOptions - Optionales Diff-Objekt.
+ * @returns {{changeType: changeEnum, diffResult: object}} Ergebnis.
+ */
+export function getDiffResult(prevData, scannedData, page, diffOptions = {}) {
+  const resolvedMode = diffOptions.mode || resolveDiffMode(page);
+  if (prevData?.html == null || prevData.html === '') {
+    const initialChanges = Array.isArray(diffOptions.changes) ?
+      diffOptions.changes :
+      [];
+    return {
+      changeType: changeEnum.NEW_CONTENT,
+      diffResult: {
+        mode: resolvedMode,
+        changes: initialChanges,
+        summary: summarizeChanges(initialChanges),
+      },
+    };
+  }
+  if (resolvedMode === diffModeEnum.DOM) {
+    const domChanges = Array.isArray(diffOptions.changes) ?
+      diffOptions.changes :
+      [];
+    const changeType = getDomChangeType(prevData, scannedData, page, domChanges);
+    return {
+      changeType: changeType,
+      diffResult: {
+        mode: resolvedMode,
+        changes: domChanges,
+        summary: summarizeChanges(domChanges),
+      },
+    };
+  }
+
+  const changeType = getChanges(prevData, scannedData, page);
+  const ignoreTags = page?.contentMode !== Page.contentModeEnum.HTML;
+  const changes = buildTextHtmlChanges(
+    prevData,
+    scannedData,
+    page,
+    ignoreTags,
+  );
+  return {
+    changeType: changeType,
+    diffResult: {
+      mode: resolvedMode,
+      changes: changes,
+      summary: summarizeChanges(changes),
+    },
+  };
+}
+
+/**
+ * Ermittelt den Change-Typ für DOM-Diffs.
+ *
+ * @param {ContentData} prevData - Data for previous HTML.
+ * @param {ContentData} scannedData - Data for scanned HTML.
+ * @param {Page} page - Page.
+ * @param {Array} domChanges - DOM-Change-Liste.
+ * @returns {changeEnum} Change-Typ.
+ */
+function getDomChangeType(prevData, scannedData, page, domChanges) {
+  if (!domChanges || domChanges.length === 0) {
+    return changeEnum.NO_CHANGE;
+  }
+
+  const ignoreTags = page?.contentMode !== Page.contentModeEnum.HTML;
+  const prevStrip = stripHtml(
+    prevData?.html ?? '',
+    page.ignoreNumbers,
+    ignoreTags,
+  );
+  const scanStrip = stripHtml(
+    scannedData?.html ?? '',
+    page.ignoreNumbers,
+    ignoreTags,
+  );
+
+  if (prevStrip === scanStrip) {
+    return changeEnum.MINOR_CHANGE;
+  }
+  return __.isMajorChange(prevStrip, scanStrip, page.changeThreshold) ?
+    changeEnum.MAJOR_CHANGE :
+    changeEnum.MINOR_CHANGE;
+}
+
+/**
+ * Erstellt eine einfache Change-Liste für Text/HTML-Diffs.
+ *
+ * @param {ContentData} prevData - Data for previous HTML.
+ * @param {ContentData} scannedData - Data for scanned HTML.
+ * @param {Page} page - Page.
+ * @param {boolean} ignoreTags - True if tags should be stripped.
+ * @returns {Array} Change-Liste.
+ */
+function buildTextHtmlChanges(prevData, scannedData, page, ignoreTags) {
+  const prevParts = prevData.parts || [prevData.html || ''];
+  const scannedParts = scannedData.parts || [scannedData.html || ''];
+  const maxLength = Math.max(prevParts.length, scannedParts.length);
+  const changes = [];
+
+  for (let i = 0; i < maxLength; i++) {
+    const prevPart = prevParts[i];
+    const scannedPart = scannedParts[i];
+    if (prevPart == null && scannedPart != null) {
+      changes.push({
+        type: 'added',
+        partIndex: i,
+      });
+      continue;
+    }
+    if (prevPart != null && scannedPart == null) {
+      changes.push({
+        type: 'removed',
+        partIndex: i,
+      });
+      continue;
+    }
+
+    const prevStrip = stripHtml(prevPart, page.ignoreNumbers, ignoreTags) ?? '';
+    const scanStrip = stripHtml(scannedPart, page.ignoreNumbers, ignoreTags) ?? '';
+    if (prevStrip !== scanStrip) {
+      changes.push({
+        type: 'modified',
+        partIndex: i,
+        changeLength: Math.abs(prevStrip.length - scanStrip.length),
+      });
+    }
+  }
+
+  return changes;
+}
+
+/**
+ * Erstellt eine einfache Zusammenfassung für Change-Listen.
+ *
+ * @param {Array} changes - Change-Liste.
+ * @returns {{total: number, byType: object}} Zusammenfassung.
+ */
+function summarizeChanges(changes) {
+  const summary = {
+    total: changes.length,
+    byType: {},
+  };
+  changes.forEach((change) => {
+    const type = change?.type || 'unknown';
+    summary.byType[type] = (summary.byType[type] || 0) + 1;
+  });
+  return summary;
 }
 
 /**
