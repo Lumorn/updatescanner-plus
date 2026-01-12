@@ -290,6 +290,164 @@
         </fieldset>
 
         <fieldset class="settings-group">
+          <legend class="settings-group-title" data-i18n="settings.group.pageDefaults">
+            Page Defaults
+          </legend>
+          <div class="settings-group-body">
+            <div class="settings-field">
+              <label for="selectors-default" class="settings-label"
+                data-i18n="settings.selectors.label">
+                Default selectors
+              </label>
+              <div class="settings-control">
+                <input id="selectors-default" type="text"
+                  placeholder=".main-content"
+                  data-i18n-attr="placeholder:settings.selectors.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.selectors.description">
+                CSS selectors used for new pages when scanning inside elements.
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="ignored-selectors-default" class="settings-label"
+                data-i18n="settings.ignoredSelectors.label">
+                Ignored selectors by default
+              </label>
+              <div class="settings-control">
+                <input id="ignored-selectors-default" type="text"
+                  placeholder=".ads, .cookie-banner"
+                  data-i18n-attr="placeholder:settings.ignoredSelectors.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.ignoredSelectors.description">
+                CSS selectors removed before comparing HTML on new pages.
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="diff-type-default" class="settings-label"
+                data-i18n="settings.diffType.label">
+                Default diff type
+              </label>
+              <div class="settings-control">
+                <select id="diff-type-default">
+                  <option value="html" data-i18n="settings.diffType.option.html">
+                    HTML diff
+                  </option>
+                  <option value="text" data-i18n="settings.diffType.option.text">
+                    Text diff
+                  </option>
+                </select>
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.diffType.description">
+                Diff type for new pages.
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="fetch-mode-default" class="settings-label"
+                data-i18n="settings.fetchMode.label">
+                Fetch mode by default
+              </label>
+              <div class="settings-control">
+                <select id="fetch-mode-default">
+                  <option value="" data-i18n="settings.fetchMode.option.default">
+                    Default
+                  </option>
+                  <option value="cors" data-i18n="settings.fetchMode.option.cors">
+                    CORS
+                  </option>
+                  <option value="no-cors" data-i18n="settings.fetchMode.option.noCors">
+                    No-CORS
+                  </option>
+                  <option value="same-origin"
+                    data-i18n="settings.fetchMode.option.sameOrigin">
+                    Same-origin
+                  </option>
+                </select>
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.fetchMode.description">
+                Default fetch mode for new pages.
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="change-threshold-default" class="settings-label"
+                data-i18n="settings.changeThreshold.label">
+                Change threshold (chars)
+              </label>
+              <div class="settings-control">
+                <input id="change-threshold-default" type="number" min="0" step="1"
+                  placeholder="100"
+                  data-i18n-attr="placeholder:settings.changeThreshold.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.changeThreshold.description">
+                Minimum number of changed characters for new pages.
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="min-change-chars-default" class="settings-label"
+                data-i18n="settings.minChangeChars.label">
+                Minimum character change
+              </label>
+              <div class="settings-control">
+                <input id="min-change-chars-default" type="number" min="0" step="1"
+                  placeholder="0"
+                  data-i18n-attr="placeholder:settings.minChangeChars.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.minChangeChars.description">
+                Ignore smaller character changes on new pages.
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="min-change-words-default" class="settings-label"
+                data-i18n="settings.minChangeWords.label">
+                Minimum word change
+              </label>
+              <div class="settings-control">
+                <input id="min-change-words-default" type="number" min="0" step="1"
+                  placeholder="0"
+                  data-i18n-attr="placeholder:settings.minChangeWords.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.minChangeWords.description">
+                Ignore smaller word changes on new pages.
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="levenshtein-threshold-default" class="settings-label"
+                data-i18n="settings.levenshteinThreshold.label">
+                Levenshtein threshold
+              </label>
+              <div class="settings-control">
+                <input id="levenshtein-threshold-default" type="number" min="0"
+                  max="1" step="0.01" placeholder="0"
+                  data-i18n-attr="placeholder:settings.levenshteinThreshold.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.levenshteinThreshold.description">
+                Relative threshold for new pages (0-1).
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="ignore-numbers-default" class="settings-label"
+                data-i18n="settings.ignoreNumbers.label">
+                Ignore number changes by default
+              </label>
+              <div class="settings-control">
+                <input id="ignore-numbers-default" type="checkbox">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.ignoreNumbers.description">
+                Ignore numeric changes when scanning new pages.
+              </p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="settings-group">
           <legend class="settings-group-title" data-i18n="settings.group.areaSelector">
             Selected area
           </legend>

@@ -12,6 +12,12 @@ const ScanEngineMode = {
   NEW: 'new',
 };
 
+const PagePreset = {
+  CUSTOM: 'custom',
+  STATIC: 'static',
+  DYNAMIC: 'dynamic',
+};
+
 let currentScanEngineMode = ScanEngineMode.LEGACY;
 let currentDialogType = 'page';
 
@@ -42,8 +48,24 @@ export function init() {
     await persistScanEngineMode(target.value);
     setScanEngineMode(target.value);
   });
+  $on(form.elements['page-preset'], 'input', ({target}) => {
+    if (!target.value) {
+      return;
+    }
+    applyPresetSelection(target.value, form);
+  });
 
   $on(form, 'reset', () => dialog.close());
+  $on(form, 'submit', (event) => {
+    if (currentDialogType !== 'page') {
+      return;
+    }
+    const isValid = validatePageForm(form);
+    if (!isValid) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  });
 }
 
 /**
@@ -72,6 +94,8 @@ export async function openPageDialog(page) {
   form.elements['ignored-selectors'].value = page.ignoredSelectors ?? '';
   form.elements['filter-regex-list'].value = page.filterRegexList ?? '';
   form.elements['attribute-blacklist'].value = page.attributeBlacklist ?? '';
+  form.elements['page-preset'].value = PagePreset.CUSTOM;
+  resetValidationState();
 
   const scanModeName = getScanModeName(page);
   form.elements['scan-mode'].value = scanModeName;
@@ -122,6 +146,7 @@ export async function openPageDialog(page) {
   showElement(qs('#urlFieldset'));
   showElement(qs('#autoscanFieldset'));
   showElement(qs('#thresholdFieldset'));
+  showElement(qs('#presetFieldset'));
   showElement(qs('#selectorsFieldset'));
   showElement(qs('#areaSelectorFieldset'));
   showElement(qs('#ignoredSelectorsFieldset'));
@@ -238,6 +263,7 @@ export async function openPageFolderDialog(pageFolder) {
   hideElement(qs('#urlFieldset'));
   hideElement(qs('#autoscanFieldset'));
   hideElement(qs('#thresholdFieldset'));
+  hideElement(qs('#presetFieldset'));
   hideElement(qs('#selectorsFieldset'));
   hideElement(qs('#areaSelectorFieldset'));
   hideElement(qs('#ignoredSelectorsFieldset'));
@@ -410,6 +436,35 @@ const ScanModeMap = new Map([
   }],
 ]);
 
+const PresetDefinitions = new Map([
+  [PagePreset.STATIC, {
+    scanMode: 'anywhere',
+    scanSourceMode: 'http',
+    fetchMode: '',
+    diffType: Page.diffTypeEnum.HTML,
+    changeThreshold: 10,
+    ignoreNumbers: false,
+    minChangeChars: 0,
+    minChangeWords: 0,
+    levenshteinThreshold: 0,
+    headlessWaitStrategy: 'network-idle',
+    waitForNetworkIdle: true,
+  }],
+  [PagePreset.DYNAMIC, {
+    scanMode: 'anywhere',
+    scanSourceMode: 'headless',
+    fetchMode: '',
+    diffType: Page.diffTypeEnum.TEXT,
+    changeThreshold: 500,
+    ignoreNumbers: true,
+    minChangeChars: 5,
+    minChangeWords: 1,
+    levenshteinThreshold: 0.15,
+    headlessWaitStrategy: 'network-idle',
+    waitForNetworkIdle: true,
+  }],
+]);
+
 function setScanEngineMode(modeName) {
   currentScanEngineMode = modeName;
   updateScanEngineUI(modeName);
@@ -471,6 +526,45 @@ function updateModeUI(modeName) {
   updateInputDisabledStates(mode);
   updateScanModeDescription(mode);
   updateSelectorsDescription(mode.options.partialScan);
+  clearSelectorsValidation();
+}
+
+/**
+ * Wendet ein Preset auf die Formularfelder an.
+ *
+ * @param {string} presetName - Name des Presets.
+ * @param {HTMLFormElement} form - Einstellungsformular.
+ */
+function applyPresetSelection(presetName, form) {
+  if (presetName === PagePreset.CUSTOM) {
+    return;
+  }
+  const preset = PresetDefinitions.get(presetName);
+  if (!preset) {
+    return;
+  }
+
+  form.elements['scan-mode'].value = preset.scanMode;
+  updateModeUI(preset.scanMode);
+
+  form.elements['scan-source-mode'].value = preset.scanSourceMode;
+  form.elements['fetch-mode'].value = preset.fetchMode ?? '';
+  form.elements['diff-type'].value = preset.diffType;
+
+  const thresholdValue = thresholdCharsToSlider(preset.changeThreshold);
+  form.elements['threshold'].value = thresholdValue;
+  updateThresholdDescription(thresholdValue);
+
+  form.elements['ignore-numbers'].checked = preset.ignoreNumbers;
+  form.elements['min-change-chars'].value = preset.minChangeChars;
+  form.elements['min-change-words'].value = preset.minChangeWords;
+  form.elements['levenshtein-threshold'].value = preset.levenshteinThreshold;
+  form.elements['headless-wait-strategy'].value = preset.headlessWaitStrategy;
+  form.elements['wait-for-network-idle'].checked = preset.waitForNetworkIdle;
+  form.elements['selectors'].value = '';
+  form.elements['fetch-headers'].value = '';
+
+  resetValidationState();
 }
 
 /**
@@ -501,6 +595,20 @@ function updateSelectorsDescription(partialScan) {
 }
 
 /**
+ * Entfernt die Validierungsmarkierung für die Selektoren.
+ */
+function clearSelectorsValidation() {
+  const selectorsError = qs('#selectors-error');
+  if (selectorsError) {
+    hideElement(selectorsError);
+  }
+  const selectorsInput = qs('#settings-form').elements['selectors'];
+  if (selectorsInput) {
+    selectorsInput.removeAttribute('aria-invalid');
+  }
+}
+
+/**
  * Updates scan mode description.
  *
  * @param {object} mode - Scan mode.
@@ -509,6 +617,190 @@ function updateScanModeDescription(mode) {
   const form = qs('#settings-form');
   const descriptionElement = form.elements['scan-mode-description'];
   descriptionElement.value = translate(mode.descriptionKey);
+}
+
+/**
+ * Setzt alle Validierungsmeldungen zurück.
+ */
+function resetValidationState() {
+  const errorIds = [
+    '#url-error',
+    '#selectors-error',
+    '#fetch-headers-error',
+    '#min-change-chars-error',
+    '#min-change-words-error',
+    '#levenshtein-threshold-error',
+  ];
+  errorIds.forEach((selector) => {
+    const element = qs(selector);
+    if (element) {
+      hideElement(element);
+    }
+  });
+
+  const form = qs('#settings-form');
+  [
+    'url',
+    'selectors',
+    'fetch-headers',
+    'min-change-chars',
+    'min-change-words',
+    'levenshtein-threshold',
+  ].forEach((name) => {
+    const input = form.elements[name];
+    if (input) {
+      input.removeAttribute('aria-invalid');
+    }
+  });
+}
+
+/**
+ * Validiert die Seiteneinstellungen.
+ *
+ * @param {HTMLFormElement} form - Einstellungsformular.
+ * @returns {boolean} True, wenn das Formular gültig ist.
+ */
+function validatePageForm(form) {
+  resetValidationState();
+
+  let isValid = true;
+  const invalidInputs = [];
+
+  const urlValue = form.elements['url'].value?.trim();
+  if (!isValidHttpUrl(urlValue)) {
+    showElement(qs('#url-error'));
+    markInvalid(form.elements['url']);
+    invalidInputs.push(form.elements['url']);
+    isValid = false;
+  }
+
+  const modeName = form.elements['scan-mode'].value;
+  const mode = ScanModeMap.get(modeName);
+  const needsSelectors = mode?.options?.partialScan;
+  const selectorsValue = normalizeTextValue(form.elements['selectors'].value);
+  if (needsSelectors && !selectorsValue) {
+    showElement(qs('#selectors-error'));
+    markInvalid(form.elements['selectors']);
+    invalidInputs.push(form.elements['selectors']);
+    isValid = false;
+  }
+
+  if (!areFetchHeadersValid(form.elements['fetch-headers'].value)) {
+    showElement(qs('#fetch-headers-error'));
+    markInvalid(form.elements['fetch-headers']);
+    invalidInputs.push(form.elements['fetch-headers']);
+    isValid = false;
+  }
+
+  if (!isValidNonNegativeNumber(form.elements['min-change-chars'].value)) {
+    showElement(qs('#min-change-chars-error'));
+    markInvalid(form.elements['min-change-chars']);
+    invalidInputs.push(form.elements['min-change-chars']);
+    isValid = false;
+  }
+
+  if (!isValidNonNegativeNumber(form.elements['min-change-words'].value)) {
+    showElement(qs('#min-change-words-error'));
+    markInvalid(form.elements['min-change-words']);
+    invalidInputs.push(form.elements['min-change-words']);
+    isValid = false;
+  }
+
+  if (!isValidRatioNumber(form.elements['levenshtein-threshold'].value)) {
+    showElement(qs('#levenshtein-threshold-error'));
+    markInvalid(form.elements['levenshtein-threshold']);
+    invalidInputs.push(form.elements['levenshtein-threshold']);
+    isValid = false;
+  }
+
+  if (!isValid && invalidInputs.length > 0) {
+    invalidInputs[0].focus();
+  }
+
+  return isValid;
+}
+
+/**
+ * Markiert ein Feld als ungültig.
+ *
+ * @param {HTMLElement} input - Eingabefeld.
+ */
+function markInvalid(input) {
+  if (!input) {
+    return;
+  }
+  input.setAttribute('aria-invalid', 'true');
+}
+
+/**
+ * Prüft, ob eine URL gültig ist.
+ *
+ * @param {string} value - URL-String.
+ * @returns {boolean} True, wenn die URL gültig ist.
+ */
+function isValidHttpUrl(value) {
+  if (!value) {
+    return false;
+  }
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Prüft Fetch-Header auf das Format "Name: Wert".
+ *
+ * @param {string} value - Header-String.
+ * @returns {boolean} True bei gültigen Headern.
+ */
+function areFetchHeadersValid(value) {
+  if (!value || value.trim() === '') {
+    return true;
+  }
+  return value.split('\n').every((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      return true;
+    }
+    const colonIndex = trimmed.indexOf(':');
+    if (colonIndex <= 0) {
+      return false;
+    }
+    const headerName = trimmed.slice(0, colonIndex).trim();
+    const headerValue = trimmed.slice(colonIndex + 1).trim();
+    return Boolean(headerName) && Boolean(headerValue);
+  });
+}
+
+/**
+ * Prüft eine nicht-negative Zahl (oder leere Eingabe).
+ *
+ * @param {string} value - Eingabewert.
+ * @returns {boolean} True bei gültigem Wert.
+ */
+function isValidNonNegativeNumber(value) {
+  if (!value || value.trim() === '') {
+    return true;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0;
+}
+
+/**
+ * Prüft eine Ratio im Bereich 0..1 (oder leere Eingabe).
+ *
+ * @param {string} value - Eingabewert.
+ * @returns {boolean} True bei gültigem Wert.
+ */
+function isValidRatioNumber(value) {
+  if (!value || value.trim() === '') {
+    return true;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 && parsed <= 1;
 }
 
 /**

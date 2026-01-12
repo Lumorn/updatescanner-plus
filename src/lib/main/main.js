@@ -203,6 +203,24 @@ export class Main {
       await Config.loadSingleSetting('filterRegexListByDefault');
     const attributeBlacklistByDefault =
       await Config.loadSingleSetting('attributeBlacklistByDefault');
+    const selectorsByDefault =
+      await Config.loadSingleSetting('selectorsByDefault');
+    const diffTypeByDefault =
+      await Config.loadSingleSetting('diffTypeByDefault');
+    const changeThresholdByDefault =
+      await Config.loadSingleSetting('changeThresholdByDefault');
+    const minChangeCharsByDefault =
+      await Config.loadSingleSetting('minChangeCharsByDefault');
+    const minChangeWordsByDefault =
+      await Config.loadSingleSetting('minChangeWordsByDefault');
+    const levenshteinThresholdByDefault =
+      await Config.loadSingleSetting('levenshteinThresholdByDefault');
+    const ignoreNumbersByDefault =
+      await Config.loadSingleSetting('ignoreNumbersByDefault');
+    const fetchModeByDefault =
+      await Config.loadSingleSetting('fetchModeByDefault');
+    const hasDefaultSelectors =
+      Boolean(selectorsByDefault && selectorsByDefault.trim());
     const scanSourceModeByDefault = useHiddenTabScanByDefault ? 'headless' : 'http';
     const temporaryPage = new Page(-1, {
       title: title,
@@ -223,6 +241,16 @@ export class Main {
       hiddenTabScrollMaxHeight: hiddenTabScrollMaxHeightByDefault,
       filterRegexList: filterRegexListByDefault,
       attributeBlacklist: attributeBlacklistByDefault,
+      selectors: selectorsByDefault,
+      partialScan: hasDefaultSelectors,
+      requireExactMatchCount: hasDefaultSelectors,
+      diffType: diffTypeByDefault,
+      changeThreshold: changeThresholdByDefault,
+      minChangeChars: minChangeCharsByDefault,
+      minChangeWords: minChangeWordsByDefault,
+      levenshteinThreshold: levenshteinThresholdByDefault,
+      ignoreNumbers: ignoreNumbersByDefault,
+      fetchMode: fetchModeByDefault,
     });
     const newSettings = await dialog.openPageDialog(temporaryPage);
 

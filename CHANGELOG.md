@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Seiteneinstellungen um Presets für statische und dynamische Seiten ergänzt
+* Popup-Settings um Defaults für Fetch-Modus, Selektoren, Diff-Typ und Schwellenwerte erweitert
+* Validierung und Fehlertexte für URL, Selektoren, Fetch-Header und Schwellenwerte ergänzt
 * Projekt-Konzeptdokument mit Zielen, Nicht-Zielen, Änderungsarten sowie Risiken ergänzt
 * HTML-Selektoren unterstützen jetzt CSS und optional XPath (Prefix `xpath:`) für Bereichs- und Text-Diffs
 * Standard-Filterregeln entfernt Script-Tags und typische Werbe-Container bei neuen Seiten

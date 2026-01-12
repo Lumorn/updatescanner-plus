@@ -278,6 +278,87 @@ export function bindFilterRegexListDefaultChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn die Standard-Selektoren geändert werden.
+ */
+export function bindSelectorsDefaultChange(handler) {
+  $on(qs('#selectors-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn ignorierte Selektoren geändert werden.
+ */
+export function bindIgnoredSelectorsDefaultChange(handler) {
+  $on(qs('#ignored-selectors-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn der Diff-Typ geändert wird.
+ */
+export function bindDiffTypeDefaultChange(handler) {
+  $on(qs('#diff-type-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn der Fetch-Modus geändert wird.
+ */
+export function bindFetchModeDefaultChange(handler) {
+  $on(qs('#fetch-mode-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn die Änderungsschwelle geändert wird.
+ */
+export function bindChangeThresholdDefaultChange(handler) {
+  $on(qs('#change-threshold-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn die minimale Zeichenänderung geändert wird.
+ */
+export function bindMinChangeCharsDefaultChange(handler) {
+  $on(qs('#min-change-chars-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn die minimale Wortänderung geändert wird.
+ */
+export function bindMinChangeWordsDefaultChange(handler) {
+  $on(qs('#min-change-words-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn die Levenshtein-Schwelle geändert wird.
+ */
+export function bindLevenshteinThresholdDefaultChange(handler) {
+  $on(qs('#levenshtein-threshold-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn die Zahl-Ignore-Option geändert wird.
+ */
+export function bindIgnoreNumbersDefaultChange(handler) {
+  $on(qs('#ignore-numbers-default'), 'change', (event) => {
+    handler(event.target.checked);
+  });
+}
+
+/**
  * @param {Function} handler - Wird aufgerufen, wenn die Attribut-Blacklist geändert wird.
  */
 export function bindAttributeBlacklistDefaultChange(handler) {
@@ -524,6 +605,87 @@ export function setHiddenTabScrollMaxHeightDefault(value) {
  */
 export function setFilterRegexListDefault(value) {
   qs('#filter-regex-list-default').value = value ?? '';
+}
+
+/**
+ * Setzt die Standard-Selektoren für neue Seiten.
+ *
+ * @param {string} value - Selektoren-String.
+ */
+export function setSelectorsDefault(value) {
+  qs('#selectors-default').value = value ?? '';
+}
+
+/**
+ * Setzt die Standard-Ignore-Selektoren für neue Seiten.
+ *
+ * @param {string} value - Selektoren-String.
+ */
+export function setIgnoredSelectorsDefault(value) {
+  qs('#ignored-selectors-default').value = value ?? '';
+}
+
+/**
+ * Setzt den Standard-Diff-Typ für neue Seiten.
+ *
+ * @param {string} value - Diff-Typ.
+ */
+export function setDiffTypeDefault(value) {
+  qs('#diff-type-default').value = value ?? 'html';
+}
+
+/**
+ * Setzt den Standard-Fetch-Modus für neue Seiten.
+ *
+ * @param {?string} value - Fetch-Modus.
+ */
+export function setFetchModeDefault(value) {
+  qs('#fetch-mode-default').value = value ?? '';
+}
+
+/**
+ * Setzt die Standard-Änderungsschwelle.
+ *
+ * @param {?number} value - Anzahl Zeichen.
+ */
+export function setChangeThresholdDefault(value) {
+  qs('#change-threshold-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt die Standard-Minimum-Zeichenänderung.
+ *
+ * @param {?number} value - Anzahl Zeichen.
+ */
+export function setMinChangeCharsDefault(value) {
+  qs('#min-change-chars-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt die Standard-Minimum-Wortänderung.
+ *
+ * @param {?number} value - Anzahl Wörter.
+ */
+export function setMinChangeWordsDefault(value) {
+  qs('#min-change-words-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt die Standard-Levenshtein-Schwelle.
+ *
+ * @param {?number} value - Ratio.
+ */
+export function setLevenshteinThresholdDefault(value) {
+  qs('#levenshtein-threshold-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt den Default für die Option "Zahlen ignorieren".
+ *
+ * @param {boolean} enabled - Aktiviert den Default.
+ */
+export function setIgnoreNumbersDefault(enabled) {
+  qs('#ignore-numbers-default').checked = enabled;
 }
 
 /**
