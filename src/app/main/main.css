@@ -425,6 +425,13 @@ output {
   color: var(--color-text-muted);
 }
 
+.settings-error {
+  margin: var(--space-1) var(--space-4) 0;
+  font-size: var(--font-size-100);
+  color: var(--color-danger, #b00020);
+  line-height: var(--line-height-normal);
+}
+
 #dialog-buttons {
   float: right;
   margin-right: var(--space-2);

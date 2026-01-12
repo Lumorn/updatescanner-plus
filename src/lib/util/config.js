@@ -34,6 +34,14 @@ export class Config {
       'attributeBlacklistByDefault': '', // Standard-Attributliste für Filter
       'ignoredSelectorsByDefault':
         'script, .ads, .ad, .advertisement, .cookie-banner', // Standard-Selektoren für HTML-Bereinigung
+      'selectorsByDefault': '', // Standard-Selektoren für neue Seiten
+      'diffTypeByDefault': 'html', // Standard-Diff-Typ für neue Seiten
+      'changeThresholdByDefault': 100, // Standard-Änderungsschwelle (Zeichen)
+      'minChangeCharsByDefault': 0, // Standard-Minimum für Zeichenänderungen
+      'minChangeWordsByDefault': 0, // Standard-Minimum für Wortänderungen
+      'levenshteinThresholdByDefault': 0, // Standard-Levenshtein-Schwelle
+      'ignoreNumbersByDefault': false, // Standard-Option Zahlen ignorieren
+      'fetchModeByDefault': null, // Standard-Fetch-Modus für neue Seiten
       'scanLegacyIdleMs': 2000, // Wartezeit zwischen Legacy-Scans (ms)
       'scanHostIdleMs': 2000, // Mindestabstand zwischen Scan-Requests pro Host
       'scanConcurrency': 2, // Anzahl paralleler Scans in der Queue

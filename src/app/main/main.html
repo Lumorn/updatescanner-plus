@@ -108,6 +108,32 @@
                  placeholder="https://www.example.com"
                  data-i18n-attr="placeholder:main.dialog.urlPlaceholder"/>
         </label>
+        <p class="settings-error hidden" id="url-error" role="alert"
+          data-i18n="main.dialog.error.urlInvalid">
+          Please enter a valid URL.
+        </p>
+      </fieldset>
+
+      <fieldset id="presetFieldset">
+        <label for="page-preset" data-i18n="main.dialog.preset.label">
+          Preset:
+        </label>
+        <select id="page-preset" name="page-preset">
+          <option value="custom" data-i18n="main.dialog.preset.custom">
+            Custom
+          </option>
+          <option value="static" data-i18n="main.dialog.preset.static">
+            Static page
+          </option>
+          <option value="dynamic" data-i18n="main.dialog.preset.dynamic">
+            Dynamic page
+          </option>
+        </select>
+        <output id="preset-description" name="preset-description">
+          <span data-i18n="main.dialog.preset.description">
+            Apply a preset to prefill scan settings.
+          </span>
+        </output>
       </fieldset>
 
       <fieldset id="autoscanFieldset">
@@ -150,6 +176,10 @@
             Änderungen unterhalb dieses Werts werden ignoriert.
           </span>
         </output>
+        <p class="settings-error hidden" id="min-change-chars-error" role="alert"
+          data-i18n="main.dialog.error.minChangeCharsInvalid">
+          Mindestwert muss eine Zahl größer oder gleich 0 sein.
+        </p>
         <div class="settings-row">
           <label for="min-change-words" data-i18n="main.dialog.minChangeWords">
             Minimale Wortänderung:
@@ -162,6 +192,10 @@
             Änderungen unterhalb dieses Werts werden ignoriert.
           </span>
         </output>
+        <p class="settings-error hidden" id="min-change-words-error" role="alert"
+          data-i18n="main.dialog.error.minChangeWordsInvalid">
+          Mindestwert muss eine Zahl größer oder gleich 0 sein.
+        </p>
         <div class="settings-row">
           <label for="levenshtein-threshold" data-i18n="main.dialog.levenshteinThreshold">
             Levenshtein-Schwelle:
@@ -175,6 +209,10 @@
             Relative Schwelle zwischen 0 und 1.
           </span>
         </output>
+        <p class="settings-error hidden" id="levenshtein-threshold-error" role="alert"
+          data-i18n="main.dialog.error.levenshteinInvalid">
+          Levenshtein-Schwelle muss zwischen 0 und 1 liegen.
+        </p>
       </fieldset>
 
       <fieldset id="scanModeFieldset">
@@ -209,6 +247,10 @@
           <a href="https://www.w3schools.com/cssref/css_selectors.asp">
             https://www.w3schools.com/cssref/css_selectors.asp</a>
         </output>
+        <p class="settings-error hidden" id="selectors-error" role="alert"
+          data-i18n="main.dialog.error.selectorsRequired">
+          Please enter at least one selector for this scan mode.
+        </p>
       </fieldset>
       <fieldset id="areaSelectorFieldset">
         <label for="area-selector" data-i18n="main.dialog.areaSelector">
@@ -385,6 +427,10 @@
             One header per line in the format "Name: Value".
           </span>
         </output>
+        <p class="settings-error hidden" id="fetch-headers-error" role="alert"
+          data-i18n="main.dialog.error.fetchHeadersInvalid">
+          Fetch headers must use the format "Name: Value".
+        </p>
       </fieldset>
 
       <fieldset id="scanOptions">

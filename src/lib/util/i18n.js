@@ -30,6 +30,7 @@ const translations = {
     'settings.group.general': 'General',
     'settings.group.scanning': 'Scanning defaults',
     'settings.group.filters': 'Filter defaults',
+    'settings.group.pageDefaults': 'Page defaults',
     'settings.group.hiddenTab': 'Hidden tab scans',
     'settings.group.areaSelector': 'Selected area',
     'settings.language.label': 'Language',
@@ -137,6 +138,45 @@ const translations = {
     'settings.attributeBlacklist.placeholder': 'data-testid, data-reactroot',
     'settings.attributeBlacklist.description':
       'Attributes removed from the DOM before comparing.',
+    'settings.selectors.label': 'Default selectors',
+    'settings.selectors.placeholder': '.main-content',
+    'settings.selectors.description':
+      'CSS selectors applied to new pages when scanning inside elements.',
+    'settings.ignoredSelectors.label': 'Ignored selectors by default',
+    'settings.ignoredSelectors.placeholder': '.ads, .cookie-banner',
+    'settings.ignoredSelectors.description':
+      'CSS selectors removed before comparing HTML on new pages.',
+    'settings.diffType.label': 'Default diff type',
+    'settings.diffType.option.html': 'HTML diff',
+    'settings.diffType.option.text': 'Text diff',
+    'settings.diffType.description':
+      'Diff output used for new pages.',
+    'settings.fetchMode.label': 'Fetch mode by default',
+    'settings.fetchMode.option.default': 'Default',
+    'settings.fetchMode.option.cors': 'CORS',
+    'settings.fetchMode.option.noCors': 'No-CORS',
+    'settings.fetchMode.option.sameOrigin': 'Same-origin',
+    'settings.fetchMode.description':
+      'Default fetch mode for new pages.',
+    'settings.changeThreshold.label': 'Change threshold (chars)',
+    'settings.changeThreshold.placeholder': '100',
+    'settings.changeThreshold.description':
+      'Minimum number of changed characters for new pages.',
+    'settings.minChangeChars.label': 'Minimum character change',
+    'settings.minChangeChars.placeholder': '0',
+    'settings.minChangeChars.description':
+      'Ignore smaller character changes on new pages.',
+    'settings.minChangeWords.label': 'Minimum word change',
+    'settings.minChangeWords.placeholder': '0',
+    'settings.minChangeWords.description':
+      'Ignore smaller word changes on new pages.',
+    'settings.levenshteinThreshold.label': 'Levenshtein threshold',
+    'settings.levenshteinThreshold.placeholder': '0',
+    'settings.levenshteinThreshold.description':
+      'Relative threshold for new pages (0-1).',
+    'settings.ignoreNumbers.label': 'Ignore number changes by default',
+    'settings.ignoreNumbers.description':
+      'Ignore numeric changes when scanning new pages.',
     'settings.areaSelector.label': 'Selected area selector',
     'settings.areaSelector.placeholder': '.main-content',
     'settings.areaSelector.description':
@@ -189,6 +229,13 @@ const translations = {
     'main.dialog.titleLabel': 'Title:',
     'main.dialog.urlLabel': 'URL:',
     'main.dialog.urlPlaceholder': 'https://www.example.com',
+    'main.dialog.error.urlInvalid': 'Please enter a valid URL.',
+    'main.dialog.preset.label': 'Preset:',
+    'main.dialog.preset.custom': 'Custom',
+    'main.dialog.preset.static': 'Static page',
+    'main.dialog.preset.dynamic': 'Dynamic page',
+    'main.dialog.preset.description':
+      'Apply a preset to prefill scan settings.',
     'main.dialog.autoscan': 'Autoscan:',
     'main.dialog.often': 'Often',
     'main.dialog.never': 'Never',
@@ -200,14 +247,20 @@ const translations = {
     'main.dialog.minChangeChars.placeholder': '0',
     'main.dialog.minChangeChars.description':
       'Changes below this value are ignored.',
+    'main.dialog.error.minChangeCharsInvalid':
+      'Minimum character change must be 0 or more.',
     'main.dialog.minChangeWords': 'Minimum word change:',
     'main.dialog.minChangeWords.placeholder': '0',
     'main.dialog.minChangeWords.description':
       'Changes below this value are ignored.',
+    'main.dialog.error.minChangeWordsInvalid':
+      'Minimum word change must be 0 or more.',
     'main.dialog.levenshteinThreshold': 'Levenshtein threshold:',
     'main.dialog.levenshteinThreshold.placeholder': '0',
     'main.dialog.levenshteinThreshold.description':
       'Relative threshold between 0 and 1.',
+    'main.dialog.error.levenshteinInvalid':
+      'Levenshtein threshold must be between 0 and 1.',
     'main.dialog.scanEngine': 'Scan mode:',
     'main.dialog.scanEngine.legacy': 'Legacy scan mode',
     'main.dialog.scanEngine.new': 'New scan mode',
@@ -295,6 +348,8 @@ const translations = {
     'main.dialog.fetchHeaders.placeholder': 'X-Custom-Header: Value',
     'main.dialog.fetchHeaders.description':
       'One header per line in the format "Name: Value".',
+    'main.dialog.error.fetchHeadersInvalid':
+      'Fetch headers must use the format "Name: Value".',
     'main.dialog.diffType': 'Diff type',
     'main.dialog.diffType.description':
       'Choose whether the diff output compares HTML or extracted text.',
@@ -302,6 +357,8 @@ const translations = {
     'main.dialog.diffType.text': 'Text diff (standard)',
     'main.dialog.selectors': 'CSS selectors:',
     'main.dialog.selectors.description': 'CSS selectors for more information see',
+    'main.dialog.error.selectorsRequired':
+      'Please enter at least one selector for this scan mode.',
     'main.dialog.ignoredSelectors': 'Ignored selectors:',
     'main.dialog.ignoredSelectors.placeholder': '.ads, .cookie-banner',
     'main.dialog.ignoredSelectors.description':
@@ -488,6 +545,7 @@ const translations = {
     'settings.group.general': 'Allgemein',
     'settings.group.scanning': 'Scan-Standards',
     'settings.group.filters': 'Filter-Standards',
+    'settings.group.pageDefaults': 'Seiten-Standards',
     'settings.group.hiddenTab': 'Hidden-Tab-Scans',
     'settings.group.areaSelector': 'Bereichsauswahl',
     'settings.language.label': 'Sprache',
@@ -596,6 +654,45 @@ const translations = {
     'settings.attributeBlacklist.placeholder': 'data-testid, data-reactroot',
     'settings.attributeBlacklist.description':
       'Attribute, die vor dem Vergleich aus dem DOM entfernt werden.',
+    'settings.selectors.label': 'Standard-Selektoren',
+    'settings.selectors.placeholder': '.main-content',
+    'settings.selectors.description':
+      'CSS-Selektoren für neue Seiten beim Scan innerhalb von Elementen.',
+    'settings.ignoredSelectors.label': 'Ignorierte Selektoren standardmäßig',
+    'settings.ignoredSelectors.placeholder': '.werbung, .cookie-banner',
+    'settings.ignoredSelectors.description':
+      'CSS-Selektoren, die vor dem Vergleich bei neuen Seiten entfernt werden.',
+    'settings.diffType.label': 'Standard-Diff-Typ',
+    'settings.diffType.option.html': 'HTML-Diff',
+    'settings.diffType.option.text': 'Text-Diff',
+    'settings.diffType.description':
+      'Diff-Ausgabe für neue Seiten.',
+    'settings.fetchMode.label': 'Fetch-Modus standardmäßig',
+    'settings.fetchMode.option.default': 'Standard',
+    'settings.fetchMode.option.cors': 'CORS',
+    'settings.fetchMode.option.noCors': 'No-CORS',
+    'settings.fetchMode.option.sameOrigin': 'Same-Origin',
+    'settings.fetchMode.description':
+      'Standard-Fetch-Modus für neue Seiten.',
+    'settings.changeThreshold.label': 'Änderungsschwelle (Zeichen)',
+    'settings.changeThreshold.placeholder': '100',
+    'settings.changeThreshold.description':
+      'Minimale Anzahl geänderter Zeichen für neue Seiten.',
+    'settings.minChangeChars.label': 'Minimale Zeichenänderung',
+    'settings.minChangeChars.placeholder': '0',
+    'settings.minChangeChars.description':
+      'Ignoriert kleinere Zeichenänderungen bei neuen Seiten.',
+    'settings.minChangeWords.label': 'Minimale Wortänderung',
+    'settings.minChangeWords.placeholder': '0',
+    'settings.minChangeWords.description':
+      'Ignoriert kleinere Wortänderungen bei neuen Seiten.',
+    'settings.levenshteinThreshold.label': 'Levenshtein-Schwelle',
+    'settings.levenshteinThreshold.placeholder': '0',
+    'settings.levenshteinThreshold.description':
+      'Relative Schwelle für neue Seiten (0-1).',
+    'settings.ignoreNumbers.label': 'Zahländerungen standardmäßig ignorieren',
+    'settings.ignoreNumbers.description':
+      'Ignoriert numerische Änderungen beim Scan neuer Seiten.',
     'settings.areaSelector.label': 'Bereichs-Selektor',
     'settings.areaSelector.placeholder': '.main-content',
     'settings.areaSelector.description':
@@ -648,6 +745,13 @@ const translations = {
     'main.dialog.titleLabel': 'Titel:',
     'main.dialog.urlLabel': 'URL:',
     'main.dialog.urlPlaceholder': 'https://www.beispiel.de',
+    'main.dialog.error.urlInvalid': 'Bitte eine gültige URL eingeben.',
+    'main.dialog.preset.label': 'Preset:',
+    'main.dialog.preset.custom': 'Benutzerdefiniert',
+    'main.dialog.preset.static': 'Statische Seite',
+    'main.dialog.preset.dynamic': 'Dynamische Seite',
+    'main.dialog.preset.description':
+      'Preset auswählen, um Scan-Einstellungen vorzubelegen.',
     'main.dialog.autoscan': 'Auto-Scan:',
     'main.dialog.often': 'Häufig',
     'main.dialog.never': 'Nie',
@@ -659,14 +763,20 @@ const translations = {
     'main.dialog.minChangeChars.placeholder': '0',
     'main.dialog.minChangeChars.description':
       'Änderungen unterhalb dieses Werts werden ignoriert.',
+    'main.dialog.error.minChangeCharsInvalid':
+      'Die minimale Zeichenänderung muss 0 oder größer sein.',
     'main.dialog.minChangeWords': 'Minimale Wortänderung:',
     'main.dialog.minChangeWords.placeholder': '0',
     'main.dialog.minChangeWords.description':
       'Änderungen unterhalb dieses Werts werden ignoriert.',
+    'main.dialog.error.minChangeWordsInvalid':
+      'Die minimale Wortänderung muss 0 oder größer sein.',
     'main.dialog.levenshteinThreshold': 'Levenshtein-Schwelle:',
     'main.dialog.levenshteinThreshold.placeholder': '0',
     'main.dialog.levenshteinThreshold.description':
       'Relative Schwelle zwischen 0 und 1.',
+    'main.dialog.error.levenshteinInvalid':
+      'Die Levenshtein-Schwelle muss zwischen 0 und 1 liegen.',
     'main.dialog.scanEngine': 'Scan-Modus:',
     'main.dialog.scanEngine.legacy': 'Alter Scan-Modus',
     'main.dialog.scanEngine.new': 'Neuer Scan-Modus',
@@ -754,6 +864,8 @@ const translations = {
     'main.dialog.fetchHeaders.placeholder': 'X-Custom-Header: Wert',
     'main.dialog.fetchHeaders.description':
       'Ein Header pro Zeile im Format "Name: Wert".',
+    'main.dialog.error.fetchHeadersInvalid':
+      'Fetch-Header müssen dem Format "Name: Wert" entsprechen.',
     'main.dialog.diffType': 'Diff-Typ',
     'main.dialog.diffType.description':
       'Lege fest, ob die Diff-Ausgabe HTML oder extrahierten Text vergleicht.',
@@ -762,6 +874,8 @@ const translations = {
     'main.dialog.selectors': 'CSS-Selektoren:',
     'main.dialog.selectors.description':
       'CSS-Selektoren, weitere Infos unter',
+    'main.dialog.error.selectorsRequired':
+      'Bitte mindestens einen Selektor für diesen Scan-Modus angeben.',
     'main.dialog.ignoredSelectors': 'Ignorierte Selektoren:',
     'main.dialog.ignoredSelectors.placeholder': '.werbung, .cookie-banner',
     'main.dialog.ignoredSelectors.description':

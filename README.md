@@ -62,6 +62,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Öffnung der Hauptansicht fällt bei Tab-Update-Fehlern automatisch auf einen neuen Tab zurück.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
 * Fetch-Scan unterstützt optionale Cache-/Mode-/Redirect-Policies sowie benutzerdefinierte Header pro Seite.
+* Seiteneinstellungen bieten Presets für „statische“ und „dynamische“ Seiten, um Scan-Defaults schnell zu setzen.
 * Fetch-Scan kann optional per POST senden und serialisiert POST-Parameter als URL-Form oder JSON inklusive Content-Type.
 * Diff-Typ pro Seite (Text oder HTML) mit Standard-Diff (diff-match-patch) sowie optionalem HTML-Diff mit `<ins>/<del>`-Markup.
 * Umschalter in der Diff-Ansicht, um zwischen Text- und HTML-Diff zu wechseln.
@@ -69,6 +70,8 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Optionaler DOM-Diff-Modus vergleicht die DOM-Struktur und speichert strukturierte Change-Listen zur gezielten UI-Hervorhebung.
 * Detailansicht visualisiert DOM-Diff-Änderungen mit farbigen Einträgen, Zusammenfassung und Toggle.
 * Option, Zahländerungen zu ignorieren sowie minimale Zeichen-/Wortänderungen und eine Levenshtein-Schwelle zu definieren.
+* Popup-Settings bieten Defaults für Fetch-Modus, Selektoren, Diff-Typ und Schwellenwerte neuer Seiten.
+* Einstellungsdialoge validieren URL, Selektoren, Fetch-Header und Schwellenwerte mit klaren Fehlermeldungen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
 * Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.
 * Stabile Öffnung der Hauptansicht über MV3-kompatible URL-Ermittlung.

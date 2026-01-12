@@ -114,6 +114,33 @@ export class Popup {
     view.bindFilterRegexListDefaultChange(
       this._handleFilterRegexListDefaultChange.bind(this),
     );
+    view.bindSelectorsDefaultChange(
+      this._handleSelectorsDefaultChange.bind(this),
+    );
+    view.bindIgnoredSelectorsDefaultChange(
+      this._handleIgnoredSelectorsDefaultChange.bind(this),
+    );
+    view.bindDiffTypeDefaultChange(
+      this._handleDiffTypeDefaultChange.bind(this),
+    );
+    view.bindFetchModeDefaultChange(
+      this._handleFetchModeDefaultChange.bind(this),
+    );
+    view.bindChangeThresholdDefaultChange(
+      this._handleChangeThresholdDefaultChange.bind(this),
+    );
+    view.bindMinChangeCharsDefaultChange(
+      this._handleMinChangeCharsDefaultChange.bind(this),
+    );
+    view.bindMinChangeWordsDefaultChange(
+      this._handleMinChangeWordsDefaultChange.bind(this),
+    );
+    view.bindLevenshteinThresholdDefaultChange(
+      this._handleLevenshteinThresholdDefaultChange.bind(this),
+    );
+    view.bindIgnoreNumbersDefaultChange(
+      this._handleIgnoreNumbersDefaultChange.bind(this),
+    );
     view.bindAttributeBlacklistDefaultChange(
       this._handleAttributeBlacklistDefaultChange.bind(this),
     );
@@ -169,6 +196,33 @@ export class Popup {
     );
     view.setFilterRegexListDefault(
       this.config.get('filterRegexListByDefault'),
+    );
+    view.setSelectorsDefault(
+      this.config.get('selectorsByDefault'),
+    );
+    view.setIgnoredSelectorsDefault(
+      this.config.get('ignoredSelectorsByDefault'),
+    );
+    view.setDiffTypeDefault(
+      this.config.get('diffTypeByDefault'),
+    );
+    view.setFetchModeDefault(
+      this.config.get('fetchModeByDefault'),
+    );
+    view.setChangeThresholdDefault(
+      this.config.get('changeThresholdByDefault'),
+    );
+    view.setMinChangeCharsDefault(
+      this.config.get('minChangeCharsByDefault'),
+    );
+    view.setMinChangeWordsDefault(
+      this.config.get('minChangeWordsByDefault'),
+    );
+    view.setLevenshteinThresholdDefault(
+      this.config.get('levenshteinThresholdByDefault'),
+    );
+    view.setIgnoreNumbersDefault(
+      this.config.get('ignoreNumbersByDefault'),
     );
     view.setAttributeBlacklistDefault(
       this.config.get('attributeBlacklistByDefault'),
@@ -605,6 +659,116 @@ export class Popup {
   }
 
   /**
+   * Speichert die Standard-Selektoren für neue Seiten.
+   *
+   * @param {string} value - Selektoren-String.
+   */
+  async _handleSelectorsDefaultChange(value) {
+    this.config.set('selectorsByDefault', value);
+    await this.config.save();
+    view.setSelectorsDefault(value);
+  }
+
+  /**
+   * Speichert die Standard-Ignore-Selektoren für neue Seiten.
+   *
+   * @param {string} value - Selektoren-String.
+   */
+  async _handleIgnoredSelectorsDefaultChange(value) {
+    this.config.set('ignoredSelectorsByDefault', value);
+    await this.config.save();
+    view.setIgnoredSelectorsDefault(value);
+  }
+
+  /**
+   * Speichert den Standard-Diff-Typ für neue Seiten.
+   *
+   * @param {string} value - Diff-Typ.
+   */
+  async _handleDiffTypeDefaultChange(value) {
+    const allowed = new Set(['html', 'text']);
+    const resolved = allowed.has(value) ? value : this.config.get('diffTypeByDefault');
+    this.config.set('diffTypeByDefault', resolved);
+    await this.config.save();
+    view.setDiffTypeDefault(resolved);
+  }
+
+  /**
+   * Speichert den Standard-Fetch-Modus für neue Seiten.
+   *
+   * @param {string} value - Fetch-Modus.
+   */
+  async _handleFetchModeDefaultChange(value) {
+    const resolved = value?.trim() || null;
+    this.config.set('fetchModeByDefault', resolved);
+    await this.config.save();
+    view.setFetchModeDefault(resolved);
+  }
+
+  /**
+   * Speichert die Standard-Änderungsschwelle für neue Seiten.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleChangeThresholdDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved = parsed ?? this.config.get('changeThresholdByDefault');
+    this.config.set('changeThresholdByDefault', resolved);
+    await this.config.save();
+    view.setChangeThresholdDefault(resolved);
+  }
+
+  /**
+   * Speichert die Standard-Minimum-Zeichenänderung für neue Seiten.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleMinChangeCharsDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved = parsed ?? this.config.get('minChangeCharsByDefault');
+    this.config.set('minChangeCharsByDefault', resolved);
+    await this.config.save();
+    view.setMinChangeCharsDefault(resolved);
+  }
+
+  /**
+   * Speichert die Standard-Minimum-Wortänderung für neue Seiten.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleMinChangeWordsDefaultChange(value) {
+    const parsed = parseNonNegativeNumber(value);
+    const resolved = parsed ?? this.config.get('minChangeWordsByDefault');
+    this.config.set('minChangeWordsByDefault', resolved);
+    await this.config.save();
+    view.setMinChangeWordsDefault(resolved);
+  }
+
+  /**
+   * Speichert die Standard-Levenshtein-Schwelle für neue Seiten.
+   *
+   * @param {string} value - Eingabewert.
+   */
+  async _handleLevenshteinThresholdDefaultChange(value) {
+    const parsed = parseRatioNumber(value);
+    const resolved = parsed ?? this.config.get('levenshteinThresholdByDefault');
+    this.config.set('levenshteinThresholdByDefault', resolved);
+    await this.config.save();
+    view.setLevenshteinThresholdDefault(resolved);
+  }
+
+  /**
+   * Speichert den Default für die Option "Zahlen ignorieren".
+   *
+   * @param {boolean} enabled - Neuer Standardwert.
+   */
+  async _handleIgnoreNumbersDefaultChange(enabled) {
+    this.config.set('ignoreNumbersByDefault', enabled);
+    await this.config.save();
+    view.setIgnoreNumbersDefault(enabled);
+  }
+
+  /**
    * Speichert die Default-Attribut-Blacklist für neue Seiten.
    *
    * @param {string} value - Attributliste.
@@ -753,4 +917,22 @@ function parsePositiveNumber(value) {
   }
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 1 ? parsed : null;
+}
+
+/**
+ * @param {string} value - Eingabewert.
+ * @returns {?number} Ratio oder null.
+ */
+function parseRatioNumber(value) {
+  if (!value || value.trim() === '') {
+    return null;
+  }
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return null;
+  }
+  if (parsed < 0 || parsed > 1) {
+    return null;
+  }
+  return parsed;
 }
