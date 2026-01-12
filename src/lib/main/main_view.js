@@ -93,7 +93,7 @@ export function viewDiff(page, html) {
   setDiffTypeToggleDisabled(false);
   showDiffTypeToggle();
   updateDomDiffPanel(page);
-  loadSandboxedIframe(html);
+  loadSandboxedIframe(page, html);
 }
 
 /**
@@ -118,7 +118,7 @@ export function viewOld(page, html) {
   setDiffTypeToggleDisabled(true);
   hideDiffTypeToggle();
   hideDomDiffPanel();
-  loadSandboxedIframe(html);
+  loadSandboxedIframe(page, html);
 }
 
 /**
@@ -143,7 +143,7 @@ export function viewNew(page, html) {
   setDiffTypeToggleDisabled(true);
   hideDiffTypeToggle();
   hideDomDiffPanel();
-  loadSandboxedIframe(html);
+  loadSandboxedIframe(page, html);
 }
 
 /**
@@ -623,13 +623,17 @@ function setMenuDisabled(isDisabled) {
  *
  * @param {string} html - Unsafe HTML to load.
  */
-function loadSandboxedIframe(html) {
+function loadSandboxedIframe(page, html) {
   removeIframe();
   removeEmptyState();
   const iframe = document.createElement('iframe');
   iframe.id = 'frame';
   iframe.classList.add('frame');
-  iframe.sandbox = 'allow-top-navigation allow-scripts';
+  const sandboxTokens = ['allow-top-navigation', 'allow-scripts'];
+  if (page?.allowSameOriginIframe) {
+    sandboxTokens.push('allow-same-origin');
+  }
+  iframe.sandbox = sandboxTokens.join(' ');
   iframe.srcdoc = html;
   qs('#frameContainer').appendChild(iframe);
 }
