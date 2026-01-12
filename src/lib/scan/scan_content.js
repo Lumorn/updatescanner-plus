@@ -43,15 +43,18 @@ export const __ = {
  *
  * @property {string} html - Page HTML.
  * @property {?Array} parts - HTML split.
+ * @property {?string} normalizedContent - Normalisierter Textinhalt.
  */
 export class ContentData {
   /**
    * @param {string} html - Page HTML.
    * @param {?Array} parts - HTML split.
+   * @param {?string} normalizedContent - Normalisierter Textinhalt.
    */
-  constructor(html, parts = null) {
+  constructor(html, parts = null, normalizedContent = null) {
     this.html = html || '';
     this.parts = parts || null;
+    this.normalizedContent = normalizedContent || null;
   }
 
 }

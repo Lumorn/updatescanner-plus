@@ -28,6 +28,7 @@
 * Fetch-Scans erkennen sehr kurze/leere Antworten und wechseln automatisch auf einen Hidden-Tab-Snapshot
 * Zentrale HTML-Normalisierung ergänzt, die pro Seite definierte „Ignorierte Selektoren“ entfernt/ersetzt
 * Neue Filter-Optionen ergänzt: Regex-Liste und Attribut-Blacklist pro Seite inkl. UI-Feldern und Default-Einstellungen
+* Text-Normalisierung speichert normalisierte Inhalte in der Scan-Pipeline und unterstützt optional JSONPath für strukturierte Antworten
 * Globale Einstellung ergänzt, um neue Seiten standardmäßig im versteckten Tab zu scannen
 * Aktion im Popup ergänzt, um den versteckten Tab-Scan für alle vorhandenen Seiten zu aktivieren/deaktivieren
 * Option zum Mitsenden von Cookies/Credentials pro Seite beim fetch-Scan ergänzt

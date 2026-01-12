@@ -104,6 +104,7 @@ export class Page {
       hiddenTabIgnoreSelectors: '',
       ignoredSelectors: '',
       filterRegexList: '',
+      textJsonPath: null,
       attributeBlacklist: '',
       hiddenTabUseTextSnapshotHash: false,
       hiddenTabScrollSteps: null,
@@ -238,6 +239,7 @@ export class Page {
    * @property {string} ignoredSelectors - CSS-Selektoren, die beim Scan-HTML
    *   entfernt oder ersetzt werden.
    * @property {string} filterRegexList - Regex-Liste für Textfilter vor dem Diff.
+   * @property {?string} textJsonPath - JSONPath für strukturierte Textauswahl.
    * @property {string} attributeBlacklist - Attributliste, die vor dem Diff entfernt wird.
    * @property {boolean} hiddenTabUseTextSnapshotHash - Nutzt einen Text-Hash
    *   (innerText) für den DOM-Snapshot.
@@ -297,6 +299,7 @@ export class Page {
       hiddenTabIgnoreSelectors = Page.DEFAULTS.hiddenTabIgnoreSelectors,
       ignoredSelectors = Page.DEFAULTS.ignoredSelectors,
       filterRegexList = Page.DEFAULTS.filterRegexList,
+      textJsonPath = Page.DEFAULTS.textJsonPath,
       attributeBlacklist = Page.DEFAULTS.attributeBlacklist,
       hiddenTabUseTextSnapshotHash = Page.DEFAULTS.hiddenTabUseTextSnapshotHash,
       hiddenTabScrollSteps = Page.DEFAULTS.hiddenTabScrollSteps,
@@ -352,6 +355,7 @@ export class Page {
     this.hiddenTabIgnoreSelectors = hiddenTabIgnoreSelectors;
     this.ignoredSelectors = ignoredSelectors;
     this.filterRegexList = filterRegexList;
+    this.textJsonPath = textJsonPath;
     this.attributeBlacklist = attributeBlacklist;
     this.hiddenTabUseTextSnapshotHash = hiddenTabUseTextSnapshotHash;
     this.hiddenTabScrollSteps = hiddenTabScrollSteps;
@@ -413,6 +417,7 @@ export class Page {
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       ignoredSelectors: this.ignoredSelectors,
       filterRegexList: this.filterRegexList,
+      textJsonPath: this.textJsonPath,
       attributeBlacklist: this.attributeBlacklist,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
       hiddenTabScrollSteps: this.hiddenTabScrollSteps,
@@ -466,6 +471,7 @@ export class Page {
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       ignoredSelectors: this.ignoredSelectors,
       filterRegexList: this.filterRegexList,
+      textJsonPath: this.textJsonPath,
       attributeBlacklist: this.attributeBlacklist,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
       hiddenTabScrollSteps: this.hiddenTabScrollSteps,
