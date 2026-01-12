@@ -188,6 +188,32 @@
           </span>
         </output>
       </fieldset>
+      <fieldset id="filterFieldset">
+        <label for="filter-regex-list" data-i18n="main.dialog.filterRegexList">
+          Regex filter list:
+        </label>
+        <textarea style="width: 100%" id="filter-regex-list" name="filter-regex-list"
+          rows="3"
+          placeholder="\\d{4}-\\d{2}-\\d{2}"
+          data-i18n-attr="placeholder:main.dialog.filterRegexList.placeholder"></textarea>
+        <output name="filter-regex-list-description" for="filter-regex-list">
+          <span data-i18n="main.dialog.filterRegexList.description">
+            One regex per line (or comma-separated) to remove dynamic text.
+          </span>
+        </output>
+        <label for="attribute-blacklist" data-i18n="main.dialog.attributeBlacklist">
+          Attribute blacklist:
+        </label>
+        <input style="width: 100%" id="attribute-blacklist" name="attribute-blacklist"
+          type="text"
+          placeholder="data-testid, data-reactroot"
+          data-i18n-attr="placeholder:main.dialog.attributeBlacklist.placeholder"/>
+        <output name="attribute-blacklist-description" for="attribute-blacklist">
+          <span data-i18n="main.dialog.attributeBlacklist.description">
+            Attributes removed from the DOM before comparison.
+          </span>
+        </output>
+      </fieldset>
 
       <fieldset id="scanSourceFieldset">
         <div>

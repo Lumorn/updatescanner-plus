@@ -269,6 +269,24 @@ export function bindHiddenTabScrollMaxHeightDefaultChange(handler) {
 }
 
 /**
+ * @param {Function} handler - Wird aufgerufen, wenn die Regex-Liste geändert wird.
+ */
+export function bindFilterRegexListDefaultChange(handler) {
+  $on(qs('#filter-regex-list-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
+ * @param {Function} handler - Wird aufgerufen, wenn die Attribut-Blacklist geändert wird.
+ */
+export function bindAttributeBlacklistDefaultChange(handler) {
+  $on(qs('#attribute-blacklist-default'), 'change', (event) => {
+    handler(event.target.value);
+  });
+}
+
+/**
  * @param {Function} handler - Wird aufgerufen, wenn der Bereichs-Selektor geändert wird.
  */
 export function bindAreaSelectorChange(handler) {
@@ -497,6 +515,24 @@ export function setHiddenTabScrollDelayDefault(value) {
  */
 export function setHiddenTabScrollMaxHeightDefault(value) {
   qs('#hidden-tab-scroll-max-height-default').value = formatOptionalNumber(value);
+}
+
+/**
+ * Setzt die Default-Regex-Liste für neue Seiten.
+ *
+ * @param {string} value - Regex-Liste.
+ */
+export function setFilterRegexListDefault(value) {
+  qs('#filter-regex-list-default').value = value ?? '';
+}
+
+/**
+ * Setzt die Default-Attribut-Blacklist für neue Seiten.
+ *
+ * @param {string} value - Attributliste.
+ */
+export function setAttributeBlacklistDefault(value) {
+  qs('#attribute-blacklist-default').value = value ?? '';
 }
 
 /**

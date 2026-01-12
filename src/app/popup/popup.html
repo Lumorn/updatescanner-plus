@@ -251,6 +251,43 @@
             </div>
           </div>
         </fieldset>
+        <fieldset class="settings-group">
+          <legend class="settings-group-title" data-i18n="settings.group.filters">
+            Filter Defaults
+          </legend>
+          <div class="settings-group-body">
+            <div class="settings-field">
+              <label for="filter-regex-list-default" class="settings-label"
+                data-i18n="settings.filterRegexList.label">
+                Regex filter list
+              </label>
+              <div class="settings-control">
+                <textarea id="filter-regex-list-default" rows="3"
+                  placeholder="\\d{4}-\\d{2}-\\d{2}"
+                  data-i18n-attr="placeholder:settings.filterRegexList.placeholder"></textarea>
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.filterRegexList.description">
+                Regex list for new pages, one per line.
+              </p>
+            </div>
+            <div class="settings-field">
+              <label for="attribute-blacklist-default" class="settings-label"
+                data-i18n="settings.attributeBlacklist.label">
+                Attribute blacklist
+              </label>
+              <div class="settings-control">
+                <input id="attribute-blacklist-default" type="text"
+                  placeholder="data-testid, data-reactroot"
+                  data-i18n-attr="placeholder:settings.attributeBlacklist.placeholder">
+              </div>
+              <p class="settings-description"
+                data-i18n="settings.attributeBlacklist.description">
+                Attributes removed from the DOM before comparing.
+              </p>
+            </div>
+          </div>
+        </fieldset>
 
         <fieldset class="settings-group">
           <legend class="settings-group-title" data-i18n="settings.group.areaSelector">

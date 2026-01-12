@@ -59,6 +59,8 @@ export class Page {
       hiddenTabMutationStabilityTimeoutMs: null,
       hiddenTabIgnoreSelectors: '',
       ignoredSelectors: '',
+      filterRegexList: '',
+      attributeBlacklist: '',
       hiddenTabUseTextSnapshotHash: false,
       hiddenTabScrollSteps: null,
       hiddenTabScrollDelayMs: null,
@@ -189,6 +191,8 @@ export class Page {
    *   Hidden-Tab-Snapshot ignoriert werden.
    * @property {string} ignoredSelectors - CSS-Selektoren, die beim Scan-HTML
    *   entfernt oder ersetzt werden.
+   * @property {string} filterRegexList - Regex-Liste für Textfilter vor dem Diff.
+   * @property {string} attributeBlacklist - Attributliste, die vor dem Diff entfernt wird.
    * @property {boolean} hiddenTabUseTextSnapshotHash - Nutzt einen Text-Hash
    *   (innerText) für den DOM-Snapshot.
    * @property {?number} hiddenTabScrollSteps - Schritte für Scroll-Simulation.
@@ -244,6 +248,8 @@ export class Page {
         Page.DEFAULTS.hiddenTabMutationStabilityTimeoutMs,
       hiddenTabIgnoreSelectors = Page.DEFAULTS.hiddenTabIgnoreSelectors,
       ignoredSelectors = Page.DEFAULTS.ignoredSelectors,
+      filterRegexList = Page.DEFAULTS.filterRegexList,
+      attributeBlacklist = Page.DEFAULTS.attributeBlacklist,
       hiddenTabUseTextSnapshotHash = Page.DEFAULTS.hiddenTabUseTextSnapshotHash,
       hiddenTabScrollSteps = Page.DEFAULTS.hiddenTabScrollSteps,
       hiddenTabScrollDelayMs = Page.DEFAULTS.hiddenTabScrollDelayMs,
@@ -295,6 +301,8 @@ export class Page {
     this.hiddenTabMutationStabilityTimeoutMs = hiddenTabMutationStabilityTimeoutMs;
     this.hiddenTabIgnoreSelectors = hiddenTabIgnoreSelectors;
     this.ignoredSelectors = ignoredSelectors;
+    this.filterRegexList = filterRegexList;
+    this.attributeBlacklist = attributeBlacklist;
     this.hiddenTabUseTextSnapshotHash = hiddenTabUseTextSnapshotHash;
     this.hiddenTabScrollSteps = hiddenTabScrollSteps;
     this.hiddenTabScrollDelayMs = hiddenTabScrollDelayMs;
@@ -352,6 +360,8 @@ export class Page {
       hiddenTabMutationStabilityTimeoutMs: this.hiddenTabMutationStabilityTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       ignoredSelectors: this.ignoredSelectors,
+      filterRegexList: this.filterRegexList,
+      attributeBlacklist: this.attributeBlacklist,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
       hiddenTabScrollSteps: this.hiddenTabScrollSteps,
       hiddenTabScrollDelayMs: this.hiddenTabScrollDelayMs,
@@ -401,6 +411,8 @@ export class Page {
       hiddenTabMutationStabilityTimeoutMs: this.hiddenTabMutationStabilityTimeoutMs,
       hiddenTabIgnoreSelectors: this.hiddenTabIgnoreSelectors,
       ignoredSelectors: this.ignoredSelectors,
+      filterRegexList: this.filterRegexList,
+      attributeBlacklist: this.attributeBlacklist,
       hiddenTabUseTextSnapshotHash: this.hiddenTabUseTextSnapshotHash,
       hiddenTabScrollSteps: this.hiddenTabScrollSteps,
       hiddenTabScrollDelayMs: this.hiddenTabScrollDelayMs,

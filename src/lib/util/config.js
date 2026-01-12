@@ -29,6 +29,8 @@ export class Config {
       'hiddenTabMutationStabilityTimeoutMsByDefault': 2000, // Standard-Timeout für Mutation-Stabilität (ms)
       'hiddenTabNetworkIdleTimeoutMsByDefault': 8000, // Standard-Timeout für Network-Idle (ms)
       'hiddenTabNetworkIdleWindowMsByDefault': 1500, // Standard-Fenster für Network-Idle (ms)
+      'filterRegexListByDefault': '', // Standard-Regex-Liste für Filter
+      'attributeBlacklistByDefault': '', // Standard-Attributliste für Filter
       'scanLegacyIdleMs': 2000, // Wartezeit zwischen Legacy-Scans (ms)
       'scanHostIdleMs': 2000, // Mindestabstand zwischen Scan-Requests pro Host
       'scanConcurrency': 2, // Anzahl paralleler Scans in der Queue

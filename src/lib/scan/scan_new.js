@@ -1415,14 +1415,20 @@ function normalizeHtml(html, page) {
   }
 
   const ignoreSelectors = parseIgnoreSelectorList(page?.ignoredSelectors);
-  if (ignoreSelectors.length === 0) {
+  const regexFilters = parseFilterRegexList(page?.filterRegexList);
+  const attributeBlacklist = parseAttributeBlacklist(page?.attributeBlacklist);
+  if (
+    ignoreSelectors.length === 0 &&
+    regexFilters.length === 0 &&
+    attributeBlacklist.size === 0
+  ) {
     return html;
   }
 
   const dom = parseHTML(html);
   if (!dom) {
-    __.log('DOMParser nicht verfügbar, Ignorier-Selektoren werden übersprungen.');
-    return html;
+    __.log('DOMParser nicht verfügbar, DOM-Filter werden als Text-Regex angewendet.');
+    return applyRegexListToText(html, regexFilters);
   }
 
   ignoreSelectors.forEach((selector) => {
@@ -1440,6 +1446,9 @@ function normalizeHtml(html, page) {
       // Ungültige Selektoren sollen die Normalisierung nicht blockieren.
     }
   });
+
+  removeBlacklistedAttributes(dom, attributeBlacklist);
+  applyRegexFiltersToDom(dom, regexFilters);
 
   return dom.documentElement?.outerHTML ?? html;
 }
@@ -1993,6 +2002,118 @@ function parseIgnoreSelectorList(selectors) {
     .split(/[\n,]+/)
     .map((selector) => selector.trim())
     .filter(Boolean);
+}
+
+/**
+ * Zerlegt Regex-Listen in RegExp-Objekte.
+ *
+ * @param {?string} rawList - Regex-Liste.
+ * @returns {Array<RegExp>} Regex-Objekte.
+ */
+function parseFilterRegexList(rawList) {
+  if (!rawList) {
+    return [];
+  }
+  return rawList
+    .split(/[\n,]+/)
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const isSlashWrapped = entry.startsWith('/') && entry.lastIndexOf('/') > 0;
+      try {
+        if (isSlashWrapped) {
+          const lastSlashIndex = entry.lastIndexOf('/');
+          const pattern = entry.slice(1, lastSlashIndex);
+          const flags = entry.slice(lastSlashIndex + 1);
+          return new RegExp(pattern, flags);
+        }
+        return new RegExp(entry, 'g');
+      } catch (error) {
+        __.log(`Regex-Filter ignoriert (ungültig): ${entry}`);
+        return null;
+      }
+    })
+    .filter(Boolean);
+}
+
+/**
+ * Zerlegt Attributlisten in eine Set-Blacklist.
+ *
+ * @param {?string} rawList - Attributliste.
+ * @returns {Set<string>} Attribut-Blacklist.
+ */
+function parseAttributeBlacklist(rawList) {
+  if (!rawList) {
+    return new Set();
+  }
+  const entries = rawList
+    .split(/[\n,]+/)
+    .map((entry) => entry.trim().toLowerCase())
+    .filter(Boolean);
+  return new Set(entries);
+}
+
+/**
+ * Entfernt per Blacklist definierte Attribute aus einem DOM-Dokument.
+ *
+ * @param {Document} dom - DOM-Dokument.
+ * @param {Set<string>} blacklist - Blacklist für Attribute.
+ */
+function removeBlacklistedAttributes(dom, blacklist) {
+  if (!dom || !blacklist || blacklist.size === 0) {
+    return;
+  }
+  const root = dom.body ?? dom.documentElement;
+  if (!root) {
+    return;
+  }
+  const elements = [root, ...Array.from(root.querySelectorAll('*'))];
+  elements.forEach((element) => {
+    Array.from(element.attributes || []).forEach((attribute) => {
+      if (blacklist.has(attribute.name.toLowerCase())) {
+        element.removeAttribute(attribute.name);
+      }
+    });
+  });
+}
+
+/**
+ * Wendet Regex-Filter auf Textknoten im DOM an.
+ *
+ * @param {Document} dom - DOM-Dokument.
+ * @param {Array<RegExp>} regexFilters - Regex-Filter.
+ */
+function applyRegexFiltersToDom(dom, regexFilters) {
+  if (!dom || !regexFilters || regexFilters.length === 0) {
+    return;
+  }
+  const root = dom.body ?? dom.documentElement;
+  if (!root) {
+    return;
+  }
+  const walker = dom.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let node = walker.nextNode();
+  while (node) {
+    node.textContent = applyRegexListToText(node.textContent, regexFilters);
+    node = walker.nextNode();
+  }
+}
+
+/**
+ * Wendet Regex-Filter auf Text an.
+ *
+ * @param {string} text - Ausgangstext.
+ * @param {Array<RegExp>} regexFilters - Regex-Filter.
+ * @returns {string} Bereinigter Text.
+ */
+function applyRegexListToText(text, regexFilters) {
+  if (!text || !regexFilters || regexFilters.length === 0) {
+    return text ?? '';
+  }
+  return regexFilters.reduce(
+    (result, regex) => result.replace(regex, ''),
+    text,
+  );
 }
 
 /**
