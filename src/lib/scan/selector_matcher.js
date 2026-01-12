@@ -1,5 +1,5 @@
 import {log} from '/lib/util/log.js';
-import {parseHTML} from '/lib/util/html.js';
+import {parseHTML, selectElements} from '/lib/util/html.js';
 
 export const __ = {
   log: (...args) => log(...args),
@@ -21,8 +21,13 @@ export async function matchHtmlWithSelector(html, selector) {
     __.log('DOMParser nicht verfügbar, selektorbasierte Prüfung übersprungen.');
     return [html];
   }
-  const matches = dom.querySelectorAll(selector);
-  const result = [];
-  matches.forEach((element) => result.push(element.outerHTML));
-  return result;
+  try {
+    const matches = selectElements(dom, selector);
+    const result = [];
+    matches.forEach((element) => result.push(element.outerHTML));
+    return result;
+  } catch (error) {
+    __.log(`Selektor-Fehler, verwende gesamtes HTML: ${error}`);
+    return [html];
+  }
 }

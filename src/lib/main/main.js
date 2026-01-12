@@ -176,6 +176,8 @@ export class Main {
       await Config.loadSingleSetting('waitForNetworkIdleByDefault');
     const hiddenTabIgnoreSelectorsByDefault =
       await Config.loadSingleSetting('hiddenTabIgnoreSelectorsByDefault');
+    const ignoredSelectorsByDefault =
+      await Config.loadSingleSetting('ignoredSelectorsByDefault');
     const hiddenTabUseTextSnapshotHashByDefault =
       await Config.loadSingleSetting('hiddenTabUseTextSnapshotHashByDefault');
     const hiddenTabScrollStepsByDefault =
@@ -211,6 +213,7 @@ export class Main {
       hiddenTabDomStabilityWindowMs: hiddenTabDomStabilityWindowMsByDefault,
       hiddenTabDomStabilityTimeoutMs: hiddenTabDomStabilityTimeoutMsByDefault,
       hiddenTabIgnoreSelectors: hiddenTabIgnoreSelectorsByDefault,
+      ignoredSelectors: ignoredSelectorsByDefault,
       hiddenTabUseTextSnapshotHash: hiddenTabUseTextSnapshotHashByDefault,
       hiddenTabScrollSteps: hiddenTabScrollStepsByDefault,
       hiddenTabScrollDelayMs: hiddenTabScrollDelayMsByDefault,

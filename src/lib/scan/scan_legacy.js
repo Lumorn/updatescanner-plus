@@ -6,7 +6,12 @@ import {waitForMs} from '/lib/util/promise.js';
 import {applyEncoding, detectEncoding} from '/lib/util/encoding.js';
 import {Config} from '/lib/util/config.js';
 import {matchHtmlWithSelector} from './selector_matcher.js';
-import {parseHTML} from '/lib/util/html.js';
+import {
+  parseHTML,
+  parseSelectorEntry,
+  selectElements,
+  splitSelectorList,
+} from '/lib/util/html.js';
 import {getChanges, ContentData, changeEnum} from './scan_content.js';
 import {isMajorChange} from './fuzzy.js';
 import {resolveFaviconUrl} from './scan_favicon.js';
@@ -998,14 +1003,37 @@ async function waitForOptionalSelector(tabId, page) {
     return;
   }
 
+  const parsedSelector = parseSelectorEntry(selector);
+  if (!parsedSelector.selector) {
+    return;
+  }
+
   const timeoutMs = page?.waitForSelectorTimeoutMs ?? HIDDEN_TAB_WAIT_FOR_SELECTOR_TIMEOUT_MS;
   const startTime = Date.now();
 
   while (Date.now() - startTime < timeoutMs) {
     const found = await executeInTab(
       tabId,
-      (selectorToFind) => Boolean(document.querySelector(selectorToFind)),
-      [selector],
+      (selectorToFind) => {
+        if (!selectorToFind?.selector) {
+          return false;
+        }
+        if (selectorToFind.type === 'xpath') {
+          if (typeof XPathResult === 'undefined') {
+            return false;
+          }
+          const result = document.evaluate(
+            selectorToFind.selector,
+            document,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
+            null,
+          );
+          return Boolean(result?.singleNodeValue);
+        }
+        return Boolean(document.querySelector(selectorToFind.selector));
+      },
+      [parsedSelector],
     );
     if (found) {
       return;
@@ -1096,9 +1124,55 @@ async function getDomSnapshotInfo(
       if (Array.isArray(selectorsToIgnore)) {
         removalSelectors.push(...selectorsToIgnore.filter(Boolean));
       }
+      const isXPathSelector = (selectorText) => {
+        const trimmed = String(selectorText ?? '').trim();
+        return trimmed.startsWith('xpath:') ||
+          trimmed.startsWith('xpath=') ||
+          trimmed.startsWith('/') ||
+          trimmed.startsWith('(');
+      };
+      const normalizeSelector = (selectorText) => {
+        const trimmed = String(selectorText ?? '').trim();
+        if (trimmed.startsWith('xpath:') || trimmed.startsWith('xpath=')) {
+          return {type: 'xpath', selector: trimmed.slice(6).trim()};
+        }
+        if (trimmed.startsWith('css:') || trimmed.startsWith('css=')) {
+          return {type: 'css', selector: trimmed.slice(4).trim()};
+        }
+        if (isXPathSelector(trimmed)) {
+          return {type: 'xpath', selector: trimmed};
+        }
+        return {type: 'css', selector: trimmed};
+      };
       removalSelectors.forEach((selector) => {
         try {
-          cleanedRoot.querySelectorAll(selector).forEach((element) => element.remove());
+          const normalized = normalizeSelector(selector);
+          if (!normalized.selector) {
+            return;
+          }
+          if (normalized.type === 'xpath') {
+            if (typeof XPathResult === 'undefined') {
+              return;
+            }
+            const snapshot = document.evaluate(
+              normalized.selector,
+              cleanedRoot,
+              null,
+              XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+              null,
+            );
+            for (let i = 0; i < snapshot.snapshotLength; i++) {
+              const node = snapshot.snapshotItem(i);
+              if (node?.remove) {
+                node.remove();
+              } else if (node?.parentNode) {
+                node.parentNode.removeChild(node);
+              }
+            }
+            return;
+          }
+          cleanedRoot.querySelectorAll(normalized.selector)
+            .forEach((element) => element.remove());
         } catch (error) {
           // Ungültige Selektoren sollen den Snapshot nicht blockieren.
         }
@@ -1174,7 +1248,7 @@ function normalizeHtml(html, page) {
 
   ignoreSelectors.forEach((selector) => {
     try {
-      dom.querySelectorAll(selector).forEach((element) => {
+      selectElements(dom, selector).forEach((element) => {
         const placeholder = dom.createComment(`ignored:${selector}`);
         const parent = element.parentNode;
         if (parent) {
@@ -1322,7 +1396,7 @@ function extractTextFromHtml(html, selectors) {
   }
 
   try {
-    const matches = dom.querySelectorAll(selectors);
+    const matches = selectElements(dom, selectors);
     const parts = [];
     matches.forEach((element) => {
       parts.push(normalizeTextContent(element.textContent ?? ''));
@@ -1470,13 +1544,7 @@ function computeQuickHtmlHash(html) {
  * @returns {Array<string>} Bereinigte Selektoren.
  */
 function parseIgnoreSelectorList(selectors) {
-  if (!selectors) {
-    return [];
-  }
-  return selectors
-    .split(/[\n,]+/)
-    .map((selector) => selector.trim())
-    .filter(Boolean);
+  return splitSelectorList(selectors, {splitOnComma: true});
 }
 
 /**
