@@ -205,6 +205,11 @@ Das Manifest liegt in `src/`, die Build-Artefakte landen in `dist/`.
 **Lint**
 * `npm run lint:addon`
 
+**Tests**
+* `npm run test` (Unit-Tests über Karma)
+* `npm run test:watch` (Unit-Tests im Watch-Modus)
+* `npm run test:func` (funktionale Tests via pytest)
+
 **Dev Run**
 * `npm run dev:firefox` (kopiert Abhängigkeiten nach `src/dependencies` und startet Firefox mit temporär installiertem Add-on aus `src/`)
 * Hinweis: Die für Sidebar und Storage benötigten Abhängigkeiten liegen im Repository unter `src/dependencies`. Für Updates kann `node scripts/copy-dependencies.js` genutzt werden.
