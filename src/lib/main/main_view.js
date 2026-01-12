@@ -89,6 +89,9 @@ export function viewDiff(page, html) {
   setScanNotice(page);
   setViewDropdown(ViewTypes.DIFF);
   setViewDropdownDisabled(false);
+  setDiffTypeToggleValue(page);
+  setDiffTypeToggleDisabled(false);
+  showDiffTypeToggle();
   updateDomDiffPanel(page);
   loadSandboxedIframe(html);
 }
@@ -112,6 +115,8 @@ export function viewOld(page, html) {
   setScanNotice(page);
   setViewDropdown(ViewTypes.OLD);
   setViewDropdownDisabled(false);
+  setDiffTypeToggleDisabled(true);
+  hideDiffTypeToggle();
   hideDomDiffPanel();
   loadSandboxedIframe(html);
 }
@@ -135,6 +140,8 @@ export function viewNew(page, html) {
   setScanNotice(page);
   setViewDropdown(ViewTypes.NEW);
   setViewDropdownDisabled(false);
+  setDiffTypeToggleDisabled(true);
+  hideDiffTypeToggle();
   hideDomDiffPanel();
   loadSandboxedIframe(html);
 }
@@ -151,6 +158,8 @@ export function viewMissingPage() {
   setScanNotice(null);
   setViewDropdown('');
   setViewDropdownDisabled(true);
+  setDiffTypeToggleDisabled(true);
+  hideDiffTypeToggle();
   hideDomDiffPanel();
   showEmptyState('Die angeforderte Seite ist nicht mehr vorhanden.');
 }
@@ -169,6 +178,8 @@ export function viewInitError(message) {
   setViewDropdownDisabled(true);
   setMenuDisabled(true);
   setErrorBanner(message);
+  setDiffTypeToggleDisabled(true);
+  hideDiffTypeToggle();
   hideDomDiffPanel();
   showEmptyState(message);
 }
@@ -191,6 +202,21 @@ function initDomDiffToggle() {
 }
 
 /**
+ * @param {Function} handler - Handler für den Diff-Typ-Wechsel.
+ */
+export function bindDiffTypeToggleChange(handler) {
+  const toggle = qs('#diff-type-toggle');
+  if (!toggle) {
+    return;
+  }
+  $on(toggle, 'change', ({target}) => {
+    if (target.value) {
+      handler(target.value);
+    }
+  });
+}
+
+/**
  * @param {string} title - Title of the page.
  * @param {string} url - URL of the page.
  */
@@ -209,6 +235,55 @@ function setTitle(title, url) {
 function setSubtitle(subtitle) {
   const subtitleElement = qs('#subtitle');
   subtitleElement.textContent = subtitle;
+}
+
+/**
+ * Setzt den Wert des Diff-Typ-Toggles basierend auf der aktuellen Seite.
+ *
+ * @param {Page} page - Page object.
+ */
+function setDiffTypeToggleValue(page) {
+  const toggle = qs('#diff-type-toggle');
+  if (!toggle) {
+    return;
+  }
+  const diffType = page?.diffType ?? (page?.textDiffMode ? 'text' : 'html');
+  toggle.value = diffType || 'html';
+}
+
+/**
+ * Aktiviert oder deaktiviert den Diff-Typ-Toggle.
+ *
+ * @param {boolean} disabled - True zum Deaktivieren.
+ */
+function setDiffTypeToggleDisabled(disabled) {
+  const toggle = qs('#diff-type-toggle');
+  if (!toggle) {
+    return;
+  }
+  toggle.disabled = Boolean(disabled);
+}
+
+/**
+ * Blendet den Diff-Typ-Toggle ein.
+ */
+function showDiffTypeToggle() {
+  const container = qs('#diff-type-switch');
+  if (!container) {
+    return;
+  }
+  showElement(container);
+}
+
+/**
+ * Blendet den Diff-Typ-Toggle aus.
+ */
+function hideDiffTypeToggle() {
+  const container = qs('#diff-type-switch');
+  if (!container) {
+    return;
+  }
+  hideElement(container);
 }
 
 /**

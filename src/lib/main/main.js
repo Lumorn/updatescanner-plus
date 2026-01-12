@@ -51,6 +51,9 @@ export class Main {
         debugHandler: this._handleMenuDebug.bind(this),
       });
       view.bindViewDropdownChange(this._handleViewDropdownChange.bind(this));
+      view.bindDiffTypeToggleChange(
+        this._handleDiffTypeToggleChange.bind(this),
+      );
 
       dialog.init();
 
@@ -337,6 +340,26 @@ export class Main {
   _handleViewDropdownChange(viewType) {
     this.viewType = viewType;
     this._refreshView();
+  }
+
+  /**
+   * Aktualisiert den Diff-Typ aus dem Toggle und lädt die Ansicht neu.
+   *
+   * @param {string} diffType - Gewählter Diff-Typ.
+   */
+  async _handleDiffTypeToggleChange(diffType) {
+    if (!this.currentPage) {
+      return;
+    }
+
+    const page = await Page.load(this.currentPage.id);
+    page.diffType = diffType;
+    page.textDiffMode = diffType === Page.diffTypeEnum.TEXT;
+    await page.save();
+
+    this.currentPage = page;
+    this.viewType = view.ViewTypes.DIFF;
+    await this._refreshView();
   }
 
   /**

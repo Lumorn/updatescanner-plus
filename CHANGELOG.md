@@ -35,6 +35,7 @@
 * Fetch-Scan um konfigurierbare Cache-/Mode-/Redirect-Policies und benutzerdefinierte Header erweitert
 * Fetch-Scan unterstützt POST-Requests mit Body-Serialisierung und UI-Hinweisen bei Fehlern
 * Diff-Typ pro Seite ergänzt (Text/HTML) inkl. Standard-Diff über diff-match-patch und optionalem HTML-Diff mit `<ins>/<del>`-Markup
+* Diff-Ansicht um Umschalter für Text- vs. HTML-Diff sowie besseres Styling für Einfügungen/Löschungen erweitert
 * DOM-Diff-Modus ergänzt, der strukturierte Change-Listen speichert, um Änderungen gezielt hervorzuheben
 * DOM-Diff-Detailansicht mit farbigen Change-Listen, Zusammenfassung und Toggle ergänzt
 * Optionaler Scan-Modus ergänzt, der die Seite in einem versteckten Tab lädt und einen DOM-Snapshot erfasst
