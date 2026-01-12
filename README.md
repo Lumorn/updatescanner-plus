@@ -149,6 +149,8 @@ Attribut-Blacklist gepflegt werden:
 
 * Regex-Filter werden vor dem Diff auf den Text angewendet (mehrere Regex pro
   Zeile oder kommasepariert), um z. B. Timestamps auszublenden.
+* Optional kann bei Text-Diffs ein JSONPath genutzt werden, um strukturierte
+  JSON-Antworten auf relevante Teilbereiche zu reduzieren.
 * Die Attribut-Blacklist entfernt definierte Attribute aus dem DOM, bevor HTML-
   oder DOM-Diffs berechnet werden.
 * Die Filter greifen sowohl auf die neu gescannte Seite als auch auf die

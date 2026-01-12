@@ -14,6 +14,155 @@ export function parseHTML(htmlText) {
 }
 
 /**
+ * Normalisiert Text, um instabile Whitespace-Änderungen zu reduzieren.
+ *
+ * @param {string} text - Rohtext.
+ * @returns {string} Normalisierter Text.
+ */
+export function normalizeTextContent(text) {
+  return (text ?? '').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Wendet Regex-Filter auf Text an.
+ *
+ * @param {string} text - Ausgangstext.
+ * @param {Array<RegExp>} regexFilters - Regex-Filter.
+ * @returns {string} Bereinigter Text.
+ */
+function applyRegexListToText(text, regexFilters) {
+  if (!text || !regexFilters || regexFilters.length === 0) {
+    return text ?? '';
+  }
+  return regexFilters.reduce(
+    (result, regex) => result.replace(regex, ''),
+    text,
+  );
+}
+
+/**
+ * Extrahiert einen JSON-Pfad aus Datenstrukturen.
+ *
+ * @param {any} data - JSON-Daten.
+ * @param {string} jsonPath - JSONPath-Ausdruck (z. B. $.foo.bar[0]).
+ * @returns {any} Extrahierter Wert oder undefined.
+ */
+function resolveJsonPath(data, jsonPath) {
+  if (!jsonPath) {
+    return data;
+  }
+  let path = jsonPath.trim();
+  if (path.startsWith('$')) {
+    path = path.slice(1);
+  }
+  if (path.startsWith('.')) {
+    path = path.slice(1);
+  }
+  if (!path) {
+    return data;
+  }
+  const tokens = [];
+  const tokenRegex = /(?:^|\.)([^.[\]]+)|\[(\d+|"(?:[^"\\]|\\.)+"|'(?:[^'\\]|\\.)+')\]/g;
+  let match;
+  while ((match = tokenRegex.exec(path)) !== null) {
+    const [, dotToken, bracketToken] = match;
+    if (dotToken) {
+      tokens.push(dotToken);
+    } else if (bracketToken != null) {
+      const trimmed = bracketToken.trim();
+      if (trimmed.startsWith('"') || trimmed.startsWith('\'')) {
+        tokens.push(trimmed.slice(1, -1));
+      } else {
+        tokens.push(Number.parseInt(trimmed, 10));
+      }
+    }
+  }
+  return tokens.reduce((current, token) => {
+    if (current == null) {
+      return undefined;
+    }
+    return current[token];
+  }, data);
+}
+
+/**
+ * Normalisiert HTML in stabilen Text, optional mit Selektor/Regex/JSONPath.
+ *
+ * @param {?string} html - HTML- oder JSON-Text.
+ * @param {{
+ *   selectors?: ?string,
+ *   regexFilters?: Array<RegExp>,
+ *   jsonPath?: ?string,
+ * }} options - Optionen für die Normalisierung.
+ * @returns {{text: string, parts: ?Array<string>, normalizedContent: string}}
+ *   Normalisierter Text und optional Teile.
+ */
+export function normalizeHtmlToText(html, options = {}) {
+  const {selectors = null, regexFilters = [], jsonPath = null} = options;
+  if (!html) {
+    return {text: '', parts: selectors ? [''] : null, normalizedContent: ''};
+  }
+
+  const trimmed = String(html).trim();
+  if (jsonPath && (trimmed.startsWith('{') || trimmed.startsWith('['))) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      const extracted = resolveJsonPath(parsed, jsonPath);
+      const normalizedValue = normalizeTextContent(
+        applyRegexListToText(
+          extracted == null ? '' : JSON.stringify(extracted),
+          regexFilters,
+        ),
+      );
+      return {
+        text: normalizedValue,
+        parts: selectors ? [normalizedValue] : null,
+        normalizedContent: normalizedValue,
+      };
+    } catch (error) {
+      // Falls JSON ungültig ist, weiter mit HTML-Parsing.
+    }
+  }
+
+  const dom = parseHTML(html);
+  if (!dom) {
+    const fallbackText = normalizeTextContent(
+      applyRegexListToText(html, regexFilters),
+    );
+    return {
+      text: fallbackText,
+      parts: selectors ? [fallbackText] : null,
+      normalizedContent: fallbackText,
+    };
+  }
+
+  const root = dom.body ?? dom.documentElement;
+  const fullText = normalizeTextContent(
+    applyRegexListToText(root?.textContent ?? '', regexFilters),
+  );
+
+  if (!selectors) {
+    return {text: fullText, parts: null, normalizedContent: fullText};
+  }
+
+  try {
+    const matches = selectElements(dom, selectors);
+    const parts = [];
+    matches.forEach((element) => {
+      parts.push(
+        normalizeTextContent(
+          applyRegexListToText(element.textContent ?? '', regexFilters),
+        ),
+      );
+    });
+    const joinedText = parts.join('\n');
+    return {text: joinedText, parts: parts, normalizedContent: fullText};
+  } catch (error) {
+    return {text: fullText, parts: [fullText], normalizedContent: fullText};
+  }
+}
+
+/**
  * Prüft, ob ein Selektor als XPath behandelt werden soll.
  *
  * @param {string} selectorText - Selektor-Text.

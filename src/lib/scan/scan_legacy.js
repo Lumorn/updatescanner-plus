@@ -11,6 +11,7 @@ import {
   parseSelectorEntry,
   selectElements,
   splitSelectorList,
+  normalizeHtmlToText,
 } from '/lib/util/html.js';
 import {getChanges, ContentData, changeEnum} from './scan_content.js';
 import {isMajorChange} from './fuzzy.js';
@@ -1345,15 +1346,37 @@ async function processHtmlWithConditions(page, scanHtml, prevHtml, scanNoticeKey
  * @returns {boolean} True, wenn eine neue größere Änderung erkannt wurde.
  */
 async function processTextDiff(page, scanHtml, prevHtml, scanNoticeKey) {
+  const filterRegexList = parseFilterRegexList(page?.filterRegexList);
+  const jsonPath = page?.textJsonPath || null;
   const selectors = resolveAreaSelectors(page);
   if (selectors && prevHtml != null) {
-    const scanData = buildTextContentData(scanHtml, selectors);
-    const prevData = buildTextContentData(prevHtml, selectors);
+    const scanData = buildTextContentData(
+      scanHtml,
+      selectors,
+      filterRegexList,
+      jsonPath,
+    );
+    const prevData = buildTextContentData(
+      prevHtml,
+      selectors,
+      filterRegexList,
+      jsonPath,
+    );
     return updatePageState(page, prevData, scanData, scanNoticeKey);
   }
 
-  const scanData = buildTextContentData(scanHtml, null);
-  const prevData = buildTextContentData(prevHtml, null);
+  const scanData = buildTextContentData(
+    scanHtml,
+    null,
+    filterRegexList,
+    jsonPath,
+  );
+  const prevData = buildTextContentData(
+    prevHtml,
+    null,
+    filterRegexList,
+    jsonPath,
+  );
   return updatePageState(page, prevData, scanData, scanNoticeKey);
 }
 
@@ -1364,9 +1387,13 @@ async function processTextDiff(page, scanHtml, prevHtml, scanNoticeKey) {
  * @param {?string} selectors - Optionaler Selektor für Teilbereiche.
  * @returns {ContentData} ContentData mit Textinhalt.
  */
-function buildTextContentData(html, selectors) {
-  const textData = extractTextFromHtml(html, selectors);
-  return new ContentData(textData.text, textData.parts);
+function buildTextContentData(html, selectors, filterRegexList, jsonPath) {
+  const textData = extractTextFromHtml(html, selectors, filterRegexList, jsonPath);
+  return new ContentData(
+    textData.text,
+    textData.parts,
+    textData.normalizedContent,
+  );
 }
 
 /**
@@ -1376,47 +1403,29 @@ function buildTextContentData(html, selectors) {
  * @param {?string} selectors - Selektoren für Teilbereiche.
  * @returns {{text: string, parts: ?Array<string>}} Textdaten.
  */
-function extractTextFromHtml(html, selectors) {
+function extractTextFromHtml(html, selectors, filterRegexList, jsonPath) {
   if (!html) {
-    return {text: '', parts: selectors ? [''] : null};
+    return {text: '', parts: selectors ? [''] : null, normalizedContent: ''};
   }
 
-  const dom = parseHTML(html);
-  if (!dom) {
+  if (typeof DOMParser === 'undefined') {
     __.log('DOMParser nicht verfügbar, Text-Diff verwendet Rohtext.');
-    const fallbackText = normalizeTextContent(html);
-    return {text: fallbackText, parts: selectors ? [fallbackText] : null};
-  }
-
-  const root = dom.body ?? dom.documentElement;
-  const fullText = normalizeTextContent(root?.textContent ?? '');
-
-  if (!selectors) {
-    return {text: fullText, parts: null};
   }
 
   try {
-    const matches = selectElements(dom, selectors);
-    const parts = [];
-    matches.forEach((element) => {
-      parts.push(normalizeTextContent(element.textContent ?? ''));
+    return normalizeHtmlToText(html, {
+      selectors,
+      regexFilters: filterRegexList,
+      jsonPath,
     });
-    const joinedText = parts.join('\n');
-    return {text: joinedText, parts: parts};
   } catch (error) {
-    __.log(`Ungültige Selektoren im Text-Diff, verwende Gesamtext: ${error}`);
-    return {text: fullText, parts: [fullText]};
+    __.log(`Fehler bei der Text-Normalisierung, verwende Rohtext: ${error}`);
+    return {
+      text: String(html ?? ''),
+      parts: selectors ? [String(html ?? '')] : null,
+      normalizedContent: String(html ?? ''),
+    };
   }
-}
-
-/**
- * Normalisiert Text, um instabile Whitespace-Änderungen zu reduzieren.
- *
- * @param {string} text - Rohtext.
- * @returns {string} Normalisierter Text.
- */
-function normalizeTextContent(text) {
-  return (text ?? '').replace(/\s+/g, ' ').trim();
 }
 
 /**
@@ -1545,6 +1554,38 @@ function computeQuickHtmlHash(html) {
  */
 function parseIgnoreSelectorList(selectors) {
   return splitSelectorList(selectors, {splitOnComma: true});
+}
+
+/**
+ * Zerlegt Regex-Listen in RegExp-Objekte.
+ *
+ * @param {?string} rawList - Regex-Liste.
+ * @returns {Array<RegExp>} Regex-Objekte.
+ */
+function parseFilterRegexList(rawList) {
+  if (!rawList) {
+    return [];
+  }
+  return rawList
+    .split(/[\n,]+/)
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const isSlashWrapped = entry.startsWith('/') && entry.lastIndexOf('/') > 0;
+      try {
+        if (isSlashWrapped) {
+          const lastSlashIndex = entry.lastIndexOf('/');
+          const pattern = entry.slice(1, lastSlashIndex);
+          const flags = entry.slice(lastSlashIndex + 1);
+          return new RegExp(pattern, flags);
+        }
+        return new RegExp(entry, 'g');
+      } catch (error) {
+        __.log(`Regex-Filter ignoriert (ungültig): ${entry}`);
+        return null;
+      }
+    })
+    .filter(Boolean);
 }
 
 /**
