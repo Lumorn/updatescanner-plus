@@ -106,6 +106,10 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 
 * Geplante Verbesserungen werden hier ergänzt, sobald sie feststehen.
 
+## Konzept
+
+* Projekt-Konzept: [docs/konzept.md](docs/konzept.md)
+
 ## Filterlogik (Ignorierte Selektoren)
 
 Für dynamische Inhalte (z. B. Consent-Banner, Werbe-Widgets) kann pro Seite eine

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Projekt-Konzeptdokument mit Zielen, Nicht-Zielen, Änderungsarten sowie Risiken ergänzt
 * Bereichsauswahl-Overlay ergänzt, Kontextmenü „Bereich auswählen“ speichert den Selektor und Scans nutzen ihn
 * Anzeige/Bearbeitung des ausgewählten Bereichs in Hauptansicht und Popup ergänzt
 * Einstellungsdialoge laden den globalen Scan-Engine-Modus asynchron ohne Syntaxfehler
