@@ -51,6 +51,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Optionaler Scroll-Simulator im Hidden-Tab-Scan (Schritte/Delay/Max-Höhe) lädt Lazy-Content und meldet Fehler als UI-Hinweis.
 * Hidden-Tab-Scan versucht bei Fehlern einmalig mit längerer Wartezeit erneut und fällt anschließend mit UI-Hinweis auf fetch zurück.
 * UI-Hinweise differenzieren Hidden-Tab-Fehler (Timeout, CSP, Script-Injektion, Tab-Hide) in Popup und Detailansicht.
+* Hauptansicht meldet Sandbox-Blockaden (Null-Origin/CSP) im Vorschau-Iframe als Hinweis.
 * Hidden-Tab-Snapshot serialisiert Shadow DOMs und same-origin Iframes; bei cross-origin Frames wird ein Platzhalter mit URL erfasst.
 * Standard-Scan über einen versteckten Tab ist für neue Seiten aktiviert (kann in den Einstellungen angepasst werden).
 * Aktion im Settings-Panel, um den versteckten Tab-Scan für alle bestehenden Seiten zu aktivieren/deaktivieren.

@@ -634,8 +634,78 @@ function loadSandboxedIframe(page, html) {
     sandboxTokens.push('allow-same-origin');
   }
   iframe.sandbox = sandboxTokens.join(' ');
+  iframe.addEventListener('load', () => {
+    handleSandboxedIframeLoad(iframe, page);
+  });
+  iframe.addEventListener('error', () => {
+    applySandboxNotice(page, 'scan.notice.sandboxBlocked');
+  });
   iframe.srcdoc = html;
   qs('#frameContainer').appendChild(iframe);
+}
+
+/**
+ * Prüft nach dem Laden, ob das Sandbox-Iframe blockiert ist.
+ *
+ * @param {HTMLIFrameElement} iframe - Das gerenderte Iframe.
+ * @param {Page} page - Page object.
+ */
+function handleSandboxedIframeLoad(iframe, page) {
+  const noticeKey = detectSandboxedIframeNotice(iframe, page);
+  if (!noticeKey) {
+    return;
+  }
+  applySandboxNotice(page, noticeKey);
+}
+
+/**
+ * Ermittelt per Heuristik, ob das Sandbox-Iframe durch null origin oder CSP
+ * blockiert wurde.
+ *
+ * @param {HTMLIFrameElement} iframe - Das gerenderte Iframe.
+ * @param {Page} page - Page object.
+ * @returns {?string} Notice-Key, falls ein Hinweis gesetzt werden soll.
+ */
+function detectSandboxedIframeNotice(iframe, page) {
+  if (!page) {
+    return null;
+  }
+  if (!page.allowSameOriginIframe) {
+    return null;
+  }
+  const origin = readSandboxedIframeOrigin(iframe);
+  if (!origin || origin === 'null') {
+    return 'scan.notice.sandboxBlocked';
+  }
+  return null;
+}
+
+/**
+ * Liest die Origin des Iframes sicher aus.
+ *
+ * @param {HTMLIFrameElement} iframe - Das gerenderte Iframe.
+ * @returns {?string} Origin-Wert oder null bei Zugriffsbeschränkung.
+ */
+function readSandboxedIframeOrigin(iframe) {
+  try {
+    return iframe.contentWindow?.location?.origin ?? null;
+  } catch (error) {
+    return null;
+  }
+}
+
+/**
+ * Setzt einen Scan-Hinweis, ohne bestehende Hinweise zu überschreiben.
+ *
+ * @param {Page} page - Page object.
+ * @param {string} noticeKey - Notice-Key für die UI.
+ */
+function applySandboxNotice(page, noticeKey) {
+  if (!page || page.lastScanNoticeKey || !noticeKey) {
+    return;
+  }
+  page.lastScanNoticeKey = noticeKey;
+  setScanNotice(page);
 }
 
 /**
