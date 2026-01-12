@@ -65,11 +65,11 @@ function renderDiffMarkup(diffs, options) {
     const escapedText = options.escapeHtml ? escapeHtml(text) : text;
     if (operation === DiffOperation.INSERT) {
       const markedText = `${options.startMarker}${escapedText}${options.endMarker}`;
-      return `<ins>${markedText}</ins>`;
+      return `<ins class="diff-insert">${markedText}</ins>`;
     }
     if (operation === DiffOperation.DELETE) {
       const markedText = `${options.startMarker}${escapedText}${options.endMarker}`;
-      return `<del>${markedText}</del>`;
+      return `<del class="diff-delete">${markedText}</del>`;
     }
     return escapedText;
   }).join('');
@@ -86,10 +86,36 @@ function wrapDiffMarkup(markup, options) {
   const textStyle = options.preserveWhitespace ? 'white-space: pre-wrap;' : '';
   return `
     <style>
-      body { font-family: sans-serif; padding: 16px; }
-      .diff-output { ${textStyle} }
-      ins { background: ${options.highlightColour}; text-decoration: none; }
-      del { background: #ffb6b6; text-decoration: line-through; }
+      body {
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        padding: 20px;
+        margin: 0;
+        background: #f6f7fb;
+        color: #1f2937;
+        line-height: 1.6;
+      }
+      .diff-output {
+        ${textStyle}
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 16px 18px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e5e7eb;
+      }
+      .diff-insert {
+        background: ${options.highlightColour};
+        color: #0f5132;
+        text-decoration: none;
+        padding: 0 2px;
+        border-radius: 4px;
+      }
+      .diff-delete {
+        background: #ffd6d6;
+        color: #7a1f1f;
+        text-decoration: line-through;
+        padding: 0 2px;
+        border-radius: 4px;
+      }
     </style>
     <div class="diff-output">${markup}</div>
   `;
