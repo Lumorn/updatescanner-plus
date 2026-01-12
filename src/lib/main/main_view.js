@@ -14,6 +14,7 @@ export const ViewTypes = {
  */
 export function init() {
   initMenu();
+  initDomDiffToggle();
 }
 
 /**
@@ -88,6 +89,7 @@ export function viewDiff(page, html) {
   setScanNotice(page);
   setViewDropdown(ViewTypes.DIFF);
   setViewDropdownDisabled(false);
+  updateDomDiffPanel(page);
   loadSandboxedIframe(html);
 }
 
@@ -110,6 +112,7 @@ export function viewOld(page, html) {
   setScanNotice(page);
   setViewDropdown(ViewTypes.OLD);
   setViewDropdownDisabled(false);
+  hideDomDiffPanel();
   loadSandboxedIframe(html);
 }
 
@@ -132,6 +135,7 @@ export function viewNew(page, html) {
   setScanNotice(page);
   setViewDropdown(ViewTypes.NEW);
   setViewDropdownDisabled(false);
+  hideDomDiffPanel();
   loadSandboxedIframe(html);
 }
 
@@ -147,6 +151,7 @@ export function viewMissingPage() {
   setScanNotice(null);
   setViewDropdown('');
   setViewDropdownDisabled(true);
+  hideDomDiffPanel();
   showEmptyState('Die angeforderte Seite ist nicht mehr vorhanden.');
 }
 
@@ -164,7 +169,25 @@ export function viewInitError(message) {
   setViewDropdownDisabled(true);
   setMenuDisabled(true);
   setErrorBanner(message);
+  hideDomDiffPanel();
   showEmptyState(message);
+}
+
+/**
+ * Initialisiert den Toggle für die DOM-Diff-Ansicht.
+ */
+function initDomDiffToggle() {
+  const toggle = qs('#dom-diff-toggle');
+  if (!toggle) {
+    return;
+  }
+  $on(toggle, 'change', () => {
+    const panel = qs('#dom-diff-panel');
+    if (!panel) {
+      return;
+    }
+    panel.classList.toggle('is-collapsed', !toggle.checked);
+  });
 }
 
 /**
@@ -218,6 +241,273 @@ function setScanNotice(page) {
   }
   noticeElement.textContent = translate(page.lastScanNoticeKey);
   showElement(noticeElement);
+}
+
+/**
+ * Aktualisiert die DOM-Diff-Ansicht in der Detailansicht.
+ *
+ * @param {Page} page - Page object to view.
+ */
+function updateDomDiffPanel(page) {
+  const panel = qs('#dom-diff-panel');
+  if (!panel) {
+    return;
+  }
+
+  const diffResult = page?.lastDiffResult;
+  if (diffResult?.mode !== 'dom') {
+    hideElement(panel);
+    return;
+  }
+
+  showElement(panel);
+  const toggle = qs('#dom-diff-toggle');
+  if (toggle) {
+    panel.classList.toggle('is-collapsed', !toggle.checked);
+  }
+
+  const changes = Array.isArray(diffResult.changes) ? diffResult.changes : [];
+  renderDomDiffSummary(changes);
+  renderDomDiffList(changes);
+}
+
+/**
+ * Blendet die DOM-Diff-Ansicht aus.
+ */
+function hideDomDiffPanel() {
+  const panel = qs('#dom-diff-panel');
+  if (!panel) {
+    return;
+  }
+  hideElement(panel);
+}
+
+/**
+ * Rendert die Zusammenfassung der DOM-Diffs.
+ *
+ * @param {Array} changes - Change-Liste.
+ */
+function renderDomDiffSummary(changes) {
+  const summary = qs('#dom-diff-summary');
+  if (!summary) {
+    return;
+  }
+  summary.textContent = '';
+
+  const counts = buildDomDiffCounts(changes);
+  const items = [
+    {
+      label: translate('main.domDiff.summary.added'),
+      count: counts.added,
+    },
+    {
+      label: translate('main.domDiff.summary.removed'),
+      count: counts.removed,
+    },
+    {
+      label: translate('main.domDiff.summary.attributes'),
+      count: counts.attributes,
+    },
+    {
+      label: translate('main.domDiff.summary.text'),
+      count: counts.text,
+    },
+    {
+      label: translate('main.domDiff.summary.replaced'),
+      count: counts.replaced,
+    },
+  ];
+
+  items.forEach((item) => {
+    const entry = document.createElement('div');
+    entry.className = 'dom-diff-summary-item';
+    entry.textContent = `${item.label}: ${item.count}`;
+    summary.appendChild(entry);
+  });
+}
+
+/**
+ * Rendert die Liste der DOM-Diff-Einträge.
+ *
+ * @param {Array} changes - Change-Liste.
+ */
+function renderDomDiffList(changes) {
+  const list = qs('#dom-diff-list');
+  if (!list) {
+    return;
+  }
+  list.textContent = '';
+
+  if (!changes || changes.length === 0) {
+    const empty = document.createElement('li');
+    empty.className = 'dom-diff-empty';
+    empty.textContent = translate('main.domDiff.empty');
+    list.appendChild(empty);
+    return;
+  }
+
+  changes.forEach((change) => {
+    list.appendChild(buildDomDiffListItem(change));
+  });
+}
+
+/**
+ * Erstellt einen DOM-Diff-Eintrag für die Liste.
+ *
+ * @param {object} change - Change-Datensatz.
+ * @returns {HTMLLIElement} Gerendertes Listenelement.
+ */
+function buildDomDiffListItem(change) {
+  const item = document.createElement('li');
+  item.className = 'dom-diff-item';
+
+  const meta = getDomDiffTypeMeta(change?.type);
+  if (meta?.className) {
+    item.classList.add(meta.className);
+  }
+
+  const title = document.createElement('div');
+  title.className = 'dom-diff-item-title';
+  title.textContent = meta?.label || translate('main.domDiff.type.unknown');
+  item.appendChild(title);
+
+  const details = document.createElement('div');
+  details.className = 'dom-diff-item-details';
+  details.textContent = buildDomDiffDetails(change);
+  item.appendChild(details);
+
+  return item;
+}
+
+/**
+ * Liefert die Metadaten für den jeweiligen DOM-Diff-Typ.
+ *
+ * @param {string} type - Change-Typ.
+ * @returns {{label: string, className: string}} Meta-Informationen.
+ */
+function getDomDiffTypeMeta(type) {
+  switch (type) {
+    case 'added':
+      return {
+        label: translate('main.domDiff.type.added'),
+        className: 'dom-diff-item--insert',
+      };
+    case 'removed':
+      return {
+        label: translate('main.domDiff.type.removed'),
+        className: 'dom-diff-item--delete',
+      };
+    case 'attr_added':
+      return {
+        label: translate('main.domDiff.type.attrAdded'),
+        className: 'dom-diff-item--attribute',
+      };
+    case 'attr_removed':
+      return {
+        label: translate('main.domDiff.type.attrRemoved'),
+        className: 'dom-diff-item--attribute',
+      };
+    case 'attr_changed':
+      return {
+        label: translate('main.domDiff.type.attrChanged'),
+        className: 'dom-diff-item--attribute',
+      };
+    case 'text_changed':
+      return {
+        label: translate('main.domDiff.type.textChanged'),
+        className: 'dom-diff-item--text',
+      };
+    case 'replaced':
+      return {
+        label: translate('main.domDiff.type.replaced'),
+        className: 'dom-diff-item--replace',
+      };
+    default:
+      return {
+        label: translate('main.domDiff.type.unknown'),
+        className: 'dom-diff-item--attribute',
+      };
+  }
+}
+
+/**
+ * Baut die Detailbeschreibung für einen Change.
+ *
+ * @param {object} change - Change-Datensatz.
+ * @returns {string} Beschreibender Text.
+ */
+function buildDomDiffDetails(change) {
+  const details = [];
+  if (change?.nodeName) {
+    details.push(`${translate('main.domDiff.field.node')}: ${change.nodeName}`);
+  }
+  if (change?.attribute) {
+    details.push(
+      `${translate('main.domDiff.field.attribute')}: ${change.attribute}`,
+    );
+  }
+  if (change?.value) {
+    details.push(`${translate('main.domDiff.field.value')}: ${change.value}`);
+  }
+  if (change?.from) {
+    details.push(`${translate('main.domDiff.field.from')}: ${change.from}`);
+  }
+  if (change?.to) {
+    details.push(`${translate('main.domDiff.field.to')}: ${change.to}`);
+  }
+  if (Number.isFinite(change?.partIndex)) {
+    details.push(`${translate('main.domDiff.field.part')}: ${change.partIndex}`);
+  }
+  if (change?.path) {
+    details.push(`${translate('main.domDiff.field.path')}: ${change.path}`);
+  }
+  return details.length > 0 ?
+    details.join(' · ') :
+    translate('main.domDiff.empty');
+}
+
+/**
+ * Zählt die Change-Typen für die Zusammenfassung.
+ *
+ * @param {Array} changes - Change-Liste.
+ * @returns {{added: number, removed: number, attributes: number, text: number,
+ * replaced: number}} Aggregierte Zähler.
+ */
+function buildDomDiffCounts(changes) {
+  const summary = {
+    added: 0,
+    removed: 0,
+    attributes: 0,
+    text: 0,
+    replaced: 0,
+  };
+
+  (changes || []).forEach((change) => {
+    switch (change?.type) {
+      case 'added':
+        summary.added += 1;
+        break;
+      case 'removed':
+        summary.removed += 1;
+        break;
+      case 'attr_added':
+      case 'attr_removed':
+      case 'attr_changed':
+        summary.attributes += 1;
+        break;
+      case 'text_changed':
+        summary.text += 1;
+        break;
+      case 'replaced':
+        summary.replaced += 1;
+        break;
+      default:
+        summary.attributes += 1;
+        break;
+    }
+  });
+
+  return summary;
 }
 
 /**
