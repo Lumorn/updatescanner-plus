@@ -629,7 +629,7 @@ function loadSandboxedIframe(html) {
   const iframe = document.createElement('iframe');
   iframe.id = 'frame';
   iframe.classList.add('frame');
-  iframe.sandbox = 'allow-top-navigation';
+  iframe.sandbox = 'allow-top-navigation allow-scripts';
   iframe.srcdoc = html;
   qs('#frameContainer').appendChild(iframe);
 }
