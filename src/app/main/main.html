@@ -43,6 +43,20 @@
       </div>
     </div>
 
+    <div id="dom-diff-panel" class="dom-diff-panel hidden" aria-live="polite">
+      <div class="dom-diff-header">
+        <div class="dom-diff-title" data-i18n="main.domDiff.title">
+          DOM changes
+        </div>
+        <label class="dom-diff-toggle">
+          <input type="checkbox" id="dom-diff-toggle" checked>
+          <span data-i18n="main.domDiff.toggle">Show DOM diff</span>
+        </label>
+      </div>
+      <div id="dom-diff-summary" class="dom-diff-summary"></div>
+      <ul id="dom-diff-list" class="dom-diff-list"></ul>
+    </div>
+
     <div id="frameContainer"></div>
   </div>
 

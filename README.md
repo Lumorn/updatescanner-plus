@@ -62,6 +62,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Fetch-Scan kann optional per POST senden und serialisiert POST-Parameter als URL-Form oder JSON inklusive Content-Type.
 * Optionaler Text-Diff-Modus vergleicht extrahierten Text (auch mit Selektoren) statt HTML und rendert die Diff-Ansicht als escapten Text in einer Vor/Nachher-Ansicht.
 * Optionaler DOM-Diff-Modus vergleicht die DOM-Struktur und speichert strukturierte Change-Listen zur gezielten UI-Hervorhebung.
+* Detailansicht visualisiert DOM-Diff-Änderungen mit farbigen Einträgen, Zusammenfassung und Toggle.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
 * Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.
