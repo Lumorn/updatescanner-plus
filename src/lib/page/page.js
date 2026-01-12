@@ -81,6 +81,9 @@ export class Page {
       faviconUrl: null,
       scanRateMinutes: 24 * 60,
       changeThreshold: 100,
+      minChangeChars: 0,
+      minChangeWords: 0,
+      levenshteinThreshold: 0,
       ignoreNumbers: false,
       encoding: null,
       highlightChanges: true,
@@ -211,6 +214,12 @@ export class Page {
    * means manual scan only.
    * @property {number} changeThreshold - Number of characters changed before
    * signalling that a change has occurred.
+   * @property {number} minChangeChars - Minimale Zeichenänderung für einen
+   *   Treffer.
+   * @property {number} minChangeWords - Minimale Wortänderung für einen
+   *   Treffer.
+   * @property {number} levenshteinThreshold - Relative Levenshtein-Schwelle
+   *   (0-1), ab der Änderungen ignoriert werden.
    * @property {boolean} ignoreNumbers - Don't trigger if only a number has
    * changed.
    * @property {?string} encoding - Text encoding of the page.
@@ -286,6 +295,9 @@ export class Page {
       faviconUrl = Page.DEFAULTS.faviconUrl,
       scanRateMinutes = Page.DEFAULTS.scanRateMinutes,
       changeThreshold = Page.DEFAULTS.changeThreshold,
+      minChangeChars = Page.DEFAULTS.minChangeChars,
+      minChangeWords = Page.DEFAULTS.minChangeWords,
+      levenshteinThreshold = Page.DEFAULTS.levenshteinThreshold,
       ignoreNumbers = Page.DEFAULTS.ignoreNumbers,
       encoding = Page.DEFAULTS.encoding,
       highlightChanges = Page.DEFAULTS.highlightChanges,
@@ -345,6 +357,9 @@ export class Page {
     this.faviconUrl = faviconUrl;
     this.scanRateMinutes = scanRateMinutes;
     this.changeThreshold = changeThreshold;
+    this.minChangeChars = minChangeChars;
+    this.minChangeWords = minChangeWords;
+    this.levenshteinThreshold = levenshteinThreshold;
     this.ignoreNumbers = ignoreNumbers;
     this.encoding = encoding;
     this.highlightChanges = highlightChanges;
@@ -408,6 +423,9 @@ export class Page {
       faviconUrl: this.faviconUrl,
       scanRateMinutes: this.scanRateMinutes,
       changeThreshold: this.changeThreshold,
+      minChangeChars: this.minChangeChars,
+      minChangeWords: this.minChangeWords,
+      levenshteinThreshold: this.levenshteinThreshold,
       ignoreNumbers: this.ignoreNumbers,
       encoding: this.encoding,
       highlightChanges: this.highlightChanges,
@@ -472,6 +490,9 @@ export class Page {
       faviconUrl: this.faviconUrl,
       scanRateMinutes: this.scanRateMinutes,
       changeThreshold: this.changeThreshold,
+      minChangeChars: this.minChangeChars,
+      minChangeWords: this.minChangeWords,
+      levenshteinThreshold: this.levenshteinThreshold,
       ignoreNumbers: this.ignoreNumbers,
       encoding: this.encoding,
       highlightChanges: this.highlightChanges,

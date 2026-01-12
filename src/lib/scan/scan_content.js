@@ -1,5 +1,6 @@
 import {log} from '/lib/util/log.js';
 import {isMajorChange} from './fuzzy.js';
+import {shouldIgnoreChange} from './heuristics.js';
 import {Page} from '../page/page.js';
 
 /**
@@ -211,6 +212,21 @@ function getDomChangeType(prevData, scannedData, page, domChanges) {
   if (prevStrip === scanStrip) {
     return changeEnum.MINOR_CHANGE;
   }
+  const prevHeuristic = buildHeuristicText(
+    prevData?.html ?? '',
+    page.ignoreNumbers,
+    ignoreTags,
+    page.filterRegexList,
+  );
+  const scanHeuristic = buildHeuristicText(
+    scannedData?.html ?? '',
+    page.ignoreNumbers,
+    ignoreTags,
+    page.filterRegexList,
+  );
+  if (shouldIgnoreChange(prevHeuristic, scanHeuristic, page)) {
+    return changeEnum.NO_CHANGE;
+  }
   return __.isMajorChange(prevStrip, scanStrip, page.changeThreshold) ?
     changeEnum.MAJOR_CHANGE :
     changeEnum.MINOR_CHANGE;
@@ -262,6 +278,21 @@ function buildTextHtmlChanges(prevData, scannedData, page, ignoreTags) {
       page.filterRegexList,
     ) ?? '';
     if (prevStrip !== scanStrip) {
+      const prevHeuristic = buildHeuristicText(
+        prevPart,
+        page.ignoreNumbers,
+        ignoreTags,
+        page.filterRegexList,
+      );
+      const scanHeuristic = buildHeuristicText(
+        scannedPart,
+        page.ignoreNumbers,
+        ignoreTags,
+        page.filterRegexList,
+      );
+      if (shouldIgnoreChange(prevHeuristic, scanHeuristic, page)) {
+        continue;
+      }
       changes.push({
         type: 'modified',
         partIndex: i,
@@ -314,9 +345,24 @@ function getChangeInStrippedHtml(page, prevHtml, scannedHtml) {
     page.filterRegexList,
   );
 
-  return prevStrip !== scanStrip ?
-    changeEnum.MINOR_CHANGE :
-    changeEnum.NO_CHANGE;
+  if (prevStrip === scanStrip) {
+    return changeEnum.NO_CHANGE;
+  }
+  const prevHeuristic = buildHeuristicText(
+    prevHtml,
+    page.ignoreNumbers,
+    ignoreTags,
+    page.filterRegexList,
+  );
+  const scanHeuristic = buildHeuristicText(
+    scannedHtml,
+    page.ignoreNumbers,
+    ignoreTags,
+    page.filterRegexList,
+  );
+  return shouldIgnoreChange(prevHeuristic, scanHeuristic, page) ?
+    changeEnum.NO_CHANGE :
+    changeEnum.MINOR_CHANGE;
 }
 
 /**
@@ -373,6 +419,21 @@ function getHTMLChange(page, prevParts, scannedParts, ignoreTags) {
     );
 
     if (prevStrip !== scanStrip) {
+      const prevHeuristic = buildHeuristicText(
+        prevParts[it.prevIndex],
+        page.ignoreNumbers,
+        ignoreTags,
+        page.filterRegexList,
+      );
+      const scanHeuristic = buildHeuristicText(
+        scannedParts[it.scannedIndex],
+        page.ignoreNumbers,
+        ignoreTags,
+        page.filterRegexList,
+      );
+      if (shouldIgnoreChange(prevHeuristic, scanHeuristic, page)) {
+        continue;
+      }
       if (__.isMajorChange(prevStrip, scanStrip, page.changeThreshold)) {
         maxChangeDetected = changeEnum.MAJOR_CHANGE;
         break;
@@ -444,6 +505,31 @@ function stripHtml(inHtml, ignoreNumbers, ignoreTags, filterRegexList = null) {
     html = stripTags(html);
   }
   return applyTextFilters(html, filterRegexList);
+}
+
+/**
+ * Erstellt einen Text für Heuristiken mit erhaltener Wortstruktur.
+ *
+ * @param {?string} inHtml - HTML für Heuristiken.
+ * @param {boolean} ignoreNumbers - True wenn Zahlen entfernt werden sollen.
+ * @param {boolean} ignoreTags - True wenn Tags entfernt werden sollen.
+ * @param {?string} filterRegexList - Regex-Liste für Filter.
+ * @returns {string} Bereinigter Text für Heuristiken.
+ */
+function buildHeuristicText(inHtml, ignoreNumbers, ignoreTags, filterRegexList = null) {
+  let html = inHtml;
+  if (html == null) {
+    return '';
+  }
+  if (ignoreNumbers) {
+    html = stripNumbers(html);
+  }
+  html = stripScript(html);
+  if (ignoreTags) {
+    html = stripTags(html);
+  }
+  html = applyTextFilters(html, filterRegexList);
+  return String(html ?? '').replace(/\s+/g, ' ').trim();
 }
 
 /**

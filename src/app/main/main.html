@@ -125,6 +125,43 @@
             Ignore changes to numbers
           </label>
         </div>
+        <div class="settings-row">
+          <label for="min-change-chars" data-i18n="main.dialog.minChangeChars">
+            Minimale Zeichenänderung:
+          </label>
+          <input id="min-change-chars" name="min-change-chars" type="number" min="0"
+            placeholder="0" data-i18n-attr="placeholder:main.dialog.minChangeChars.placeholder"/>
+        </div>
+        <output name="min-change-chars-description" for="min-change-chars">
+          <span data-i18n="main.dialog.minChangeChars.description">
+            Änderungen unterhalb dieses Werts werden ignoriert.
+          </span>
+        </output>
+        <div class="settings-row">
+          <label for="min-change-words" data-i18n="main.dialog.minChangeWords">
+            Minimale Wortänderung:
+          </label>
+          <input id="min-change-words" name="min-change-words" type="number" min="0"
+            placeholder="0" data-i18n-attr="placeholder:main.dialog.minChangeWords.placeholder"/>
+        </div>
+        <output name="min-change-words-description" for="min-change-words">
+          <span data-i18n="main.dialog.minChangeWords.description">
+            Änderungen unterhalb dieses Werts werden ignoriert.
+          </span>
+        </output>
+        <div class="settings-row">
+          <label for="levenshtein-threshold" data-i18n="main.dialog.levenshteinThreshold">
+            Levenshtein-Schwelle:
+          </label>
+          <input id="levenshtein-threshold" name="levenshtein-threshold" type="number"
+            min="0" max="1" step="0.01" placeholder="0"
+            data-i18n-attr="placeholder:main.dialog.levenshteinThreshold.placeholder"/>
+        </div>
+        <output name="levenshtein-threshold-description" for="levenshtein-threshold">
+          <span data-i18n="main.dialog.levenshteinThreshold.description">
+            Relative Schwelle zwischen 0 und 1.
+          </span>
+        </output>
       </fieldset>
 
       <fieldset id="scanModeFieldset">
