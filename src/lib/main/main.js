@@ -194,6 +194,10 @@ export class Main {
       await Config.loadSingleSetting('hiddenTabNetworkIdleTimeoutMsByDefault');
     const hiddenTabNetworkIdleWindowMsByDefault =
       await Config.loadSingleSetting('hiddenTabNetworkIdleWindowMsByDefault');
+    const filterRegexListByDefault =
+      await Config.loadSingleSetting('filterRegexListByDefault');
+    const attributeBlacklistByDefault =
+      await Config.loadSingleSetting('attributeBlacklistByDefault');
     const temporaryPage = new Page(-1, {
       title: title,
       url: url,
@@ -209,6 +213,8 @@ export class Main {
       hiddenTabScrollSteps: hiddenTabScrollStepsByDefault,
       hiddenTabScrollDelayMs: hiddenTabScrollDelayMsByDefault,
       hiddenTabScrollMaxHeight: hiddenTabScrollMaxHeightByDefault,
+      filterRegexList: filterRegexListByDefault,
+      attributeBlacklist: attributeBlacklistByDefault,
     });
     const newSettings = await dialog.openPageDialog(temporaryPage);
 
@@ -280,6 +286,8 @@ export class Main {
     this.currentPage.selectors = newSettings.selectors;
     this.currentPage.areaSelector = newSettings.areaSelector;
     this.currentPage.ignoredSelectors = newSettings.ignoredSelectors;
+    this.currentPage.filterRegexList = newSettings.filterRegexList;
+    this.currentPage.attributeBlacklist = newSettings.attributeBlacklist;
     this.currentPage.contentMode = newSettings.contentMode;
     this.currentPage.requireExactMatchCount =
       newSettings.requireExactMatchCount;

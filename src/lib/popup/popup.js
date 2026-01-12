@@ -111,6 +111,12 @@ export class Popup {
     view.bindHiddenTabScrollMaxHeightDefaultChange(
       this._handleHiddenTabScrollMaxHeightDefaultChange.bind(this),
     );
+    view.bindFilterRegexListDefaultChange(
+      this._handleFilterRegexListDefaultChange.bind(this),
+    );
+    view.bindAttributeBlacklistDefaultChange(
+      this._handleAttributeBlacklistDefaultChange.bind(this),
+    );
     view.bindAreaSelectorChange(this._handleAreaSelectorChange.bind(this));
     view.bindAreaSelectorClick(this._handleAreaSelectorClick.bind(this));
     view.setLanguage(this.config.get('language'));
@@ -160,6 +166,12 @@ export class Popup {
     );
     view.setHiddenTabScrollMaxHeightDefault(
       this.config.get('hiddenTabScrollMaxHeightByDefault'),
+    );
+    view.setFilterRegexListDefault(
+      this.config.get('filterRegexListByDefault'),
+    );
+    view.setAttributeBlacklistDefault(
+      this.config.get('attributeBlacklistByDefault'),
     );
     this._syncHiddenTabScanAllState();
     this._syncWaitForNetworkIdleAllState();
@@ -579,6 +591,28 @@ export class Popup {
     this.config.set('hiddenTabScrollMaxHeightByDefault', parsed);
     await this.config.save();
     view.setHiddenTabScrollMaxHeightDefault(parsed);
+  }
+
+  /**
+   * Speichert die Default-Regex-Liste für neue Seiten.
+   *
+   * @param {string} value - Regex-Liste.
+   */
+  async _handleFilterRegexListDefaultChange(value) {
+    this.config.set('filterRegexListByDefault', value);
+    await this.config.save();
+    view.setFilterRegexListDefault(value);
+  }
+
+  /**
+   * Speichert die Default-Attribut-Blacklist für neue Seiten.
+   *
+   * @param {string} value - Attributliste.
+   */
+  async _handleAttributeBlacklistDefaultChange(value) {
+    this.config.set('attributeBlacklistByDefault', value);
+    await this.config.save();
+    view.setAttributeBlacklistDefault(value);
   }
 
   /**

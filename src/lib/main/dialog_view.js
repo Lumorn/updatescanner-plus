@@ -70,6 +70,8 @@ export async function openPageDialog(page) {
   form.elements['selectors'].value = page.selectors;
   form.elements['area-selector'].value = page.areaSelector ?? '';
   form.elements['ignored-selectors'].value = page.ignoredSelectors ?? '';
+  form.elements['filter-regex-list'].value = page.filterRegexList ?? '';
+  form.elements['attribute-blacklist'].value = page.attributeBlacklist ?? '';
 
   const scanModeName = getScanModeName(page);
   form.elements['scan-mode'].value = scanModeName;
@@ -116,6 +118,7 @@ export async function openPageDialog(page) {
   showElement(qs('#selectorsFieldset'));
   showElement(qs('#areaSelectorFieldset'));
   showElement(qs('#ignoredSelectorsFieldset'));
+  showElement(qs('#filterFieldset'));
   showElement(qs('#scanModeFieldset'));
   showElement(qs('#scanSourceFieldset'));
   showElement(qs('#scanOptions'));
@@ -143,6 +146,12 @@ export async function openPageDialog(page) {
             form.elements['area-selector'].value,
           ),
           ignoredSelectors: form.elements['ignored-selectors'].value,
+          filterRegexList: normalizeTextValue(
+            form.elements['filter-regex-list'].value,
+          ),
+          attributeBlacklist: normalizeTextValue(
+            form.elements['attribute-blacklist'].value,
+          ),
           contentMode: modeData.contentMode,
           requireExactMatchCount: modeData.requireExactMatchCount,
           partialScan: modeData.partialScan,
@@ -214,6 +223,7 @@ export async function openPageFolderDialog(pageFolder) {
   hideElement(qs('#selectorsFieldset'));
   hideElement(qs('#areaSelectorFieldset'));
   hideElement(qs('#ignoredSelectorsFieldset'));
+  hideElement(qs('#filterFieldset'));
   hideElement(qs('#scanModeFieldset'));
   hideElement(qs('#scanSourceFieldset'));
   hideElement(qs('#scanOptions'));

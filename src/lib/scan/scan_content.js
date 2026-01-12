@@ -196,11 +196,13 @@ function getDomChangeType(prevData, scannedData, page, domChanges) {
     prevData?.html ?? '',
     page.ignoreNumbers,
     ignoreTags,
+    page.filterRegexList,
   );
   const scanStrip = stripHtml(
     scannedData?.html ?? '',
     page.ignoreNumbers,
     ignoreTags,
+    page.filterRegexList,
   );
 
   if (prevStrip === scanStrip) {
@@ -244,8 +246,18 @@ function buildTextHtmlChanges(prevData, scannedData, page, ignoreTags) {
       continue;
     }
 
-    const prevStrip = stripHtml(prevPart, page.ignoreNumbers, ignoreTags) ?? '';
-    const scanStrip = stripHtml(scannedPart, page.ignoreNumbers, ignoreTags) ?? '';
+    const prevStrip = stripHtml(
+      prevPart,
+      page.ignoreNumbers,
+      ignoreTags,
+      page.filterRegexList,
+    ) ?? '';
+    const scanStrip = stripHtml(
+      scannedPart,
+      page.ignoreNumbers,
+      ignoreTags,
+      page.filterRegexList,
+    ) ?? '';
     if (prevStrip !== scanStrip) {
       changes.push({
         type: 'modified',
@@ -290,11 +302,13 @@ function getChangeInStrippedHtml(page, prevHtml, scannedHtml) {
     prevHtml,
     page.ignoreNumbers,
     ignoreTags,
+    page.filterRegexList,
   );
   const scanStrip = stripHtml(
     scannedHtml,
     page.ignoreNumbers,
     ignoreTags,
+    page.filterRegexList,
   );
 
   return prevStrip !== scanStrip ?
@@ -346,11 +360,13 @@ function getHTMLChange(page, prevParts, scannedParts, ignoreTags) {
       prevParts[it.prevIndex],
       page.ignoreNumbers,
       ignoreTags,
+      page.filterRegexList,
     );
     const scanStrip = stripHtml(
       scannedParts[it.scannedIndex],
       page.ignoreNumbers,
       ignoreTags,
+      page.filterRegexList,
     );
 
     if (prevStrip !== scanStrip) {
@@ -410,7 +426,7 @@ function getIteratorFunction(page, prevParts, scannedParts) {
  *
  * @returns {object} Object containing the updated prevHtml and scannedHtml.
  */
-function stripHtml(inHtml, ignoreNumbers, ignoreTags) {
+function stripHtml(inHtml, ignoreNumbers, ignoreTags, filterRegexList = null) {
   let html = inHtml;
   if (html == null) return null;
 
@@ -424,7 +440,7 @@ function stripHtml(inHtml, ignoreNumbers, ignoreTags) {
   if (ignoreTags) {
     html = stripTags(html);
   }
-  return html;
+  return applyTextFilters(html, filterRegexList);
 }
 
 /**
@@ -461,4 +477,54 @@ function stripTags(html) {
  */
 function stripNumbers(html) {
   return html.replace(/([0-9]+([,.]?[0-9])?)*/g, '');
+}
+
+/**
+ * Entfernt Textanteile anhand der Regex-Filterliste.
+ *
+ * @param {string} text - Text für Filter.
+ * @param {?string} filterRegexList - Rohdaten für die Regex-Liste.
+ * @returns {string} Bereinigter Text.
+ */
+function applyTextFilters(text, filterRegexList) {
+  if (!filterRegexList) {
+    return text;
+  }
+  const regexFilters = parseFilterRegexList(filterRegexList);
+  if (regexFilters.length === 0) {
+    return text;
+  }
+  return regexFilters.reduce((result, regex) => result.replace(regex, ''), text);
+}
+
+/**
+ * Zerlegt Regex-Listen in RegExp-Objekte.
+ *
+ * @param {?string} rawList - Regex-Liste.
+ * @returns {Array<RegExp>} Regex-Objekte.
+ */
+function parseFilterRegexList(rawList) {
+  if (!rawList) {
+    return [];
+  }
+  return rawList
+    .split(/[\n,]+/)
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const isSlashWrapped = entry.startsWith('/') && entry.lastIndexOf('/') > 0;
+      try {
+        if (isSlashWrapped) {
+          const lastSlashIndex = entry.lastIndexOf('/');
+          const pattern = entry.slice(1, lastSlashIndex);
+          const flags = entry.slice(lastSlashIndex + 1);
+          return new RegExp(pattern, flags);
+        }
+        return new RegExp(entry, 'g');
+      } catch (error) {
+        __.log(`Regex-Filter ignoriert (ungültig): ${entry}`);
+        return null;
+      }
+    })
+    .filter(Boolean);
 }

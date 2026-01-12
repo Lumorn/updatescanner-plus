@@ -29,6 +29,7 @@ const translations = {
     'settings.title': 'Settings',
     'settings.group.general': 'General',
     'settings.group.scanning': 'Scanning defaults',
+    'settings.group.filters': 'Filter defaults',
     'settings.group.hiddenTab': 'Hidden tab scans',
     'settings.group.areaSelector': 'Selected area',
     'settings.language.label': 'Language',
@@ -128,6 +129,14 @@ const translations = {
     'settings.hiddenTabScrollMaxHeight.placeholder': '0',
     'settings.hiddenTabScrollMaxHeight.description':
       'Limit the simulated scroll height for new pages (0 disables the limit).',
+    'settings.filterRegexList.label': 'Regex filter list',
+    'settings.filterRegexList.placeholder': '\\d{4}-\\d{2}-\\d{2}',
+    'settings.filterRegexList.description':
+      'Regex list for new pages, one per line.',
+    'settings.attributeBlacklist.label': 'Attribute blacklist',
+    'settings.attributeBlacklist.placeholder': 'data-testid, data-reactroot',
+    'settings.attributeBlacklist.description':
+      'Attributes removed from the DOM before comparing.',
     'settings.areaSelector.label': 'Selected area selector',
     'settings.areaSelector.placeholder': '.main-content',
     'settings.areaSelector.description':
@@ -269,6 +278,14 @@ const translations = {
     'main.dialog.ignoredSelectors.placeholder': '.ads, .cookie-banner',
     'main.dialog.ignoredSelectors.description':
       'CSS selectors that will be removed before comparing HTML.',
+    'main.dialog.filterRegexList': 'Regex filter list:',
+    'main.dialog.filterRegexList.placeholder': '\\d{4}-\\d{2}-\\d{2}',
+    'main.dialog.filterRegexList.description':
+      'One regex per line (or comma-separated) to remove dynamic text.',
+    'main.dialog.attributeBlacklist': 'Attribute blacklist:',
+    'main.dialog.attributeBlacklist.placeholder': 'data-testid, data-reactroot',
+    'main.dialog.attributeBlacklist.description':
+      'Attributes removed from the DOM before comparison.',
     'main.dialog.cancel': 'Cancel',
     'main.dialog.ok': 'Ok',
     'main.subtitle.error':
@@ -439,6 +456,7 @@ const translations = {
     'settings.title': 'Einstellungen',
     'settings.group.general': 'Allgemein',
     'settings.group.scanning': 'Scan-Standards',
+    'settings.group.filters': 'Filter-Standards',
     'settings.group.hiddenTab': 'Hidden-Tab-Scans',
     'settings.group.areaSelector': 'Bereichsauswahl',
     'settings.language.label': 'Sprache',
@@ -539,6 +557,14 @@ const translations = {
     'settings.hiddenTabScrollMaxHeight.placeholder': '0',
     'settings.hiddenTabScrollMaxHeight.description':
       'Begrenzt die simulierte Scroll-Höhe für neue Seiten (0 deaktiviert die Grenze).',
+    'settings.filterRegexList.label': 'Regex-Filterliste',
+    'settings.filterRegexList.placeholder': '\\d{4}-\\d{2}-\\d{2}',
+    'settings.filterRegexList.description':
+      'Regex-Liste für neue Seiten, eine pro Zeile.',
+    'settings.attributeBlacklist.label': 'Attribut-Blacklist',
+    'settings.attributeBlacklist.placeholder': 'data-testid, data-reactroot',
+    'settings.attributeBlacklist.description':
+      'Attribute, die vor dem Vergleich aus dem DOM entfernt werden.',
     'settings.areaSelector.label': 'Bereichs-Selektor',
     'settings.areaSelector.placeholder': '.main-content',
     'settings.areaSelector.description':
@@ -681,6 +707,14 @@ const translations = {
     'main.dialog.ignoredSelectors.placeholder': '.werbung, .cookie-banner',
     'main.dialog.ignoredSelectors.description':
       'CSS-Selektoren, die vor dem HTML-Vergleich entfernt oder ersetzt werden.',
+    'main.dialog.filterRegexList': 'Regex-Filterliste:',
+    'main.dialog.filterRegexList.placeholder': '\\d{4}-\\d{2}-\\d{2}',
+    'main.dialog.filterRegexList.description':
+      'Eine Regex pro Zeile (oder kommasepariert) für dynamischen Text.',
+    'main.dialog.attributeBlacklist': 'Attribut-Blacklist:',
+    'main.dialog.attributeBlacklist.placeholder': 'data-testid, data-reactroot',
+    'main.dialog.attributeBlacklist.description':
+      'Attribute, die vor dem Vergleich aus dem DOM entfernt werden.',
     'main.dialog.cancel': 'Abbrechen',
     'main.dialog.ok': 'OK',
     'main.subtitle.error':

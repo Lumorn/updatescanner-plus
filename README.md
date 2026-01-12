@@ -37,6 +37,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Einstellungsdialoge laden den globalen Scan-Engine-Modus asynchron und stabil ohne Syntaxfehler.
 * Alter Scan-Modus arbeitet rein HTML-basiert und blendet Hidden-Tab-Optionen in den Einstellungen aus.
 * Zentrale HTML-Normalisierung entfernt optional dynamische Bereiche über „Ignorierte Selektoren“ pro Seite.
+* Zusätzliche Filter pro Seite: Regex-Liste für dynamischen Text und Attribut-Blacklist für DOM-Diffs.
 * Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
 * Versteckter Tab wird per Tab-Hide-API verborgen und bei fehlender API in ein minimiertes Popup ausgelagert.
 * Hidden-Tab-Scan wartet optional auf Selektoren (inkl. Timeout pro Seite), nutzt ein DOM-Stabilitätsfenster und einen globalen Standard-Delay.
@@ -116,6 +117,18 @@ Vergleich der gescannten HTML-Versionen angewendet:
 * Der Filter greift sowohl auf die neu gescannte Seite als auch auf die
   gespeicherte „NEW“-Version, damit der Vergleich stabil bleibt.
 * Ungültige Selektoren blockieren den Scan nicht und werden still ignoriert.
+
+## Filterlogik (Regex & Attribut-Blacklist)
+
+Zusätzlich zu Ignorier-Selektoren können pro Seite Regex-Filter und eine
+Attribut-Blacklist gepflegt werden:
+
+* Regex-Filter werden vor dem Diff auf den Text angewendet (mehrere Regex pro
+  Zeile oder kommasepariert), um z. B. Timestamps auszublenden.
+* Die Attribut-Blacklist entfernt definierte Attribute aus dem DOM, bevor HTML-
+  oder DOM-Diffs berechnet werden.
+* Die Filter greifen sowohl auf die neu gescannte Seite als auch auf die
+  gespeicherte „NEW“-Version, damit der Vergleich stabil bleibt.
 
 ## Installation
 
