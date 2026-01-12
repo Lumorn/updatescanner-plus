@@ -280,9 +280,11 @@ const translations = {
     'main.dialog.fetchHeaders.placeholder': 'X-Custom-Header: Value',
     'main.dialog.fetchHeaders.description':
       'One header per line in the format "Name: Value".',
-    'main.dialog.textDiffMode': 'Text diff mode',
-    'main.dialog.textDiffMode.description':
-      'Compare extracted text (and selectors) instead of HTML.',
+    'main.dialog.diffType': 'Diff type',
+    'main.dialog.diffType.description':
+      'Choose whether the diff output compares HTML or extracted text.',
+    'main.dialog.diffType.html': 'HTML diff (<ins>/<del>)',
+    'main.dialog.diffType.text': 'Text diff (standard)',
     'main.dialog.selectors': 'CSS selectors:',
     'main.dialog.selectors.description': 'CSS selectors for more information see',
     'main.dialog.ignoredSelectors': 'Ignored selectors:',
@@ -417,7 +419,7 @@ const translations = {
     'debugInfo.details.fetchMode': 'fetchMode',
     'debugInfo.details.fetchRedirect': 'fetchRedirect',
     'debugInfo.details.fetchHeaders': 'fetchHeaders',
-    'debugInfo.details.textDiffMode': 'textDiffMode',
+    'debugInfo.details.diffType': 'diffType',
     'debugInfo.details.waitForNetworkIdle': 'waitForNetworkIdle',
     'debugInfo.details.waitForNetworkIdleTimeoutMs': 'waitForNetworkIdleTimeoutMs',
     'debugInfo.details.hiddenTabIgnoreSelectors': 'hiddenTabIgnoreSelectors',
@@ -719,9 +721,11 @@ const translations = {
     'main.dialog.fetchHeaders.placeholder': 'X-Custom-Header: Wert',
     'main.dialog.fetchHeaders.description':
       'Ein Header pro Zeile im Format "Name: Wert".',
-    'main.dialog.textDiffMode': 'Text-Diff-Modus',
-    'main.dialog.textDiffMode.description':
-      'Vergleicht extrahierten Text (und Selektoren) statt HTML.',
+    'main.dialog.diffType': 'Diff-Typ',
+    'main.dialog.diffType.description':
+      'Lege fest, ob die Diff-Ausgabe HTML oder extrahierten Text vergleicht.',
+    'main.dialog.diffType.html': 'HTML-Diff (<ins>/<del>)',
+    'main.dialog.diffType.text': 'Text-Diff (Standard)',
     'main.dialog.selectors': 'CSS-Selektoren:',
     'main.dialog.selectors.description':
       'CSS-Selektoren, weitere Infos unter',
@@ -858,7 +862,7 @@ const translations = {
     'debugInfo.details.fetchMode': 'fetchMode',
     'debugInfo.details.fetchRedirect': 'fetchRedirect',
     'debugInfo.details.fetchHeaders': 'fetchHeaders',
-    'debugInfo.details.textDiffMode': 'textDiffMode',
+    'debugInfo.details.diffType': 'diffType',
     'debugInfo.details.waitForNetworkIdle': 'waitForNetworkIdle',
     'debugInfo.details.waitForNetworkIdleTimeoutMs': 'waitForNetworkIdleTimeoutMs',
     'debugInfo.details.hiddenTabIgnoreSelectors': 'hiddenTabIgnoreSelectors',

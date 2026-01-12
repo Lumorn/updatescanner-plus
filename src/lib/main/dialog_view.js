@@ -95,7 +95,7 @@ export async function openPageDialog(page) {
   form.elements['fetch-headers'].value = page.fetchHeaders ?? '';
   form.elements['headless-wait-strategy'].value =
     page.headlessWaitStrategy ?? 'network-idle';
-  form.elements['text-diff-mode'].checked = page.textDiffMode ?? false;
+  form.elements['diff-type'].value = page.diffType ?? Page.DEFAULTS.diffType;
   form.elements['wait-for-network-idle'].checked = page.waitForNetworkIdle ?? true;
   form.elements['wait-for-selector'].value = page.waitForSelector ?? '';
   form.elements['wait-for-selector-timeout'].value =
@@ -166,7 +166,7 @@ export async function openPageDialog(page) {
           fetchRedirect: normalizeSelectValue(form.elements['fetch-redirect'].value),
           fetchHeaders: form.elements['fetch-headers'].value,
           headlessWaitStrategy: form.elements['headless-wait-strategy'].value,
-          textDiffMode: form.elements['text-diff-mode'].checked,
+          diffType: form.elements['diff-type'].value,
           waitForNetworkIdle: form.elements['wait-for-network-idle'].checked,
           waitForSelector: normalizeTextValue(
             form.elements['wait-for-selector'].value,
@@ -400,7 +400,7 @@ function applyLegacyDefaults(settings) {
     fetchHeaders: '',
     scanSourceMode: 'http',
     headlessWaitStrategy: 'network-idle',
-    textDiffMode: false,
+    diffType: Page.DEFAULTS.diffType,
     waitForNetworkIdle: false,
     waitForSelector: null,
     waitForSelectorTimeoutMs: null,

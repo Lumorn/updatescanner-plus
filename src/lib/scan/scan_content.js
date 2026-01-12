@@ -69,7 +69,7 @@ export function resolveDiffMode(page) {
   if (page?.domDiffMode) {
     return diffModeEnum.DOM;
   }
-  if (page?.textDiffMode) {
+  if (page?.diffType === Page.diffTypeEnum.TEXT || page?.textDiffMode) {
     return diffModeEnum.TEXT;
   }
   return diffModeEnum.HTML;
@@ -531,3 +531,5 @@ function parseFilterRegexList(rawList) {
     })
     .filter(Boolean);
 }
+
+export {stripHtml};

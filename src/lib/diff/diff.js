@@ -1,4 +1,6 @@
-import {highlightDiffs} from './diff_engine.js';
+import {buildHtmlDiffOutput, buildStandardDiffOutput} from './diff_render.js';
+import {stripHtml} from '/lib/scan/scan_content.js';
+import {Page} from '/lib/page/page.js';
 
 /**
  * Perform a diff between two HTML strings, returning highlighted HTML.
@@ -18,5 +20,32 @@ export function diff(page, oldHtml, newHtml) {
     return newHtml || 'Neue Version ohne Hervorhebung';
   }
 
-  return highlightDiffs(oldHtml, newHtml, highlightColour, startMarker, endMarker);
+  const diffType = page.diffType ||
+    (page.textDiffMode ? Page.diffTypeEnum.TEXT : Page.diffTypeEnum.HTML);
+
+  if (diffType === Page.diffTypeEnum.TEXT) {
+    const strippedOld = stripHtml(
+      oldHtml ?? '',
+      page.ignoreNumbers,
+      true,
+      page.filterRegexList,
+    ) ?? '';
+    const strippedNew = stripHtml(
+      newHtml ?? '',
+      page.ignoreNumbers,
+      true,
+      page.filterRegexList,
+    ) ?? '';
+    return buildStandardDiffOutput(strippedOld, strippedNew, {
+      highlightColour,
+      startMarker,
+      endMarker,
+    });
+  }
+
+  return buildHtmlDiffOutput(oldHtml ?? '', newHtml ?? '', {
+    highlightColour,
+    startMarker,
+    endMarker,
+  });
 }

@@ -63,7 +63,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Option, Cookies/Credentials pro Seite beim fetch-Scan mitzuschicken.
 * Fetch-Scan unterstützt optionale Cache-/Mode-/Redirect-Policies sowie benutzerdefinierte Header pro Seite.
 * Fetch-Scan kann optional per POST senden und serialisiert POST-Parameter als URL-Form oder JSON inklusive Content-Type.
-* Optionaler Text-Diff-Modus vergleicht extrahierten Text (auch mit Selektoren) statt HTML und rendert die Diff-Ansicht als escapten Text in einer Vor/Nachher-Ansicht.
+* Diff-Typ pro Seite (Text oder HTML) mit Standard-Diff (diff-match-patch) sowie optionalem HTML-Diff mit `<ins>/<del>`-Markup.
 * Optionaler DOM-Diff-Modus vergleicht die DOM-Struktur und speichert strukturierte Change-Listen zur gezielten UI-Hervorhebung.
 * Detailansicht visualisiert DOM-Diff-Änderungen mit farbigen Einträgen, Zusammenfassung und Toggle.
 * Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.

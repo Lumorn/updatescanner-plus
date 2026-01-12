@@ -17,6 +17,11 @@ const HeadlessWaitStrategy = {
   TIMEOUT: 'timeout',
 };
 
+const DiffType = {
+  HTML: 'html',
+  TEXT: 'text',
+};
+
 /**
  * Normalisiert den Scan-Quellenmodus für eine Seite.
  *
@@ -46,6 +51,20 @@ function normalizeHeadlessWaitStrategy(headlessWaitStrategy) {
     return headlessWaitStrategy;
   }
   return HeadlessWaitStrategy.NETWORK_IDLE;
+}
+
+/**
+ * Normalisiert den Diff-Typ, berücksichtigt Legacy-Flags.
+ *
+ * @param {?string} diffType - Diff-Typ aus der Persistenz.
+ * @param {boolean} textDiffMode - Legacy-Flag für Text-Diff.
+ * @returns {string} Normalisierter Diff-Typ.
+ */
+function normalizeDiffType(diffType, textDiffMode) {
+  if (diffType === DiffType.HTML || diffType === DiffType.TEXT) {
+    return diffType;
+  }
+  return textDiffMode ? DiffType.TEXT : DiffType.HTML;
 }
 
 /**
@@ -85,6 +104,7 @@ export class Page {
       fetchMode: null,
       fetchRedirect: null,
       fetchHeaders: '',
+      diffType: DiffType.HTML,
       textDiffMode: false,
       domDiffMode: false,
       newHtmlHash: null,
@@ -134,6 +154,16 @@ export class Page {
       IGNORE: 'ignore',
       HTML: 'html',
       TEXT: 'text',
+    };
+  }
+
+  /**
+   * @returns {{HTML: string, TEXT: string}} Enumeration des Diff-Typs.
+   */
+  static get diffTypeEnum() {
+    return {
+      HTML: DiffType.HTML,
+      TEXT: DiffType.TEXT,
     };
   }
 
@@ -213,6 +243,7 @@ export class Page {
    * @property {?string} fetchMode - Fetch-Mode (cors, no-cors, same-origin).
    * @property {?string} fetchRedirect - Redirect-Policy für fetch.
    * @property {string} fetchHeaders - Zusätzliche Fetch-Header als Text.
+   * @property {string} diffType - Diff-Typ (Text oder HTML).
    * @property {boolean} textDiffMode - Vergleicht Text statt HTML.
    * @property {boolean} domDiffMode - Vergleicht den DOM statt HTML/Text.
    * @property {?string} newHtmlHash - Hash der zuletzt gespeicherten NEW-HTML.
@@ -278,6 +309,7 @@ export class Page {
       fetchMode = Page.DEFAULTS.fetchMode,
       fetchRedirect = Page.DEFAULTS.fetchRedirect,
       fetchHeaders = Page.DEFAULTS.fetchHeaders,
+      diffType = Page.DEFAULTS.diffType,
       textDiffMode = Page.DEFAULTS.textDiffMode,
       domDiffMode = Page.DEFAULTS.domDiffMode,
       newHtmlHash = Page.DEFAULTS.newHtmlHash,
@@ -336,7 +368,8 @@ export class Page {
     this.fetchMode = fetchMode;
     this.fetchRedirect = fetchRedirect;
     this.fetchHeaders = fetchHeaders;
-    this.textDiffMode = textDiffMode;
+    this.diffType = normalizeDiffType(diffType, textDiffMode);
+    this.textDiffMode = this.diffType === DiffType.TEXT;
     this.domDiffMode = domDiffMode;
     this.newHtmlHash = newHtmlHash;
     this.lastScanNoticeKey = lastScanNoticeKey;
@@ -398,6 +431,7 @@ export class Page {
       fetchMode: this.fetchMode,
       fetchRedirect: this.fetchRedirect,
       fetchHeaders: this.fetchHeaders,
+      diffType: this.diffType,
       textDiffMode: this.textDiffMode,
       domDiffMode: this.domDiffMode,
       newHtmlHash: this.newHtmlHash,
@@ -457,6 +491,7 @@ export class Page {
       fetchMode: this.fetchMode,
       fetchRedirect: this.fetchRedirect,
       fetchHeaders: this.fetchHeaders,
+      diffType: this.diffType,
       textDiffMode: this.textDiffMode,
       domDiffMode: this.domDiffMode,
       waitForSelector: this.waitForSelector,

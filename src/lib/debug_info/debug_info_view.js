@@ -58,7 +58,7 @@ ${translate('debugInfo.details.fetchCache')}:       ${page.fetchCache}
 ${translate('debugInfo.details.fetchMode')}:        ${page.fetchMode}
 ${translate('debugInfo.details.fetchRedirect')}:    ${page.fetchRedirect}
 ${translate('debugInfo.details.fetchHeaders')}:     ${page.fetchHeaders}
-${translate('debugInfo.details.textDiffMode')}:     ${page.textDiffMode}
+${translate('debugInfo.details.diffType')}:         ${page.diffType}
 ${translate('debugInfo.details.waitForNetworkIdle')}: ${page.waitForNetworkIdle}
 ${translate('debugInfo.details.waitForNetworkIdleTimeoutMs')}: ${page.waitForNetworkIdleTimeoutMs}
 ${translate('debugInfo.details.hiddenTabIgnoreSelectors')}: ${page.hiddenTabIgnoreSelectors}
