@@ -108,6 +108,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
   und Diff-Schritte bei unveränderten Seiten zu überspringen.
 * Popup-Settings erlauben eine Anpassung des Host-Delays, um Legacy-Scans je nach Bedarf zu beschleunigen.
 * Popup-Settings erlauben die Konfiguration der Scan-Parallelität für die Queue.
+* Hauptansicht erlaubt Skriptausführung im Sandbox-iframe, damit dynamische Seiten korrekt gerendert werden.
 
 ## Roadmap
 

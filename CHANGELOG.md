@@ -18,6 +18,7 @@
 * Sidebar zeigt Webseiten-Icons in der Baumansicht, mit Platzhalter bei fehlendem Icon
 * Abstände und Zeilenhöhen im Popup-Settings-Menü reduziert, damit mehr Optionen sichtbar sind
 * Hauptansicht rendert gespeicherte Seiten wieder korrekt, indem der `<base>`-Tag sauber im `<head>` ergänzt und fehlendes HTML-Grundgerüst aufgebaut wird
+* Hauptansicht erlaubt Skriptausführung im Sandbox-iframe, damit dynamische Seiten wieder angezeigt werden
 * Hauptansicht zeigt bei fehlenden Seiten eine sichere Fallback-Ansicht mit Empty-State
 * Hauptansicht initialisiert zuverlässiger, damit Menü und Ansicht auch nach spätem Script-Load reagieren
 * Hauptansicht zeigt Initialisierungsfehler mit verständlicher Meldung und deaktiviert Menü sowie View-Dropdown
