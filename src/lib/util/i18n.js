@@ -415,6 +415,8 @@ const translations = {
       'Scroll simulation failed; snapshot captured anyway.',
     'scan.notice.hiddenTabMutationTimeout':
       'Mutation stability timed out; snapshot captured anyway.',
+    'scan.notice.sandboxBlocked':
+      'Preview iframe blocked by sandbox or Content Security Policy; rendering may be incomplete.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Scan every 5 minutes',
     'main.autoscan.every15': 'Scan every 15 minutes',
@@ -936,6 +938,8 @@ const translations = {
       'Scroll-Simulation fehlgeschlagen; Snapshot trotzdem erstellt.',
     'scan.notice.hiddenTabMutationTimeout':
       'Mutation-Stabilität lief in ein Timeout; Snapshot trotzdem erstellt.',
+    'scan.notice.sandboxBlocked':
+      'Vorschau-Iframe durch Sandbox oder Content-Security-Policy blockiert; Darstellung ggf. unvollständig.',
     'main.titleWithPage': 'Update Scanner - {title}',
     'main.autoscan.every5': 'Alle 5 Minuten scannen',
     'main.autoscan.every15': 'Alle 15 Minuten scannen',
