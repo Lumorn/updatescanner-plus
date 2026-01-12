@@ -640,7 +640,24 @@ function loadSandboxedIframe(page, html) {
   iframe.addEventListener('error', () => {
     applySandboxNotice(page, 'scan.notice.sandboxBlocked');
   });
-  iframe.srcdoc = html;
+  // Fügt ein Stil-Override in den Head ein, um die Vorschau immer vollbreit zu rendern.
+  const styleOverrides = [
+    '.outer, .inner, #main_content {',
+    '  max-width: none !important;',
+    '  width: 100% !important;',
+    '  margin: 0 !important;',
+    '}',
+  ].join('\n');
+  const styleBlock = `<style>${styleOverrides}</style>`;
+  let injectedHtml = html ?? '';
+  if (/<head[^>]*>/i.test(injectedHtml)) {
+    // Falls ein Head existiert, wird das Stylesheet direkt dort eingefügt.
+    injectedHtml = injectedHtml.replace(/<head[^>]*>/i, (match) => `${match}\n${styleBlock}`);
+  } else {
+    // Falls kein Head vorhanden ist, wird er am Anfang ergänzt.
+    injectedHtml = `<head>${styleBlock}</head>${injectedHtml}`;
+  }
+  iframe.srcdoc = injectedHtml;
   qs('#frameContainer').appendChild(iframe);
 }
 
