@@ -371,6 +371,9 @@ const translations = {
     'main.dialog.attributeBlacklist.placeholder': 'data-testid, data-reactroot',
     'main.dialog.attributeBlacklist.description':
       'Attributes removed from the DOM before comparison.',
+    'main.dialog.allowSameOriginIframe': 'Allow same-origin in preview iframe',
+    'main.dialog.allowSameOriginIframe.description':
+      'Enable same-origin requests inside the sandboxed preview.',
     'main.dialog.cancel': 'Cancel',
     'main.dialog.ok': 'Ok',
     'main.subtitle.error':
@@ -888,6 +891,10 @@ const translations = {
     'main.dialog.attributeBlacklist.placeholder': 'data-testid, data-reactroot',
     'main.dialog.attributeBlacklist.description':
       'Attribute, die vor dem Vergleich aus dem DOM entfernt werden.',
+    'main.dialog.allowSameOriginIframe':
+      'Same-Origin im Vorschau-Iframe erlauben',
+    'main.dialog.allowSameOriginIframe.description':
+      'Same-Origin-Requests im sandboxed Preview-Iframe zulassen.',
     'main.dialog.cancel': 'Abbrechen',
     'main.dialog.ok': 'OK',
     'main.subtitle.error':

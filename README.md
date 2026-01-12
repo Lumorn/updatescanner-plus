@@ -109,6 +109,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Popup-Settings erlauben eine Anpassung des Host-Delays, um Legacy-Scans je nach Bedarf zu beschleunigen.
 * Popup-Settings erlauben die Konfiguration der Scan-Parallelität für die Queue.
 * Hauptansicht erlaubt Skriptausführung im Sandbox-iframe, damit dynamische Seiten korrekt gerendert werden.
+* Option pro Seite, Same-Origin im Sandbox-iframe der Hauptansicht zu erlauben, damit Same-Origin-Requests funktionieren.
 
 ## Roadmap
 

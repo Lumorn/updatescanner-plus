@@ -587,6 +587,22 @@
         </output>
       </fieldset>
 
+      <fieldset id="viewOptionsFieldset">
+        <div>
+          <input type="checkbox" id="allow-same-origin-iframe"
+            name="allow-same-origin-iframe">
+          <label for="allow-same-origin-iframe" class="checkbox-label"
+            data-i18n="main.dialog.allowSameOriginIframe">
+            Allow same-origin in preview iframe
+          </label>
+        </div>
+        <output name="allow-same-origin-iframe-description">
+          <span data-i18n="main.dialog.allowSameOriginIframe.description">
+            Enable same-origin requests inside the sandboxed preview.
+          </span>
+        </output>
+      </fieldset>
+
       <div id="dialog-buttons">
         <button class="browser-style" id="cancel-button" type="reset"
           data-i18n="main.dialog.cancel">

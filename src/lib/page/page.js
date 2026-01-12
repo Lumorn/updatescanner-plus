@@ -133,6 +133,7 @@ export class Page {
       hiddenTabScrollSteps: null,
       hiddenTabScrollDelayMs: null,
       hiddenTabScrollMaxHeight: null,
+      allowSameOriginIframe: false,
     };
   }
 
@@ -286,6 +287,8 @@ export class Page {
    * @property {?number} hiddenTabScrollSteps - Schritte für Scroll-Simulation.
    * @property {?number} hiddenTabScrollDelayMs - Wartezeit pro Schritt (ms).
    * @property {?number} hiddenTabScrollMaxHeight - Maximale Scroll-Höhe (px).
+   * @property {boolean} allowSameOriginIframe - Erlaubt Same-Origin-Zugriffe
+   *   im Sandbox-Iframe der Hauptansicht.
    */
   constructor(
     id,
@@ -349,6 +352,7 @@ export class Page {
       hiddenTabScrollSteps = Page.DEFAULTS.hiddenTabScrollSteps,
       hiddenTabScrollDelayMs = Page.DEFAULTS.hiddenTabScrollDelayMs,
       hiddenTabScrollMaxHeight = Page.DEFAULTS.hiddenTabScrollMaxHeight,
+      allowSameOriginIframe = Page.DEFAULTS.allowSameOriginIframe,
     },
   ) {
     this.id = id;
@@ -409,6 +413,7 @@ export class Page {
     this.hiddenTabScrollSteps = hiddenTabScrollSteps;
     this.hiddenTabScrollDelayMs = hiddenTabScrollDelayMs;
     this.hiddenTabScrollMaxHeight = hiddenTabScrollMaxHeight;
+    this.allowSameOriginIframe = allowSameOriginIframe;
   }
 
   /**
@@ -475,6 +480,7 @@ export class Page {
       hiddenTabScrollSteps: this.hiddenTabScrollSteps,
       hiddenTabScrollDelayMs: this.hiddenTabScrollDelayMs,
       hiddenTabScrollMaxHeight: this.hiddenTabScrollMaxHeight,
+      allowSameOriginIframe: this.allowSameOriginIframe,
     };
   }
 
@@ -533,6 +539,7 @@ export class Page {
       hiddenTabScrollSteps: this.hiddenTabScrollSteps,
       hiddenTabScrollDelayMs: this.hiddenTabScrollDelayMs,
       hiddenTabScrollMaxHeight: this.hiddenTabScrollMaxHeight,
+      allowSameOriginIframe: this.allowSameOriginIframe,
       newHtmlHash: this.newHtmlHash,
       // state: this.state,
       // lastAutoscanTime: this.lastAutoscanTime,

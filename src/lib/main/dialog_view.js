@@ -140,6 +140,8 @@ export async function openPageDialog(page) {
     formatOptionalNumber(page.hiddenTabScrollDelayMs);
   form.elements['hidden-tab-scroll-max-height'].value =
     formatOptionalNumber(page.hiddenTabScrollMaxHeight);
+  form.elements['allow-same-origin-iframe'].checked =
+    page.allowSameOriginIframe ?? false;
 
   showElement(qs('#page-heading'));
   showElement(qs('#scanEngineFieldset'));
@@ -154,6 +156,7 @@ export async function openPageDialog(page) {
   showElement(qs('#scanModeFieldset'));
   showElement(qs('#scanSourceFieldset'));
   showElement(qs('#scanOptions'));
+  showElement(qs('#viewOptionsFieldset'));
 
   hideElement(qs('#folder-heading'));
   setScanEngineMode(scanEngineMode);
@@ -228,6 +231,8 @@ export async function openPageDialog(page) {
           hiddenTabScrollMaxHeight: parseOptionalNumber(
             form.elements['hidden-tab-scroll-max-height'].value,
           ),
+          allowSameOriginIframe:
+            form.elements['allow-same-origin-iframe'].checked,
         };
         settings = applyLegacyDefaults(settings);
         resolve(settings);
@@ -271,6 +276,7 @@ export async function openPageFolderDialog(pageFolder) {
   hideElement(qs('#scanModeFieldset'));
   hideElement(qs('#scanSourceFieldset'));
   hideElement(qs('#scanOptions'));
+  hideElement(qs('#viewOptionsFieldset'));
 
   setScanEngineMode(scanEngineMode);
   dialog.showModal();
@@ -512,6 +518,7 @@ function applyLegacyDefaults(settings) {
     hiddenTabScrollSteps: null,
     hiddenTabScrollDelayMs: null,
     hiddenTabScrollMaxHeight: null,
+    allowSameOriginIframe: settings.allowSameOriginIframe,
   };
 }
 

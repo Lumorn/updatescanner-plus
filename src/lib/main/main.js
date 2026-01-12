@@ -355,6 +355,8 @@ export class Main {
     this.currentPage.hiddenTabScrollDelayMs = newSettings.hiddenTabScrollDelayMs;
     this.currentPage.hiddenTabScrollMaxHeight =
       newSettings.hiddenTabScrollMaxHeight;
+    this.currentPage.allowSameOriginIframe =
+      newSettings.allowSameOriginIframe;
     await this.currentPage.save();
 
     document.location.replace(getMainDiffUrl(this.currentPage.id));
