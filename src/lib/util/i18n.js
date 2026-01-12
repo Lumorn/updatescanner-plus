@@ -207,6 +207,17 @@ const translations = {
     'main.dialog.hiddenTabScan': 'Use hidden tab for scan',
     'main.dialog.hiddenTabScan.description':
       'Open a hidden background tab and capture the DOM snapshot instead of fetch.',
+    'main.dialog.scanSourceMode': 'Scan source:',
+    'main.dialog.scanSourceMode.description':
+      'Choose between HTTP fetch and a headless tab snapshot.',
+    'main.dialog.scanSourceMode.http': 'HTTP (fetch)',
+    'main.dialog.scanSourceMode.headless': 'Headless (hidden tab)',
+    'main.dialog.headlessWaitStrategy': 'Headless wait strategy:',
+    'main.dialog.headlessWaitStrategy.description':
+      'Define how headless scans wait before capturing a snapshot.',
+    'main.dialog.headlessWaitStrategy.networkIdle': 'Network idle',
+    'main.dialog.headlessWaitStrategy.selectorReady': 'Selector ready',
+    'main.dialog.headlessWaitStrategy.timeout': 'Timeout',
     'main.dialog.waitForNetworkIdle': 'Wait for network idle',
     'main.dialog.waitForNetworkIdle.description':
       'Wait for network idle or hydration signals before taking a snapshot.',
@@ -635,6 +646,17 @@ const translations = {
     'main.dialog.hiddenTabScan': 'Versteckten Tab zum Scannen verwenden',
     'main.dialog.hiddenTabScan.description':
       'Einen versteckten Hintergrund-Tab öffnen und den DOM-Snapshot statt fetch verwenden.',
+    'main.dialog.scanSourceMode': 'Scan-Quelle:',
+    'main.dialog.scanSourceMode.description':
+      'Zwischen HTTP-Fetch und Headless-Tab-Snapshot wählen.',
+    'main.dialog.scanSourceMode.http': 'HTTP (fetch)',
+    'main.dialog.scanSourceMode.headless': 'Headless (versteckter Tab)',
+    'main.dialog.headlessWaitStrategy': 'Headless-Wartestrategie:',
+    'main.dialog.headlessWaitStrategy.description':
+      'Legt fest, wie Headless-Scans vor dem Snapshot warten.',
+    'main.dialog.headlessWaitStrategy.networkIdle': 'Network-Idle',
+    'main.dialog.headlessWaitStrategy.selectorReady': 'Selektor bereit',
+    'main.dialog.headlessWaitStrategy.timeout': 'Timeout',
     'main.dialog.waitForNetworkIdle': 'Auf Network-Idle warten',
     'main.dialog.waitForNetworkIdle.description':
       'Vor dem Snapshot auf Network-Idle oder Hydration-Signale warten.',

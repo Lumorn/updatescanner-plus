@@ -86,12 +86,15 @@ export async function openPageDialog(page) {
   updateThresholdDescription(thresholdSliderValue);
 
   form.elements['ignore-numbers'].checked = page.ignoreNumbers;
-  form.elements['hidden-tab-scan'].checked = page.useHiddenTabScan;
+  form.elements['scan-source-mode'].value =
+    page.scanSourceMode ?? (page.useHiddenTabScan ? 'headless' : 'http');
   form.elements['send-credentials'].checked = page.sendCredentials;
   form.elements['fetch-cache'].value = page.fetchCache ?? '';
   form.elements['fetch-mode'].value = page.fetchMode ?? '';
   form.elements['fetch-redirect'].value = page.fetchRedirect ?? '';
   form.elements['fetch-headers'].value = page.fetchHeaders ?? '';
+  form.elements['headless-wait-strategy'].value =
+    page.headlessWaitStrategy ?? 'network-idle';
   form.elements['text-diff-mode'].checked = page.textDiffMode ?? false;
   form.elements['wait-for-network-idle'].checked = page.waitForNetworkIdle ?? true;
   form.elements['wait-for-selector'].value = page.waitForSelector ?? '';
@@ -155,12 +158,14 @@ export async function openPageDialog(page) {
           contentMode: modeData.contentMode,
           requireExactMatchCount: modeData.requireExactMatchCount,
           partialScan: modeData.partialScan,
-          useHiddenTabScan: form.elements['hidden-tab-scan'].checked,
+          scanSourceMode: form.elements['scan-source-mode'].value,
+          useHiddenTabScan: form.elements['scan-source-mode'].value === 'headless',
           sendCredentials: form.elements['send-credentials'].checked,
           fetchCache: normalizeSelectValue(form.elements['fetch-cache'].value),
           fetchMode: normalizeSelectValue(form.elements['fetch-mode'].value),
           fetchRedirect: normalizeSelectValue(form.elements['fetch-redirect'].value),
           fetchHeaders: form.elements['fetch-headers'].value,
+          headlessWaitStrategy: form.elements['headless-wait-strategy'].value,
           textDiffMode: form.elements['text-diff-mode'].checked,
           waitForNetworkIdle: form.elements['wait-for-network-idle'].checked,
           waitForSelector: normalizeTextValue(
@@ -393,6 +398,8 @@ function applyLegacyDefaults(settings) {
     fetchMode: null,
     fetchRedirect: null,
     fetchHeaders: '',
+    scanSourceMode: 'http',
+    headlessWaitStrategy: 'network-idle',
     textDiffMode: false,
     waitForNetworkIdle: false,
     waitForSelector: null,

@@ -38,6 +38,47 @@ function resolveAreaSelectors(page) {
   return page?.areaSelector || page?.selectors || null;
 }
 
+/**
+ * Ermittelt den Scan-Quellenmodus mit Legacy-Fallback.
+ *
+ * @param {Page} page - Page object.
+ * @returns {string} Modus für den Scan.
+ */
+function resolveScanSourceMode(page) {
+  if (page?.scanSourceMode === ScanSourceMode.HEADLESS) {
+    return ScanSourceMode.HEADLESS;
+  }
+  if (page?.scanSourceMode === ScanSourceMode.HTTP) {
+    return ScanSourceMode.HTTP;
+  }
+  return page?.useHiddenTabScan ? ScanSourceMode.HEADLESS : ScanSourceMode.HTTP;
+}
+
+/**
+ * Ermittelt die Headless-Wartestrategie mit Legacy-Fallback.
+ *
+ * @param {Page} page - Page object.
+ * @returns {string} Strategie für den Headless-Scan.
+ */
+function resolveHeadlessWaitStrategy(page) {
+  if (page?.headlessWaitStrategy === HeadlessWaitStrategy.SELECTOR_READY) {
+    return HeadlessWaitStrategy.SELECTOR_READY;
+  }
+  if (page?.headlessWaitStrategy === HeadlessWaitStrategy.TIMEOUT) {
+    return HeadlessWaitStrategy.TIMEOUT;
+  }
+  if (page?.headlessWaitStrategy === HeadlessWaitStrategy.NETWORK_IDLE) {
+    return HeadlessWaitStrategy.NETWORK_IDLE;
+  }
+  if (page?.waitForSelector) {
+    return HeadlessWaitStrategy.SELECTOR_READY;
+  }
+  if (page?.waitForNetworkIdle === false) {
+    return HeadlessWaitStrategy.TIMEOUT;
+  }
+  return HeadlessWaitStrategy.NETWORK_IDLE;
+}
+
 const SCAN_LEGACY_IDLE_DEFAULT_MS = 2000;
 const TAB_LOAD_TIMEOUT_MS = 20000;
 const HIDDEN_TAB_DEFAULT_WAIT_MS = 3000;
@@ -51,6 +92,18 @@ const HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS = 8000;
 const HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS = 100;
 const HIDDEN_TAB_SCROLL_DEFAULT_DELAY_MS = 250;
 const HIDDEN_TAB_SCROLL_TIMEOUT_BUFFER_MS = 2000;
+const FETCH_FALLBACK_MIN_LENGTH = 200;
+
+const ScanSourceMode = {
+  HTTP: 'http',
+  HEADLESS: 'headless',
+};
+
+const HeadlessWaitStrategy = {
+  NETWORK_IDLE: 'network-idle',
+  SELECTOR_READY: 'selector-ready',
+  TIMEOUT: 'timeout',
+};
 
 class ScanTimeoutError extends Error {
   constructor(message) {
@@ -99,8 +152,22 @@ export async function scanPage(page) {
   }
   __.log(`Scanning "${page.title}"...`);
   try {
-    const html = await getHtmlFromFetch(page);
-    return processHtml(page, html, null);
+    let html = '';
+    let scanNoticeKey = null;
+    const scanSourceMode = resolveScanSourceMode(page);
+    if (scanSourceMode === ScanSourceMode.HEADLESS) {
+      ({html, scanNoticeKey} = await getHtmlFromHeadlessFetcherWithRetry(page));
+    } else {
+      html = await getHtmlFromHttpFetcher(page);
+      if (shouldFallbackToHeadless(html)) {
+        __.log(`HTTP-Ergebnis zu kurz/leer für "${page.title}", starte Headless-Fallback.`);
+        const fallbackResult = await getHtmlFromHeadlessFetcherWithRetry(page);
+        const fallbackNoticeKey =
+          fallbackResult.scanNoticeKey ?? 'scan.notice.fetchTooShortFallback';
+        return processHtml(page, fallbackResult.html, fallbackNoticeKey);
+      }
+    }
+    return processHtml(page, html, scanNoticeKey);
   } catch (error) {
     if (error?.name === 'ScanTimeoutError') {
       __.log(`Scan-Timeout bei "${page.title}": ${error.message}`);
@@ -119,12 +186,12 @@ export async function scanPage(page) {
 }
 
 /**
- * Lädt HTML per fetch (Standardpfad).
+ * Lädt HTML über den HTTP-Fetcher (Standardpfad).
  *
  * @param {Page} page - Page object associated with the scan.
  * @returns {string} HTML page content.
  */
-async function getHtmlFromFetch(page) {
+async function getHtmlFromHttpFetcher(page) {
   let response;
   try {
     response = await fetch(page.url);
@@ -143,6 +210,31 @@ async function getHtmlFromFetch(page) {
   }
 
   return await getHtmlFromResponse(response, page);
+}
+
+/**
+ * Prüft, ob ein HTTP-HTML so kurz ist, dass ein Headless-Fallback sinnvoll ist.
+ *
+ * @param {?string} html - HTML-Text.
+ * @returns {boolean} true, wenn ein Fallback empfohlen wird.
+ */
+function shouldFallbackToHeadless(html) {
+  if (html == null) {
+    return true;
+  }
+  const trimmed = html.trim();
+  if (trimmed.length === 0) {
+    return true;
+  }
+  if (trimmed.length < FETCH_FALLBACK_MIN_LENGTH) {
+    const lowerHtml = trimmed.toLowerCase();
+    const hasHtmlMarkers =
+      lowerHtml.includes('<html') ||
+      lowerHtml.includes('<body') ||
+      lowerHtml.includes('<!doctype');
+    return !hasHtmlMarkers;
+  }
+  return false;
 }
 
 /**
@@ -167,24 +259,24 @@ async function getScanLegacyIdleMs() {
  * @param {Page} page - Page object associated with the scan.
  * @returns {{html: string, scanNoticeKey: ?string}} HTML und optionaler Hinweis-Key.
  */
-async function getHtmlFromHiddenTabWithRetry(page) {
+async function getHtmlFromHeadlessFetcherWithRetry(page) {
   let lastHiddenTabNoticeKey = null;
   try {
-    return await getHtmlFromHiddenTab(page);
+    return await getHtmlFromHeadlessFetcher(page);
   } catch (error) {
     const noticeKey = logHiddenTabFailure(page, error, '1. Versuch');
     lastHiddenTabNoticeKey = noticeKey ?? lastHiddenTabNoticeKey;
   }
 
   try {
-    return await getHtmlFromHiddenTab(page, {extraWaitMs: HIDDEN_TAB_RETRY_EXTRA_WAIT_MS});
+    return await getHtmlFromHeadlessFetcher(page, {extraWaitMs: HIDDEN_TAB_RETRY_EXTRA_WAIT_MS});
   } catch (error) {
     const noticeKey = logHiddenTabFailure(page, error, 'Retry');
     lastHiddenTabNoticeKey = noticeKey ?? lastHiddenTabNoticeKey;
   }
 
   __.log(`Hidden-Tab-Scan fehlgeschlagen für "${page.title}", verwende Fetch-Fallback.`);
-  const html = await getHtmlFromFetch(page);
+  const html = await getHtmlFromHttpFetcher(page);
   return {
     html,
     scanNoticeKey: lastHiddenTabNoticeKey ?? 'scan.notice.hiddenTabFallback',
@@ -192,14 +284,14 @@ async function getHtmlFromHiddenTabWithRetry(page) {
 }
 
 /**
- * Lädt HTML über einen versteckten Tab und einen DOM-Snapshot.
+ * Lädt HTML über den Headless-Fetcher (versteckter Tab + DOM-Snapshot).
  *
  * @param {Page} page - Page object associated with the scan.
  * @param {object} options - Zusatzoptionen für den Scan.
  * @param {number} options.extraWaitMs - Zusätzliche Wartezeit vor dem Snapshot.
  * @returns {{html: string, scanNoticeKey: ?string}} HTML und optionaler Hinweis-Key.
  */
-async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
+async function getHtmlFromHeadlessFetcher(page, {extraWaitMs = 0} = {}) {
   const tab = await browser.tabs.create({
     url: page.url,
     active: false,
@@ -232,25 +324,9 @@ async function getHtmlFromHiddenTab(page, {extraWaitMs = 0} = {}) {
   }
 
   try {
-    await waitForTabReady(tab.id, page);
-    const shouldWaitForNetworkIdle = page?.waitForNetworkIdle ?? true;
-    if (shouldWaitForNetworkIdle) {
-      const networkIdleTimeoutMs =
-        page?.waitForNetworkIdleTimeoutMs ?? HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS;
-      try {
-        await waitForNetworkIdle(tab.id, networkIdleTimeoutMs);
-      } catch (error) {
-        if (error?.noticeKey === 'scan.notice.networkIdleTimeout') {
-          scanNoticeKey = error.noticeKey;
-        } else {
-          throw error;
-        }
-      }
-    }
-    const waitMs = HIDDEN_TAB_DEFAULT_WAIT_MS + Math.max(0, extraWaitMs);
-    if (waitMs > 0) {
-      await __.waitForMs(waitMs);
-    }
+    await waitForTabReady(tab.id);
+    scanNoticeKey =
+      (await applyHeadlessWaitStrategy(tab.id, page, extraWaitMs)) ?? scanNoticeKey;
     if (page?.hiddenTabScrollSteps && page.hiddenTabScrollSteps > 0) {
       try {
         await simulateScroll(tab.id, {
@@ -326,10 +402,9 @@ function getHiddenTabFailureNoticeKey(error) {
  *
  * @param {number} tabId - Tab-ID.
  */
-async function waitForTabReady(tabId, page) {
+async function waitForTabReady(tabId) {
   const tab = await browser.tabs.get(tabId);
   if (tab.status === 'complete') {
-    await waitForOptionalSelector(tabId, page);
     return;
   }
 
@@ -357,23 +432,86 @@ async function waitForTabReady(tabId, page) {
     browser.tabs.onUpdated.addListener(handleUpdated);
   });
 
-  await waitForOptionalSelector(tabId, page);
+}
+
+/**
+ * Wendet die konfigurierte Headless-Wartestrategie an.
+ *
+ * @param {number} tabId - Tab-ID.
+ * @param {Page} page - Page object associated with the scan.
+ * @param {number} extraWaitMs - Zusätzliche Wartezeit (z. B. beim Retry).
+ * @returns {Promise<?string>} Optionaler Hinweis-Key.
+ */
+async function applyHeadlessWaitStrategy(tabId, page, extraWaitMs) {
+  const strategy = resolveHeadlessWaitStrategy(page);
+  let scanNoticeKey = null;
+  const defaultWaitMs = page?.hiddenTabDefaultWaitMs ?? HIDDEN_TAB_DEFAULT_WAIT_MS;
+  const totalWaitMs = defaultWaitMs + Math.max(0, extraWaitMs);
+
+  if (strategy === HeadlessWaitStrategy.NETWORK_IDLE) {
+    const networkIdleTimeoutMs =
+      page?.waitForNetworkIdleTimeoutMs ?? HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS;
+    const networkIdleWindowMs =
+      page?.hiddenTabNetworkIdleWindowMs ?? HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS;
+    try {
+      await waitForNetworkIdle(tabId, {
+        timeoutMs: networkIdleTimeoutMs,
+        idleWindowMs: networkIdleWindowMs,
+      });
+    } catch (error) {
+      if (error?.noticeKey === 'scan.notice.networkIdleTimeout') {
+        scanNoticeKey = error.noticeKey;
+      } else {
+        throw error;
+      }
+    }
+    if (page?.waitForSelector) {
+      await waitForOptionalSelector(tabId, page);
+    }
+    await waitForOptionalDelay(totalWaitMs);
+    return scanNoticeKey;
+  }
+
+  if (strategy === HeadlessWaitStrategy.SELECTOR_READY) {
+    if (page?.waitForSelector) {
+      await waitForOptionalSelector(tabId, page);
+    } else {
+      __.log('Headless-Wartestrategie "selector-ready" ohne Selektor, nutze Timeout.');
+    }
+    await waitForOptionalDelay(totalWaitMs);
+    return scanNoticeKey;
+  }
+
+  await waitForOptionalDelay(totalWaitMs);
+  return scanNoticeKey;
+}
+
+/**
+ * Wartet optional für eine definierte Zeit.
+ *
+ * @param {number} waitMs - Wartezeit in Millisekunden.
+ */
+async function waitForOptionalDelay(waitMs) {
+  if (waitMs > 0) {
+    await __.waitForMs(waitMs);
+  }
 }
 
 /**
  * Wartet, bis im Tab keine Netzwerkaktivität mehr stattfindet oder Hydration-Signale erkannt werden.
  *
  * @param {number} tabId - Tab-ID.
- * @param {number} timeoutMs - Timeout für Network-Idle.
+ * @param {{timeoutMs: number, idleWindowMs: number}} options - Optionen für Network-Idle.
  */
-async function waitForNetworkIdle(tabId, timeoutMs) {
-  if (timeoutMs <= 0) {
+async function waitForNetworkIdle(tabId, {timeoutMs, idleWindowMs} = {}) {
+  const timeoutMsValue = Math.max(0, timeoutMs ?? HIDDEN_TAB_NETWORK_IDLE_TIMEOUT_MS);
+  if (timeoutMsValue <= 0) {
     return;
   }
 
   const result = await executeInTab(
     tabId,
-    async (idleWindowMs, timeoutMsValue, checkIntervalMs) => {
+    async (idleWindowMsValue, timeoutMsValue, checkIntervalMs) => {
       const hasHydrationSignal = () => {
         const root = document.documentElement;
         const body = document.body;
@@ -574,7 +712,8 @@ async function waitForNetworkIdle(tabId, timeoutMs) {
 
         const checkIdle = () => {
           const now = performance.now();
-          const idleEnough = !hasPendingRequests() && now - lastActivity >= idleWindowMs;
+          const idleEnough =
+            !hasPendingRequests() && now - lastActivity >= idleWindowMsValue;
           const hydrated = hasHydrationSignal();
           if ((idleEnough || hydrated) && !hasPendingRequests()) {
             cleanup();
@@ -592,8 +731,8 @@ async function waitForNetworkIdle(tabId, timeoutMs) {
       });
     },
     [
-      HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS,
-      timeoutMs,
+      Math.max(0, idleWindowMs ?? HIDDEN_TAB_NETWORK_IDLE_WINDOW_MS),
+      timeoutMsValue,
       HIDDEN_TAB_NETWORK_IDLE_CHECK_INTERVAL_MS,
     ],
   );

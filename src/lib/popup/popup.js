@@ -658,6 +658,7 @@ export class Popup {
   async _handleHiddenTabScanAllChange(enabled) {
     const pages = this.pageStore.getPageList();
     await Promise.all(pages.map(async (page) => {
+      page.scanSourceMode = enabled ? 'headless' : 'http';
       page.useHiddenTabScan = enabled;
       await page.save();
     }));
@@ -684,7 +685,9 @@ export class Popup {
   _syncHiddenTabScanAllState() {
     const pages = this.pageStore.getPageList();
     const total = pages.length;
-    const enabledCount = pages.filter((page) => page.useHiddenTabScan).length;
+    const enabledCount = pages.filter((page) =>
+      page.scanSourceMode === 'headless' || page.useHiddenTabScan,
+    ).length;
     const checked = total > 0 && enabledCount === total;
     const indeterminate = enabledCount > 0 && enabledCount < total;
     view.setHiddenTabScanAllState({checked, indeterminate});

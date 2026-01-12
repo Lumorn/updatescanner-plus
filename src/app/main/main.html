@@ -216,16 +216,22 @@
       </fieldset>
 
       <fieldset id="scanSourceFieldset">
-        <div>
-          <input type="checkbox" id="hidden-tab-scan" name="hidden-tab-scan">
-          <label for="hidden-tab-scan" class="checkbox-label"
-            data-i18n="main.dialog.hiddenTabScan">
-            Use hidden tab for scan
-          </label>
-        </div>
-        <output name="hidden-tab-scan-description">
-          <span data-i18n="main.dialog.hiddenTabScan.description">
-            Use a hidden tab to capture the DOM instead of fetch.
+        <label>
+          <span data-i18n="main.dialog.scanSourceMode">
+            Scan source:
+          </span>
+          <select name="scan-source-mode">
+            <option value="http" data-i18n="main.dialog.scanSourceMode.http">
+              HTTP (fetch)
+            </option>
+            <option value="headless" data-i18n="main.dialog.scanSourceMode.headless">
+              Headless (hidden tab)
+            </option>
+          </select>
+        </label>
+        <output name="scan-source-mode-description">
+          <span data-i18n="main.dialog.scanSourceMode.description">
+            Choose between HTTP fetch and a headless tab snapshot.
           </span>
         </output>
         <div>
@@ -332,6 +338,27 @@
       </fieldset>
 
       <fieldset id="scanOptions">
+        <label>
+          <span data-i18n="main.dialog.headlessWaitStrategy">
+            Headless wait strategy:
+          </span>
+          <select name="headless-wait-strategy">
+            <option value="network-idle" data-i18n="main.dialog.headlessWaitStrategy.networkIdle">
+              Network idle
+            </option>
+            <option value="selector-ready" data-i18n="main.dialog.headlessWaitStrategy.selectorReady">
+              Selector ready
+            </option>
+            <option value="timeout" data-i18n="main.dialog.headlessWaitStrategy.timeout">
+              Timeout
+            </option>
+          </select>
+        </label>
+        <output name="headless-wait-strategy-description">
+          <span data-i18n="main.dialog.headlessWaitStrategy.description">
+            Define how headless scans wait before capturing a snapshot.
+          </span>
+        </output>
         <div>
           <input type="checkbox" id="text-diff-mode" name="text-diff-mode">
           <label for="text-diff-mode" class="checkbox-label"

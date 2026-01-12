@@ -6,6 +6,48 @@ export const __ = {
   log: (...args) => log(...args),
 };
 
+const ScanSourceMode = {
+  HTTP: 'http',
+  HEADLESS: 'headless',
+};
+
+const HeadlessWaitStrategy = {
+  NETWORK_IDLE: 'network-idle',
+  SELECTOR_READY: 'selector-ready',
+  TIMEOUT: 'timeout',
+};
+
+/**
+ * Normalisiert den Scan-Quellenmodus für eine Seite.
+ *
+ * @param {?string} scanSourceMode - Modus aus der Persistenz.
+ * @param {boolean} useHiddenTabScan - Legacy-Flag für Hidden-Tab.
+ * @returns {string} Normalisierter Modus.
+ */
+function normalizeScanSourceMode(scanSourceMode, useHiddenTabScan) {
+  if (scanSourceMode === ScanSourceMode.HEADLESS || scanSourceMode === ScanSourceMode.HTTP) {
+    return scanSourceMode;
+  }
+  return useHiddenTabScan ? ScanSourceMode.HEADLESS : ScanSourceMode.HTTP;
+}
+
+/**
+ * Normalisiert die Headless-Wartestrategie.
+ *
+ * @param {?string} headlessWaitStrategy - Strategie aus der Persistenz.
+ * @returns {string} Normalisierte Strategie.
+ */
+function normalizeHeadlessWaitStrategy(headlessWaitStrategy) {
+  if (
+    headlessWaitStrategy === HeadlessWaitStrategy.NETWORK_IDLE ||
+    headlessWaitStrategy === HeadlessWaitStrategy.SELECTOR_READY ||
+    headlessWaitStrategy === HeadlessWaitStrategy.TIMEOUT
+  ) {
+    return headlessWaitStrategy;
+  }
+  return HeadlessWaitStrategy.NETWORK_IDLE;
+}
+
 /**
  * Class representing a webpage.
  */
@@ -36,6 +78,7 @@ export class Page {
       contentMode: Page.contentModeEnum.TEXT,
       requireExactMatchCount: false,
       partialScan: false,
+      scanSourceMode: 'http',
       useHiddenTabScan: false,
       sendCredentials: false,
       fetchCache: null,
@@ -51,6 +94,7 @@ export class Page {
       waitForSelectorTimeoutMs: null,
       waitForNetworkIdle: true,
       waitForNetworkIdleTimeoutMs: null,
+      headlessWaitStrategy: 'network-idle',
       hiddenTabDefaultWaitMs: null,
       hiddenTabNetworkIdleWindowMs: null,
       hiddenTabDomStabilityWindowMs: null,
@@ -160,6 +204,7 @@ export class Page {
    *   match.
    * @property {boolean} partialScan - True if selectors should be used for
    *   selecting parts of the page to scan.
+   * @property {string} scanSourceMode - Scan-Modus (http oder headless).
    * @property {boolean} useHiddenTabScan - Nutzt einen versteckten Tab als
    *   Scan-Quelle statt fetch.
    * @property {boolean} sendCredentials - Sendet Cookies/Credentials beim fetch.
@@ -177,6 +222,7 @@ export class Page {
    * @property {?number} waitForSelectorTimeoutMs - Timeout für den Selektor.
    * @property {boolean} waitForNetworkIdle - Wartet auf Network-Idle vor dem Snapshot.
    * @property {?number} waitForNetworkIdleTimeoutMs - Timeout für Network-Idle.
+   * @property {string} headlessWaitStrategy - Strategie für Headless-Warten.
    * @property {?number} hiddenTabDefaultWaitMs - Standard-Wartezeit vor Snapshot.
    * @property {?number} hiddenTabNetworkIdleWindowMs - Fenster für Network-Idle.
    * @property {?number} hiddenTabDomStabilityWindowMs - Zeitfenster, in dem das
@@ -223,6 +269,7 @@ export class Page {
       contentMode = Page.DEFAULTS.contentMode,
       requireExactMatchCount = Page.DEFAULTS.requireExactMatchCount,
       partialScan = Page.DEFAULTS.partialScan,
+      scanSourceMode = Page.DEFAULTS.scanSourceMode,
       useHiddenTabScan = Page.DEFAULTS.useHiddenTabScan,
       sendCredentials = Page.DEFAULTS.sendCredentials,
       fetchCache = Page.DEFAULTS.fetchCache,
@@ -238,6 +285,7 @@ export class Page {
       waitForSelectorTimeoutMs = Page.DEFAULTS.waitForSelectorTimeoutMs,
       waitForNetworkIdle = Page.DEFAULTS.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs = Page.DEFAULTS.waitForNetworkIdleTimeoutMs,
+      headlessWaitStrategy = Page.DEFAULTS.headlessWaitStrategy,
       hiddenTabDefaultWaitMs = Page.DEFAULTS.hiddenTabDefaultWaitMs,
       hiddenTabNetworkIdleWindowMs = Page.DEFAULTS.hiddenTabNetworkIdleWindowMs,
       hiddenTabDomStabilityWindowMs = Page.DEFAULTS.hiddenTabDomStabilityWindowMs,
@@ -278,7 +326,8 @@ export class Page {
     this.contentMode = contentMode;
     this.requireExactMatchCount = requireExactMatchCount;
     this.partialScan = partialScan;
-    this.useHiddenTabScan = useHiddenTabScan;
+    this.scanSourceMode = normalizeScanSourceMode(scanSourceMode, useHiddenTabScan);
+    this.useHiddenTabScan = this.scanSourceMode === 'headless';
     this.sendCredentials = sendCredentials;
     this.fetchCache = fetchCache;
     this.fetchMode = fetchMode;
@@ -293,6 +342,7 @@ export class Page {
     this.waitForSelectorTimeoutMs = waitForSelectorTimeoutMs;
     this.waitForNetworkIdle = waitForNetworkIdle;
     this.waitForNetworkIdleTimeoutMs = waitForNetworkIdleTimeoutMs;
+    this.headlessWaitStrategy = normalizeHeadlessWaitStrategy(headlessWaitStrategy);
     this.hiddenTabDefaultWaitMs = hiddenTabDefaultWaitMs;
     this.hiddenTabNetworkIdleWindowMs = hiddenTabNetworkIdleWindowMs;
     this.hiddenTabDomStabilityWindowMs = hiddenTabDomStabilityWindowMs;
@@ -337,6 +387,7 @@ export class Page {
       contentMode: this.contentMode,
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
+      scanSourceMode: this.scanSourceMode,
       useHiddenTabScan: this.useHiddenTabScan,
       sendCredentials: this.sendCredentials,
       fetchCache: this.fetchCache,
@@ -352,6 +403,7 @@ export class Page {
       waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
       waitForNetworkIdle: this.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
+      headlessWaitStrategy: this.headlessWaitStrategy,
       hiddenTabDefaultWaitMs: this.hiddenTabDefaultWaitMs,
       hiddenTabNetworkIdleWindowMs: this.hiddenTabNetworkIdleWindowMs,
       hiddenTabDomStabilityWindowMs: this.hiddenTabDomStabilityWindowMs,
@@ -393,6 +445,7 @@ export class Page {
       contentMode: this.contentMode,
       requireExactMatchCount: this.requireExactMatchCount,
       partialScan: this.partialScan,
+      scanSourceMode: this.scanSourceMode,
       useHiddenTabScan: this.useHiddenTabScan,
       sendCredentials: this.sendCredentials,
       fetchCache: this.fetchCache,
@@ -405,6 +458,7 @@ export class Page {
       waitForSelectorTimeoutMs: this.waitForSelectorTimeoutMs,
       waitForNetworkIdle: this.waitForNetworkIdle,
       waitForNetworkIdleTimeoutMs: this.waitForNetworkIdleTimeoutMs,
+      headlessWaitStrategy: this.headlessWaitStrategy,
       hiddenTabDefaultWaitMs: this.hiddenTabDefaultWaitMs,
       hiddenTabNetworkIdleWindowMs: this.hiddenTabNetworkIdleWindowMs,
       hiddenTabMutationStabilityWindowMs: this.hiddenTabMutationStabilityWindowMs,

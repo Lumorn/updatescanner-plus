@@ -36,6 +36,8 @@
 * DOM-Diff-Modus ergänzt, der strukturierte Change-Listen speichert, um Änderungen gezielt hervorzuheben
 * DOM-Diff-Detailansicht mit farbigen Change-Listen, Zusammenfassung und Toggle ergänzt
 * Optionaler Scan-Modus ergänzt, der die Seite in einem versteckten Tab lädt und einen DOM-Snapshot erfasst
+* Scan-Quelle pro Seite als HTTP-Fetch oder Headless-Tab-Snapshot konfigurierbar
+* Headless-Scans unterstützen konfigurierbare Wartestrategien (Network-Idle, Selektor bereit, Timeout)
 * Hidden-Tab-Scan versteckt Tabs per `tabs.hide`, mit Fallback in minimierte Popup-Fenster
 * Manifest um die Permission `tabHide` ergänzt, damit versteckte Tabs genutzt werden können
 * Hidden-Tab-Scan wartet optional auf Selektoren, nutzt ein DOM-Stabilitätsfenster und einen Standard-Delay
