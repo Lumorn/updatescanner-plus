@@ -359,16 +359,22 @@
             Define how headless scans wait before capturing a snapshot.
           </span>
         </output>
-        <div>
-          <input type="checkbox" id="text-diff-mode" name="text-diff-mode">
-          <label for="text-diff-mode" class="checkbox-label"
-            data-i18n="main.dialog.textDiffMode">
-            Text diff mode
-          </label>
-        </div>
-        <output name="text-diff-mode-description">
-          <span data-i18n="main.dialog.textDiffMode.description">
-            Compare extracted text (and selectors) instead of HTML.
+        <label>
+          <span data-i18n="main.dialog.diffType">
+            Diff type:
+          </span>
+          <select name="diff-type" id="diff-type">
+            <option value="html" data-i18n="main.dialog.diffType.html">
+              HTML diff
+            </option>
+            <option value="text" data-i18n="main.dialog.diffType.text">
+              Text diff
+            </option>
+          </select>
+        </label>
+        <output name="diff-type-description">
+          <span data-i18n="main.dialog.diffType.description">
+            Choose whether the diff output compares HTML or extracted text.
           </span>
         </output>
         <div>
