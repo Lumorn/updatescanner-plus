@@ -46,6 +46,9 @@ function formatDetails(page) {
   return `${translate('debugInfo.details.url')}: ${page.url}
 ${translate('debugInfo.details.scanRateMinutes')}:  ${page.scanRateMinutes}
 ${translate('debugInfo.details.changeThreshold')}:  ${page.changeThreshold}
+${translate('debugInfo.details.minChangeChars')}:  ${page.minChangeChars}
+${translate('debugInfo.details.minChangeWords')}:  ${page.minChangeWords}
+${translate('debugInfo.details.levenshteinThreshold')}: ${page.levenshteinThreshold}
 ${translate('debugInfo.details.ignoreNumbers')}:    ${page.ignoreNumbers}
 ${translate('debugInfo.details.encoding')}:         ${page.encoding}
 ${translate('debugInfo.details.highlightChanges')}: ${page.highlightChanges}

@@ -66,7 +66,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Diff-Typ pro Seite (Text oder HTML) mit Standard-Diff (diff-match-patch) sowie optionalem HTML-Diff mit `<ins>/<del>`-Markup.
 * Optionaler DOM-Diff-Modus vergleicht die DOM-Struktur und speichert strukturierte Change-Listen zur gezielten UI-Hervorhebung.
 * Detailansicht visualisiert DOM-Diff-Änderungen mit farbigen Einträgen, Zusammenfassung und Toggle.
-* Option, Zahländerungen zu ignorieren und Schwellwerte für Änderungen zu setzen.
+* Option, Zahländerungen zu ignorieren sowie minimale Zeichen-/Wortänderungen und eine Levenshtein-Schwelle zu definieren.
 * Backup und Wiederherstellung der gespeicherten Einträge (JSON).
 * Robuster Zeichencodierungs-Fallback (UTF-8), wenn keine Kodierung erkennbar ist.
 * Stabile Öffnung der Hauptansicht über MV3-kompatible URL-Ermittlung.
@@ -141,6 +141,24 @@ Script-Anteile und typische Werbe-Container zu reduzieren:
 * `.ad`
 * `.advertisement`
 * `.cookie-banner`
+
+## Ignorierte Änderungen (Schwellwerte & Filter)
+
+Update Scanner Plus kann kleine oder dynamische Änderungen gezielt ausblenden.
+Folgende Mechanismen wirken vor dem Vergleich der Inhalte:
+
+* **Zahländerungen ignorieren:** Optional werden Zahlen entfernt, damit reine
+  Zähler-/Preis-Updates keine Treffer erzeugen.
+* **Minimale Änderungen:** Über die Seiteneinstellungen lassen sich minimale
+  Änderungen in Zeichen und Wörtern festlegen. Änderungen darunter werden
+  ignoriert.
+* **Levenshtein-Schwelle:** Eine relative Schwelle (0–1) bewertet die
+  Ähnlichkeit der Texte und kann kleine Abweichungen ausblenden.
+* **Regex-Filterliste:** Dynamische Textteile (z. B. Zeitstempel) können per
+  Regex entfernt werden, etwa `\\d{4}-\\d{2}-\\d{2}` oder
+  `\\d{2}:\\d{2}:\\d{2}`.
+* **Ignorierte Selektoren / Attribut-Blacklist:** Entfernen dynamische DOM-
+  Bereiche oder Attribute vor dem Diff.
 
 ## Filterlogik (Regex & Attribut-Blacklist)
 

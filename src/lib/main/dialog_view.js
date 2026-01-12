@@ -86,6 +86,10 @@ export async function openPageDialog(page) {
   updateThresholdDescription(thresholdSliderValue);
 
   form.elements['ignore-numbers'].checked = page.ignoreNumbers;
+  form.elements['min-change-chars'].value = formatOptionalNumber(page.minChangeChars);
+  form.elements['min-change-words'].value = formatOptionalNumber(page.minChangeWords);
+  form.elements['levenshtein-threshold'].value =
+    formatOptionalNumber(page.levenshteinThreshold);
   form.elements['scan-source-mode'].value =
     page.scanSourceMode ?? (page.useHiddenTabScan ? 'headless' : 'http');
   form.elements['send-credentials'].checked = page.sendCredentials;
@@ -144,6 +148,15 @@ export async function openPageDialog(page) {
           changeThreshold:
             ThresholdSliderToChars[form.elements['threshold'].value],
           ignoreNumbers: form.elements['ignore-numbers'].checked,
+          minChangeChars: parseNonNegativeNumber(
+            form.elements['min-change-chars'].value,
+          ),
+          minChangeWords: parseNonNegativeNumber(
+            form.elements['min-change-words'].value,
+          ),
+          levenshteinThreshold: parseRatioValue(
+            form.elements['levenshtein-threshold'].value,
+          ),
           selectors: form.elements['selectors'].value,
           areaSelector: normalizeTextValue(
             form.elements['area-selector'].value,
@@ -335,6 +348,40 @@ function parseOptionalNumber(value) {
   }
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+/**
+ * Normalisiert eine Zahl auf >= 0, leere Eingaben werden 0.
+ *
+ * @param {string} value - Eingabewert.
+ * @returns {number} Normalisierter Zahlenwert.
+ */
+function parseNonNegativeNumber(value) {
+  if (!value || value.trim() === '') {
+    return 0;
+  }
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return 0;
+  }
+  return parsed;
+}
+
+/**
+ * Normalisiert eine Ratio in den Bereich 0..1, leere Eingaben werden 0.
+ *
+ * @param {string} value - Eingabewert.
+ * @returns {number} Normalisierte Ratio.
+ */
+function parseRatioValue(value) {
+  if (!value || value.trim() === '') {
+    return 0;
+  }
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return 0;
+  }
+  return Math.min(1, Math.max(0, parsed));
 }
 
 const ScanModeMap = new Map([

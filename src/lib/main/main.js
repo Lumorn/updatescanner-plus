@@ -288,6 +288,9 @@ export class Main {
     this.currentPage.scanRateMinutes = newSettings.scanRateMinutes;
     this.currentPage.changeThreshold = newSettings.changeThreshold;
     this.currentPage.ignoreNumbers = newSettings.ignoreNumbers;
+    this.currentPage.minChangeChars = newSettings.minChangeChars;
+    this.currentPage.minChangeWords = newSettings.minChangeWords;
+    this.currentPage.levenshteinThreshold = newSettings.levenshteinThreshold;
     this.currentPage.selectors = newSettings.selectors;
     this.currentPage.areaSelector = newSettings.areaSelector;
     this.currentPage.ignoredSelectors = newSettings.ignoredSelectors;
