@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Test-Fixtures für statische und dynamische Seiten ergänzt
+* Unit-Tests für Normalisierung, Diff-Strategien und Filter ergänzt
+* README um Hinweise zur lokalen Testausführung erweitert
 * Seiteneinstellungen um Presets für statische und dynamische Seiten ergänzt
 * Popup-Settings um Defaults für Fetch-Modus, Selektoren, Diff-Typ und Schwellenwerte erweitert
 * Validierung und Fehlertexte für URL, Selektoren, Fetch-Header und Schwellenwerte ergänzt
