@@ -198,9 +198,11 @@ export class Main {
       await Config.loadSingleSetting('filterRegexListByDefault');
     const attributeBlacklistByDefault =
       await Config.loadSingleSetting('attributeBlacklistByDefault');
+    const scanSourceModeByDefault = useHiddenTabScanByDefault ? 'headless' : 'http';
     const temporaryPage = new Page(-1, {
       title: title,
       url: url,
+      scanSourceMode: scanSourceModeByDefault,
       useHiddenTabScan: useHiddenTabScanByDefault,
       waitForNetworkIdle: waitForNetworkIdleByDefault,
       waitForNetworkIdleTimeoutMs: hiddenTabNetworkIdleTimeoutMsByDefault,
@@ -292,6 +294,7 @@ export class Main {
     this.currentPage.requireExactMatchCount =
       newSettings.requireExactMatchCount;
     this.currentPage.partialScan = newSettings.partialScan;
+    this.currentPage.scanSourceMode = newSettings.scanSourceMode;
     this.currentPage.useHiddenTabScan = newSettings.useHiddenTabScan;
     this.currentPage.sendCredentials = newSettings.sendCredentials;
     this.currentPage.fetchCache = newSettings.fetchCache;
@@ -299,6 +302,9 @@ export class Main {
     this.currentPage.fetchRedirect = newSettings.fetchRedirect;
     this.currentPage.fetchHeaders = newSettings.fetchHeaders;
     this.currentPage.textDiffMode = newSettings.textDiffMode;
+    this.currentPage.headlessWaitStrategy = newSettings.headlessWaitStrategy;
+    this.currentPage.waitForSelector = newSettings.waitForSelector;
+    this.currentPage.waitForSelectorTimeoutMs = newSettings.waitForSelectorTimeoutMs;
     this.currentPage.waitForNetworkIdle = newSettings.waitForNetworkIdle;
     this.currentPage.waitForNetworkIdleTimeoutMs =
       newSettings.waitForNetworkIdleTimeoutMs;

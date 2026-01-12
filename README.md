@@ -39,8 +39,10 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Zentrale HTML-Normalisierung entfernt optional dynamische Bereiche über „Ignorierte Selektoren“ pro Seite.
 * Zusätzliche Filter pro Seite: Regex-Liste für dynamischen Text und Attribut-Blacklist für DOM-Diffs.
 * Optionaler Scan über einen versteckten Tab mit DOM-Snapshot statt fetch.
+* Scan-Quelle pro Seite als HTTP-Fetch oder Headless-Tab-Snapshot konfigurierbar.
 * Versteckter Tab wird per Tab-Hide-API verborgen und bei fehlender API in ein minimiertes Popup ausgelagert.
 * Hidden-Tab-Scan wartet optional auf Selektoren (inkl. Timeout pro Seite), nutzt ein DOM-Stabilitätsfenster und einen globalen Standard-Delay.
+* Headless-Scans unterstützen konfigurierbare Wartestrategien (Network-Idle, Selektor bereit, Timeout).
 * Hidden-Tab-Scan wartet nach `document.readyState === 'complete'` kurz nach und kann ein zusätzliches Mutation-Stabilitätsfenster (konfigurierbar) nutzen.
 * Hidden-Tab-Scan kann optional auf Network-Idle/Hydration-Signale warten; berücksichtigt Fetch/XHR-Requests sowie long-lived WebSocket/EventSource-Aktivität und meldet Timeouts als Hinweis im UI.
 * Globale Einstellung für Network-Idle-Wartezeit bei neuen Seiten sowie Sammelaktion für alle Seiten.
