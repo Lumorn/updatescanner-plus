@@ -3,6 +3,8 @@
 ## Unreleased
 
 * Projekt-Konzeptdokument mit Zielen, Nicht-Zielen, Änderungsarten sowie Risiken ergänzt
+* HTML-Selektoren unterstützen jetzt CSS und optional XPath (Prefix `xpath:`) für Bereichs- und Text-Diffs
+* Standard-Filterregeln entfernt Script-Tags und typische Werbe-Container bei neuen Seiten
 * Bereichsauswahl-Overlay ergänzt, Kontextmenü „Bereich auswählen“ speichert den Selektor und Scans nutzen ihn
 * Anzeige/Bearbeitung des ausgewählten Bereichs in Hauptansicht und Popup ergänzt
 * Einstellungsdialoge laden den globalen Scan-Engine-Modus asynchron ohne Syntaxfehler

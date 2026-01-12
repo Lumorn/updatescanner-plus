@@ -112,6 +112,14 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 
 * Projekt-Konzept: [docs/konzept.md](docs/konzept.md)
 
+## Parser-Schicht (HTML-Parsing)
+
+Die HTML-Parsing-Schicht liegt in `src/lib/util/html.js`. Dort werden HTML-Texte
+über `DOMParser` in ein Dokument gewandelt und Selektoren (CSS oder optional
+XPath) auf das Dokument angewendet. Diese Helfer werden von den Scan-Modulen
+in `src/lib/scan/` genutzt, um Teilbereiche auszuwählen, Filter anzuwenden und
+Textinhalte zu extrahieren.
+
 ## Filterlogik (Ignorierte Selektoren)
 
 Für dynamische Inhalte (z. B. Consent-Banner, Werbe-Widgets) kann pro Seite eine
@@ -122,7 +130,17 @@ Vergleich der gescannten HTML-Versionen angewendet:
   Platzhalter ersetzt.
 * Der Filter greift sowohl auf die neu gescannte Seite als auch auf die
   gespeicherte „NEW“-Version, damit der Vergleich stabil bleibt.
+* Selektoren unterstützen CSS (Standard) und optional XPath (Prefix `xpath:`).
 * Ungültige Selektoren blockieren den Scan nicht und werden still ignoriert.
+
+Standardmäßig werden bei neuen Seiten folgende Elemente entfernt, um
+Script-Anteile und typische Werbe-Container zu reduzieren:
+
+* `script`
+* `.ads`
+* `.ad`
+* `.advertisement`
+* `.cookie-banner`
 
 ## Filterlogik (Regex & Attribut-Blacklist)
 

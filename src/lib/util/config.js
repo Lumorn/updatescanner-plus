@@ -17,7 +17,8 @@ export class Config {
       'language': 'en', // Sprache der Benutzeroberfläche
       'useHiddenTabScanByDefault': true, // Standard für versteckten Tab bei neuen Scans
       'waitForNetworkIdleByDefault': true, // Standard für Network-Idle bei neuen Scans
-      'hiddenTabIgnoreSelectorsByDefault': '', // Standard-Selektoren für Snapshot-Bereinigung
+      'hiddenTabIgnoreSelectorsByDefault':
+        'script, .ads, .ad, .advertisement, .cookie-banner', // Standard-Selektoren für Snapshot-Bereinigung
       'hiddenTabUseTextSnapshotHashByDefault': false, // Standard für Text-Hash-Snapshots
       'hiddenTabScrollStepsByDefault': null, // Standard-Schritte für Scroll-Simulation
       'hiddenTabScrollDelayMsByDefault': null, // Standard-Delay für Scroll-Schritte
@@ -31,6 +32,8 @@ export class Config {
       'hiddenTabNetworkIdleWindowMsByDefault': 1500, // Standard-Fenster für Network-Idle (ms)
       'filterRegexListByDefault': '', // Standard-Regex-Liste für Filter
       'attributeBlacklistByDefault': '', // Standard-Attributliste für Filter
+      'ignoredSelectorsByDefault':
+        'script, .ads, .ad, .advertisement, .cookie-banner', // Standard-Selektoren für HTML-Bereinigung
       'scanLegacyIdleMs': 2000, // Wartezeit zwischen Legacy-Scans (ms)
       'scanHostIdleMs': 2000, // Mindestabstand zwischen Scan-Requests pro Host
       'scanConcurrency': 2, // Anzahl paralleler Scans in der Queue
