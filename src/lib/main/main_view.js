@@ -642,6 +642,12 @@ function loadSandboxedIframe(page, html) {
   });
   // Fügt ein Stil-Override in den Head ein, um die Vorschau immer vollbreit zu rendern.
   const styleOverrides = [
+    // Erzwingt scrollbareren Inhalt, falls die Seite selbst das Scrollen einschränkt.
+    'html, body {',
+    '  height: auto !important;',
+    '  min-height: 100% !important;',
+    '  overflow: auto !important;',
+    '}',
     '.outer, .inner, #main_content {',
     '  max-width: none !important;',
     '  width: 100% !important;',
