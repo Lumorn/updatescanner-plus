@@ -629,6 +629,8 @@ function loadSandboxedIframe(page, html) {
   const iframe = document.createElement('iframe');
   iframe.id = 'frame';
   iframe.classList.add('frame');
+  iframe.setAttribute('scrolling', 'yes');
+  iframe.style.overflow = 'auto';
   const sandboxTokens = ['allow-top-navigation', 'allow-scripts'];
   if (page?.allowSameOriginIframe) {
     sandboxTokens.push('allow-same-origin');
@@ -642,6 +644,19 @@ function loadSandboxedIframe(page, html) {
   });
   // Fügt ein Stil-Override in den Head ein, um die Vorschau immer vollbreit zu rendern.
   const styleOverrides = [
+    // Erzwingt scrollbareren Inhalt, falls die Seite selbst das Scrollen einschränkt.
+    'html, body {',
+    '  height: auto !important;',
+    '  min-height: 100% !important;',
+    '  max-height: none !important;',
+    '  overflow: auto !important;',
+    '  position: static !important;',
+    '}',
+    'main, #app, #root, .app, .page {',
+    '  height: auto !important;',
+    '  max-height: none !important;',
+    '  overflow: visible !important;',
+    '}',
     '.outer, .inner, #main_content {',
     '  max-width: none !important;',
     '  width: 100% !important;',
