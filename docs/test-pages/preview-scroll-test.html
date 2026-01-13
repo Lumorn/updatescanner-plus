@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UpdateScanner Vorschau-Test</title>
+    <style>
+      /* Basissimulation: Die Seite verhält sich wie eine App mit fixierter Höhe. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      body.is-locked {
+        overflow: hidden;
+      }
+
+      .app-shell {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #f7f7fb;
+        font-family: "Segoe UI", system-ui, sans-serif;
+      }
+
+      .app-header {
+        position: sticky;
+        top: 0;
+        background: #2f2f3a;
+        color: #fff;
+        padding: 16px 24px;
+        font-size: 20px;
+        font-weight: 600;
+        z-index: 2;
+      }
+
+      .app-content {
+        flex: 1;
+        overflow: hidden;
+        padding: 24px;
+      }
+
+      .content-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      }
+
+      .content-list {
+        display: grid;
+        gap: 16px;
+      }
+
+      .content-item {
+        padding: 16px;
+        border-radius: 10px;
+        background: #eef1ff;
+        border: 1px solid #d9ddff;
+      }
+
+      .toggle-row {
+        margin-bottom: 16px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 14px;
+      }
+
+      .toggle-row button {
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        background: #5a6bff;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .input-section {
+        margin-top: 24px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .input-section label {
+        font-size: 14px;
+        color: #2f2f3a;
+        font-weight: 600;
+      }
+
+      .input-section textarea {
+        width: 100%;
+        min-height: 160px;
+        border-radius: 10px;
+        border: 1px solid #d9ddff;
+        padding: 12px;
+        font-family: inherit;
+        font-size: 14px;
+        resize: vertical;
+      }
+    </style>
+  </head>
+  <body class="is-locked">
+    <div class="app-shell">
+      <div class="app-header">UpdateScanner Vorschau-Testseite</div>
+      <div class="app-content">
+        <div class="content-card">
+          <div class="toggle-row">
+            <button id="toggle-lock">Scroll-Lock umschalten</button>
+            <span>Aktuell: <strong id="lock-state">aktiv</strong></span>
+          </div>
+          <div class="content-list" id="content-list"></div>
+          <div class="input-section">
+            <label for="test-input">Freitext für Scroll-Test:</label>
+            <textarea id="test-input" placeholder="Hier kannst du eigenen Text eingeben."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Füllt die Seite mit ausreichend Inhalt, um Scrollen zu erzwingen.
+      const list = document.getElementById('content-list');
+      for (let index = 1; index <= 40; index += 1) {
+        const item = document.createElement('div');
+        item.className = 'content-item';
+        item.textContent = `Testinhalt Zeile ${index} – Lorem ipsum dolor sit amet.`;
+        list.appendChild(item);
+      }
+
+      // Schaltet den simulierten Scroll-Lock an/aus.
+      const lockState = document.getElementById('lock-state');
+      const toggleButton = document.getElementById('toggle-lock');
+      toggleButton.addEventListener('click', () => {
+        document.body.classList.toggle('is-locked');
+        lockState.textContent = document.body.classList.contains('is-locked') ? 'aktiv' : 'inaktiv';
+      });
+    </script>
+  </body>
+</html>
