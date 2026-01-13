@@ -21,6 +21,7 @@
 * Hauptansicht rendert Vorschau-Seiten wieder in voller Breite und Höhe, damit sie nicht verkleinert wirken
 * Hauptansicht streckt den Vorschau-Container dauerhaft über die volle Höhe
 * Hauptansicht streckt den Vorschau-Iframe flexibel, damit gescannte Seiten vollständig scrollen
+* Hauptansicht lässt den Vorschau-Container selbst scrollen, damit lange Seiten vollständig sichtbar bleiben
 * Hauptansicht injiziert ein Head-Stylesheet in Vorschau-HTML, um Layout-Container ohne Max-Width darzustellen
 * Hauptansicht erzwingt scrollbare Vorschauinhalte und entsperrt typische App-Container, damit gescannte Seiten vollständig sichtbar bleiben
 * Testseite für Scroll-Probleme in der Vorschau hinzugefügt (`docs/test-pages/preview-scroll-test.html`, inkl. Freitextfeld)
