@@ -20,6 +20,8 @@
 * Hauptansicht rendert gespeicherte Seiten wieder korrekt, indem der `<base>`-Tag sauber im `<head>` ergänzt und fehlendes HTML-Grundgerüst aufgebaut wird
 * Hauptansicht rendert Vorschau-Seiten wieder in voller Breite und Höhe, damit sie nicht verkleinert wirken
 * Hauptansicht streckt den Vorschau-Container dauerhaft über die volle Höhe
+* Hauptansicht streckt den Vorschau-Iframe flexibel, damit gescannte Seiten vollständig scrollen
+* Hauptansicht nutzt eine minmax-Gitterzeile, damit der Vorschaubereich zuverlässig die Resthöhe erhält
 * Hauptansicht injiziert ein Head-Stylesheet in Vorschau-HTML, um Layout-Container ohne Max-Width darzustellen
 * Hauptansicht erlaubt Skriptausführung im Sandbox-iframe, damit dynamische Seiten wieder angezeigt werden
 * Hauptansicht unterstützt optional Same-Origin im Sandbox-iframe pro Seite, damit Same-Origin-Requests funktionieren

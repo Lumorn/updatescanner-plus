@@ -59,6 +59,8 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Hauptansicht rendert gespeicherte Seiten konsistent, indem der `<base>`-Tag im `<head>` ergänzt und fehlendes HTML-Grundgerüst automatisch erzeugt wird.
 * Hauptansicht rendert die Vorschau jetzt wieder in voller Breite und Höhe, damit Seiten nicht verkleinert wirken.
 * Hauptansicht nutzt einen flexiblen Vorschau-Container, damit die Inhaltsfläche dauerhaft die volle Höhe ausfüllt.
+* Hauptansicht streckt den Vorschau-Iframe flexibel, damit gescannte Seiten vollständig gescrollt werden können.
+* Hauptansicht nutzt eine minmax-Gitterzeile, damit der Vorschau-Bereich zuverlässig die Resthöhe bekommt.
 * Hauptansicht injiziert ein Head-Stylesheet in die Vorschau, um Containerspalten in voller Breite zu rendern.
 * Hauptansicht zeigt eine sichere Fallback-Ansicht mit Empty-State, wenn die aufgerufene Seite fehlt.
 * Hauptansicht initialisiert zuverlässig auch bei spät geladenen Skripten, damit Menü und Seitenansicht reagieren.
