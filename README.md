@@ -61,6 +61,8 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Hauptansicht nutzt einen flexiblen Vorschau-Container, damit die Inhaltsfläche dauerhaft die volle Höhe ausfüllt.
 * Hauptansicht streckt den Vorschau-Iframe flexibel, damit gescannte Seiten vollständig gescrollt werden können.
 * Hauptansicht injiziert ein Head-Stylesheet in die Vorschau, um Containerspalten in voller Breite zu rendern.
+* Hauptansicht erzwingt scrollbare Vorschauinhalte und entsperrt typische App-Container, damit vollständige Seiten angezeigt werden.
+* Testseite `docs/test-pages/preview-scroll-test.html` ergänzt, um Scroll-Probleme in der Vorschau gezielt nachzustellen (inkl. Freitextfeld).
 * Hauptansicht zeigt eine sichere Fallback-Ansicht mit Empty-State, wenn die aufgerufene Seite fehlt.
 * Hauptansicht initialisiert zuverlässig auch bei spät geladenen Skripten, damit Menü und Seitenansicht reagieren.
 * Hauptansicht zeigt bei Initialisierungsfehlern eine verständliche Meldung und deaktiviert Menü sowie View-Dropdown.

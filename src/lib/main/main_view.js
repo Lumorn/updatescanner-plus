@@ -629,6 +629,8 @@ function loadSandboxedIframe(page, html) {
   const iframe = document.createElement('iframe');
   iframe.id = 'frame';
   iframe.classList.add('frame');
+  iframe.setAttribute('scrolling', 'yes');
+  iframe.style.overflow = 'auto';
   const sandboxTokens = ['allow-top-navigation', 'allow-scripts'];
   if (page?.allowSameOriginIframe) {
     sandboxTokens.push('allow-same-origin');
@@ -642,6 +644,24 @@ function loadSandboxedIframe(page, html) {
   });
   // Fügt ein Stil-Override in den Head ein, um die Vorschau immer vollbreit zu rendern.
   const styleOverrides = [
+    // Erzwingt scrollbareren Inhalt, falls die Seite selbst das Scrollen einschränkt.
+    'html, body {',
+    '  height: auto !important;',
+    '  min-height: 100% !important;',
+    '  max-height: none !important;',
+    '  overflow: auto !important;',
+    '  position: static !important;',
+    '}',
+    'main, #app, #root, .app, .page {',
+      '  height: auto !important;',
+      '  max-height: none !important;',
+      '  overflow: visible !important;',
+    '}',
+    '#updatescanner-preview-wrapper {',
+    '  min-height: 100% !important;',
+    '  height: auto !important;',
+    '  overflow: visible !important;',
+    '}',
     '.outer, .inner, #main_content {',
     '  max-width: none !important;',
     '  width: 100% !important;',
@@ -649,13 +669,59 @@ function loadSandboxedIframe(page, html) {
     '}',
   ].join('\n');
   const styleBlock = `<style>${styleOverrides}</style>`;
+  // Ergänzt ein Inline-Skript, das typische Scroll-Locks nach dem Rendern auflöst.
+  const scriptBlock = [
+    '<script>',
+    '(function() {',
+    '  const unlockScrollContainers = () => {',
+    '    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;',
+    '    const candidates = new Set([',
+    '      ...document.querySelectorAll(',
+    "        'body, main, #app, #root, .app, .page, .app-shell, .app-content, [data-scroll-lock], [data-lock-scroll]',",
+    '      ),',
+    '    ]);',
+    '    candidates.forEach((node) => {',
+    '      if (!(node instanceof HTMLElement)) {',
+    '        return;',
+    '      }',
+    '      const style = window.getComputedStyle(node);',
+    '      const heightValue = Number.parseFloat(style.height || "0");',
+    '      const hasLock =',
+    "        (style.overflow === 'hidden' || style.overflowY === 'hidden') && heightValue > 0;",
+    '      const nearViewportHeight =',
+    '        Math.abs(heightValue - viewportHeight) <= 2 || style.height === "100vh";',
+    '      if (hasLock && nearViewportHeight) {',
+    '        node.style.height = "auto";',
+    '        node.style.maxHeight = "none";',
+    '        node.style.overflow = "visible";',
+    '        node.style.overflowY = "visible";',
+    '      }',
+    '    });',
+    '  };',
+    '  window.addEventListener("load", unlockScrollContainers);',
+    '  window.addEventListener("resize", unlockScrollContainers);',
+    '  unlockScrollContainers();',
+    '})();',
+    '</script>',
+  ].join('');
   let injectedHtml = html ?? '';
   if (/<head[^>]*>/i.test(injectedHtml)) {
     // Falls ein Head existiert, wird das Stylesheet direkt dort eingefügt.
-    injectedHtml = injectedHtml.replace(/<head[^>]*>/i, (match) => `${match}\n${styleBlock}`);
+    injectedHtml = injectedHtml.replace(
+      /<head[^>]*>/i,
+      (match) => `${match}\n${styleBlock}\n${scriptBlock}`,
+    );
   } else {
     // Falls kein Head vorhanden ist, wird er am Anfang ergänzt.
-    injectedHtml = `<head>${styleBlock}</head>${injectedHtml}`;
+    injectedHtml = `<head>${styleBlock}${scriptBlock}</head>${injectedHtml}`;
+  }
+  // Umschließt den Body-Inhalt, um eine robuste Scroll-Container-Hülle zu erzwingen.
+  if (/<body[^>]*>/i.test(injectedHtml) && /<\/body>/i.test(injectedHtml)) {
+    injectedHtml = injectedHtml.replace(
+      /<body[^>]*>/i,
+      (match) => `${match}\n<div id="updatescanner-preview-wrapper">`,
+    );
+    injectedHtml = injectedHtml.replace(/<\/body>/i, '</div>\n</body>');
   }
   iframe.srcdoc = injectedHtml;
   qs('#frameContainer').appendChild(iframe);
