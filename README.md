@@ -60,6 +60,7 @@ Buttonreihe (Neu/Sidebar/Menü) angezeigt und muss immer aktuell sein.
 * Hauptansicht rendert die Vorschau jetzt wieder in voller Breite und Höhe, damit Seiten nicht verkleinert wirken.
 * Hauptansicht nutzt einen flexiblen Vorschau-Container, damit die Inhaltsfläche dauerhaft die volle Höhe ausfüllt.
 * Hauptansicht streckt den Vorschau-Iframe flexibel, damit gescannte Seiten vollständig gescrollt werden können.
+* Hauptansicht lässt den Vorschau-Container eigenständig scrollen, damit lange Seiten vollständig sichtbar bleiben.
 * Hauptansicht injiziert ein Head-Stylesheet in die Vorschau, um Containerspalten in voller Breite zu rendern.
 * Hauptansicht erzwingt scrollbare Vorschauinhalte und entsperrt typische App-Container, damit vollständige Seiten angezeigt werden.
 * Testseite `docs/test-pages/preview-scroll-test.html` ergänzt, um Scroll-Probleme in der Vorschau gezielt nachzustellen (inkl. Freitextfeld).
